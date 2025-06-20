@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Quick Links - Manage and access your favorite websites and resources">
+    <meta name="keywords" content="bookmarks, quick access, links, favorites, personal dashboard">
+    <meta name="author" content="Joe">
+    <title>Quick Links - Personal Link Manager</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+</head>
+<body>
+    <!-- Skip to main content link for screen readers -->
+    <a href="#main-content" class="skip-to-main">Skip to main content</a>
+    
+    <header class="header" role="banner">
+        <div class="header-content">
+            <div class="date-display" id="dateDisplay" role="text" aria-label="Current date" aria-live="polite"></div>
+            <h1 class="main-title">🔗 Quick Links</h1>
+            <div class="time-display" id="timeDisplay" role="text" aria-label="Current time" aria-live="polite"></div>
+        </div>
+    </header>
+
+    <main class="main-content" id="main-content" role="main">
+        <div class="container">
+            <!-- Add Link Section -->
+            <section class="add-link-section" aria-labelledby="add-link-heading">
+                <h2 id="add-link-heading">Add New Link</h2>
+                <form class="add-link-form" id="addLinkForm" aria-label="Add new quick link">
+                    <div class="form-group">
+                        <label for="linkTitle">Title:</label>
+                        <input type="text" id="linkTitle" name="title" placeholder="Enter link title" required aria-describedby="title-help">
+                        <small id="title-help" class="help-text">Give your link a descriptive name</small>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="linkUrl">URL:</label>
+                        <input type="url" id="linkUrl" name="url" placeholder="https://example.com" required aria-describedby="url-help">
+                        <small id="url-help" class="help-text">Enter the full URL including https://</small>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="linkDescription">Description (Optional):</label>
+                        <input type="text" id="linkDescription" name="description" placeholder="Brief description of the link" aria-describedby="desc-help">
+                        <small id="desc-help" class="help-text">Optional description to help remember what this link is for</small>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="linkCategory">Category:</label>
+                        <select id="linkCategory" name="category" aria-describedby="category-help">
+                            <option value="work">Work</option>
+                            <option value="personal">Personal</option>
+                            <option value="entertainment">Entertainment</option>
+                            <option value="education">Education</option>
+                            <option value="shopping">Shopping</option>
+                            <option value="social">Social</option>
+                            <option value="tools">Tools</option>
+                            <option value="news">News</option>
+                            <option value="other">Other</option>
+                        </select>
+                        <small id="category-help" class="help-text">Choose a category to organize your links</small>
+                    </div>
+                    
+                    <button type="submit" class="add-button">
+                        <span class="button-icon">➕</span>
+                        Add Link
+                    </button>
+                </form>
+            </section>
+
+            <!-- Filter Section -->
+            <section class="filter-section" aria-labelledby="filter-heading">
+                <h2 id="filter-heading">Filter Links</h2>
+                <div class="filter-controls">
+                    <div class="filter-group">
+                        <label for="categoryFilter">Filter by Category:</label>
+                        <select id="categoryFilter" aria-label="Filter links by category">
+                            <option value="all">All Categories</option>
+                            <option value="work">Work</option>
+                            <option value="personal">Personal</option>
+                            <option value="entertainment">Entertainment</option>
+                            <option value="education">Education</option>
+                            <option value="shopping">Shopping</option>
+                            <option value="social">Social</option>
+                            <option value="tools">Tools</option>
+                            <option value="news">News</option>
+                            <option value="other">Other</option>
+                        </select>
+                    </div>
+                    
+                    <div class="filter-group">
+                        <label for="searchLinks">Search Links:</label>
+                        <input type="text" id="searchLinks" placeholder="Search titles and descriptions..." aria-label="Search through your links">
+                    </div>
+                </div>
+            </section>
+
+            <!-- Links Display Section -->
+            <section class="links-section" aria-labelledby="links-heading">
+                <h2 id="links-heading">Your Quick Links</h2>
+                <div id="linksContainer" class="links-container" role="list" aria-label="Your saved links">
+                    <div class="empty-state" id="emptyState">
+                        <div class="empty-icon">🔗</div>
+                        <h3>No links yet</h3>
+                        <p>Add your first quick link using the form above!</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Stats Section -->
+            <section class="stats-section" aria-labelledby="stats-heading">
+                <h2 id="stats-heading">Link Statistics</h2>
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-number" id="totalLinks">0</div>
+                        <div class="stat-label">Total Links</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" id="categoriesCount">0</div>
+                        <div class="stat-label">Categories Used</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" id="recentlyAdded">0</div>
+                        <div class="stat-label">Added This Week</div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <footer class="footer" role="contentinfo">
+        <div class="footer-content">
+            <p>Quick Links Manager - <span aria-label="Version 1.0.0">Version 1.0.0</span></p>
+            <p class="footer-subtitle">Personal Link Organization Tool</p>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
+
