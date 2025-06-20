@@ -152,6 +152,24 @@ class JobTracker {
             this.showSettingsMenu();
         });
 
+        // Print button
+        document.getElementById('printBtn').addEventListener('click', () => {
+            this.openPrintModal();
+        });
+
+        // Print modal controls
+        document.getElementById('closePrintModal').addEventListener('click', () => {
+            this.closePrintModal();
+        });
+
+        document.getElementById('cancelPrintBtn').addEventListener('click', () => {
+            this.closePrintModal();
+        });
+
+        document.getElementById('generatePrintBtn').addEventListener('click', () => {
+            this.generatePrintView();
+        });
+
         // Close modals when clicking outside
         document.addEventListener('click', (e) => {
             if (e.target.classList.contains('modal')) {
@@ -309,6 +327,35 @@ class JobTracker {
         document.getElementById('status').value = application.status;
         document.getElementById('jobUrl').value = application.jobUrl || '';
         document.getElementById('notes').value = application.notes || '';
+        
+        // Populate contact information if available
+        document.getElementById('contactPersonName').value = application.contactName || '';
+        document.getElementById('contactPersonTitle').value = application.contactTitle || '';
+        document.getElementById('contactPersonEmail').value = application.contactEmail || '';
+        document.getElementById('contactPersonPhone').value = application.contactPhone || '';
+        document.getElementById('contactPersonLinkedIn').value = application.contactLinkedIn || '';
+        
+        // Populate interview information if available
+        document.getElementById('interviewDate').value = application.interviewDate || '';
+        document.getElementById('interviewTime').value = application.interviewTime || '';
+        document.getElementById('interviewType').value = application.interviewType || 'phone';
+        document.getElementById('interviewDuration').value = application.interviewDuration || 60;
+        document.getElementById('interviewLocation').value = application.interviewLocation || '';
+        document.getElementById('interviewNotes').value = application.interviewNotes || '';
+        
+        // Toggle interview fields based on status
+        this.toggleInterviewFields();
+    }
+
+    toggleInterviewFields() {
+        const status = document.getElementById('status').value;
+        const interviewSection = document.getElementById('interviewSection');
+        
+        if (status === 'interview') {
+            interviewSection.style.display = 'block';
+        } else {
+            interviewSection.style.display = 'none';
+        }
     }
 
     saveApplication() {
@@ -319,8 +366,26 @@ class JobTracker {
             salary: document.getElementById('salary').value,
             status: document.getElementById('status').value,
             jobUrl: document.getElementById('jobUrl').value,
-            notes: document.getElementById('notes').value
+            notes: document.getElementById('notes').value,
+            // Contact information from application form
+            contactName: document.getElementById('contactPersonName').value,
+            contactTitle: document.getElementById('contactPersonTitle').value,
+            contactEmail: document.getElementById('contactPersonEmail').value,
+            contactPhone: document.getElementById('contactPersonPhone').value,
+            contactLinkedIn: document.getElementById('contactPersonLinkedIn').value,
+            // Interview information from application form
+            interviewDate: document.getElementById('interviewDate').value,
+            interviewTime: document.getElementById('interviewTime').value,
+            interviewType: document.getElementById('interviewType').value,
+            interviewDuration: document.getElementById('interviewDuration').value,
+            interviewLocation: document.getElementById('interviewLocation').value,
+            interviewNotes: document.getElementById('interviewNotes').value
         };
+
+        // If contact information is provided, add/update contact
+        if (formData.contactName.trim()) {
+            this.handleContactFromApplication(formData);
+        }
 
         if (this.currentEditingId) {
             // Update existing application
@@ -348,6 +413,7 @@ class JobTracker {
         this.saveDataToStorage();
         this.updateDashboard();
         this.renderApplications();
+        this.renderContacts();
         this.updateAnalytics();
         this.closeApplicationModal();
     }
@@ -377,7 +443,7 @@ class JobTracker {
         }
 
         grid.innerHTML = this.applications.map(app => `
-            <div class="application-card slide-up">
+            <div class="application-card slide-up ${app.status === 'interview' && app.interviewDate ? 'interview-scheduled' : ''}">
                 <div class="application-status status-${app.status}">${app.status}</div>
                 <div class="application-header">
                     <h3>${app.jobTitle}</h3>
@@ -387,8 +453,11 @@ class JobTracker {
                     ${app.location ? `<span><i class="fas fa-map-marker-alt"></i> ${app.location}</span>` : ''}
                     ${app.salary ? `<span><i class="fas fa-dollar-sign"></i> ${app.salary}</span>` : ''}
                     <span><i class="fas fa-calendar"></i> Added ${this.formatDate(app.dateAdded)}</span>
+                    ${app.contactName ? `<span><i class="fas fa-user"></i> Contact: ${this.capitalizeWords(app.contactName)}${app.contactTitle ? ` (${this.capitalizeWords(app.contactTitle)})` : ''}</span>` : ''}
+                    ${this.getInterviewDetailsHtml(app)}
                 </div>
                 ${app.notes ? `<p class="application-notes">${app.notes}</p>` : ''}
+                ${app.interviewNotes && app.status === 'interview' ? `<p class="interview-notes"><i class="fas fa-sticky-note"></i> <strong>Interview Notes:</strong> ${app.interviewNotes}</p>` : ''}
                 <div class="application-actions">
                     <button class="edit-btn" onclick="jobTracker.openApplicationModal('${app.id}')">
                         <i class="fas fa-edit"></i> Edit
@@ -398,6 +467,9 @@ class JobTracker {
                     </button>
                     ${app.jobUrl ? `<a href="${app.jobUrl}" target="_blank" class="btn-secondary">
                         <i class="fas fa-external-link-alt"></i> View Job
+                    </a>` : ''}
+                    ${app.interviewLocation && app.status === 'interview' ? `<a href="${app.interviewLocation.includes('http') ? app.interviewLocation : '#'}" target="_blank" class="btn-secondary interview-link">
+                        <i class="fas fa-${app.interviewType === 'video' ? 'video' : app.interviewType === 'phone' ? 'phone' : 'map-marker-alt'}"></i> ${app.interviewType === 'video' ? 'Join Call' : app.interviewType === 'phone' ? 'Call' : 'Location'}
                     </a>` : ''}
                 </div>
             </div>
@@ -552,19 +624,24 @@ class JobTracker {
             return;
         }
 
-        grid.innerHTML = this.contacts.map(contact => `
+        // Sort contacts alphabetically by name
+        const sortedContacts = [...this.contacts].sort((a, b) => 
+            a.name.toLowerCase().localeCompare(b.name.toLowerCase())
+        );
+
+        grid.innerHTML = sortedContacts.map(contact => `
             <div class="contact-card slide-up">
                 <div class="contact-header">
                     <div class="contact-avatar">
-                        ${contact.name.charAt(0).toUpperCase()}
+                        ${this.capitalizeWords(contact.name).charAt(0).toUpperCase()}
                     </div>
                     <div class="contact-info">
-                        <h3>${contact.name}</h3>
-                        ${contact.title ? `<div class="contact-title">${contact.title}</div>` : ''}
+                        <h3>${this.capitalizeWords(contact.name)}</h3>
+                        ${contact.title ? `<div class="contact-title">${this.capitalizeWords(contact.title)}</div>` : ''}
                     </div>
                 </div>
                 <div class="contact-details">
-                    ${contact.company ? `<p><i class="fas fa-building"></i> ${contact.company}</p>` : ''}
+                    ${contact.company ? `<p><i class="fas fa-building"></i> ${this.capitalizeWords(contact.company)}</p>` : ''}
                     ${contact.email ? `<p><i class="fas fa-envelope"></i> <a href="mailto:${contact.email}">${contact.email}</a></p>` : ''}
                     ${contact.phone ? `<p><i class="fas fa-phone"></i> <a href="tel:${contact.phone}">${contact.phone}</a></p>` : ''}
                     ${contact.linkedIn ? `<p><i class="fab fa-linkedin"></i> <a href="${contact.linkedIn}" target="_blank">LinkedIn</a></p>` : ''}
@@ -907,14 +984,449 @@ class JobTracker {
             this.updateDashboard();
             this.renderApplications();
             this.renderContacts();
-            this.showNotification('All data cleared', 'success');
-            document.getElementById('settingsModal').remove();
+        this.showNotification('All data cleared', 'success');
+        document.getElementById('settingsModal').remove();
+        }
+    }
+
+    // Print functionality
+    openPrintModal() {
+        const modal = document.getElementById('printModal');
+        this.updatePrintCounts();
+        modal.classList.add('active');
+    }
+
+    closePrintModal() {
+        const modal = document.getElementById('printModal');
+        modal.classList.remove('active');
+    }
+
+    updatePrintCounts() {
+        document.getElementById('appCount').textContent = `${this.applications.length} applications`;
+        document.getElementById('contactCount').textContent = `${this.contacts.length} contacts`;
+    }
+
+    generatePrintView() {
+        const includeApplications = document.getElementById('printApplications').checked;
+        const includeContacts = document.getElementById('printContacts').checked;
+        const includeAnalytics = document.getElementById('printAnalytics').checked;
+        const format = document.querySelector('input[name="printFormat"]:checked').value;
+
+        if (!includeApplications && !includeContacts && !includeAnalytics) {
+            this.showNotification('Please select at least one category to print', 'error');
+            return;
+        }
+
+        let printContent = this.generatePrintContent({
+            includeApplications,
+            includeContacts,
+            includeAnalytics,
+            format
+        });
+
+        // Create print window
+        const printWindow = window.open('', '_blank');
+        printWindow.document.write(`
+            <!DOCTYPE html>
+            <html>
+            <head>
+                <title>JobTracker Pro - Report</title>
+                <style>
+                    ${this.getPrintStyles()}
+                </style>
+            </head>
+            <body class="print-content">
+                ${printContent}
+            </body>
+            </html>
+        `);
+        printWindow.document.close();
+        
+        // Wait for content to load then print
+        setTimeout(() => {
+            printWindow.print();
+            printWindow.close();
+        }, 500);
+
+        this.closePrintModal();
+        this.showNotification('Print view generated successfully', 'success');
+    }
+
+    generatePrintContent(options) {
+        const { includeApplications, includeContacts, includeAnalytics, format } = options;
+        const now = new Date();
+        const dateString = now.toLocaleDateString('en-US', {
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric',
+            hour: '2-digit',
+            minute: '2-digit'
+        });
+
+        let content = `
+            <div class="print-header">
+                <h1>JobTracker Pro - Career Report</h1>
+                <p>Generated on ${dateString}</p>
+                <p>Total Applications: ${this.applications.length} | Total Contacts: ${this.contacts.length}</p>
+            </div>
+        `;
+
+        if (includeApplications) {
+            content += this.generateApplicationsPrintSection(format);
+        }
+
+        if (includeContacts) {
+            content += this.generateContactsPrintSection(format);
+        }
+
+        if (includeAnalytics) {
+            content += this.generateAnalyticsPrintSection();
+        }
+
+        return content;
+    }
+
+    generateApplicationsPrintSection(format) {
+        if (this.applications.length === 0) {
+            return `
+                <div class="print-section">
+                    <h2>Job Applications</h2>
+                    <p>No applications found.</p>
+                </div>
+            `;
+        }
+
+        const sortedApps = [...this.applications].sort((a, b) => 
+            new Date(b.dateAdded) - new Date(a.dateAdded)
+        );
+
+        if (format === 'table') {
+            return `
+                <div class="print-section">
+                    <h2>Job Applications (${this.applications.length})</h2>
+                    <table class="print-table">
+                        <thead>
+                            <tr>
+                                <th>Job Title</th>
+                                <th>Company</th>
+                                <th>Status</th>
+                                <th>Location</th>
+                                <th>Salary</th>
+                                <th>Date Added</th>
+                                <th>Contact</th>
+                                <th>Interview</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${sortedApps.map(app => `
+                                <tr>
+                                    <td><strong>${app.jobTitle}</strong></td>
+                                    <td>${app.company}</td>
+                                    <td class="status-${app.status}">${this.capitalizeWords(app.status)}</td>
+                                    <td>${app.location || '-'}</td>
+                                    <td>${app.salary || '-'}</td>
+                                    <td>${new Date(app.dateAdded).toLocaleDateString()}</td>
+                                    <td>${app.contactName ? `${this.capitalizeWords(app.contactName)}${app.contactTitle ? ` (${this.capitalizeWords(app.contactTitle)})` : ''}` : '-'}</td>
+                                    <td>${app.status === 'interview' && app.interviewDate ? `${new Date(app.interviewDate).toLocaleDateString()}${app.interviewTime ? ` ${app.interviewTime}` : ''}` : '-'}</td>
+                                </tr>
+                            `).join('')}
+                        </tbody>
+                    </table>
+                </div>
+            `;
+        } else {
+            return `
+                <div class="print-section">
+                    <h2>Job Applications (${this.applications.length})</h2>
+                    ${sortedApps.map(app => `
+                        <div class="print-card">
+                            <h3>${app.jobTitle} - ${app.company}</h3>
+                            <p><strong>Status:</strong> ${this.capitalizeWords(app.status)}</p>
+                            ${app.location ? `<p><strong>Location:</strong> ${app.location}</p>` : ''}
+                            ${app.salary ? `<p><strong>Salary:</strong> ${app.salary}</p>` : ''}
+                            <p><strong>Date Added:</strong> ${new Date(app.dateAdded).toLocaleDateString()}</p>
+                            ${app.contactName ? `<p><strong>Contact:</strong> ${this.capitalizeWords(app.contactName)}${app.contactTitle ? ` (${this.capitalizeWords(app.contactTitle)})` : ''}</p>` : ''}
+                            ${app.status === 'interview' && app.interviewDate ? `<p><strong>Interview:</strong> ${new Date(app.interviewDate).toLocaleDateString()}${app.interviewTime ? ` at ${app.interviewTime}` : ''}${app.interviewType ? ` (${this.capitalizeWords(app.interviewType.replace('-', ' '))})` : ''}</p>` : ''}
+                            ${app.notes ? `<p><strong>Notes:</strong> ${app.notes}</p>` : ''}
+                            ${app.jobUrl ? `<p><strong>Job URL:</strong> ${app.jobUrl}</p>` : ''}
+                        </div>
+                    `).join('')}
+                </div>
+            `;
+        }
+    }
+
+    generateContactsPrintSection(format) {
+        if (this.contacts.length === 0) {
+            return `
+                <div class="print-section">
+                    <h2>Professional Contacts</h2>
+                    <p>No contacts found.</p>
+                </div>
+            `;
+        }
+
+        const sortedContacts = [...this.contacts].sort((a, b) => 
+            a.name.toLowerCase().localeCompare(b.name.toLowerCase())
+        );
+
+        if (format === 'table') {
+            return `
+                <div class="print-section page-break">
+                    <h2>Professional Contacts (${this.contacts.length})</h2>
+                    <table class="print-table">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Title</th>
+                                <th>Company</th>
+                                <th>Email</th>
+                                <th>Phone</th>
+                                <th>LinkedIn</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${sortedContacts.map(contact => `
+                                <tr>
+                                    <td><strong>${this.capitalizeWords(contact.name)}</strong></td>
+                                    <td>${contact.title ? this.capitalizeWords(contact.title) : '-'}</td>
+                                    <td>${contact.company ? this.capitalizeWords(contact.company) : '-'}</td>
+                                    <td>${contact.email || '-'}</td>
+                                    <td>${contact.phone || '-'}</td>
+                                    <td>${contact.linkedIn ? 'Yes' : '-'}</td>
+                                </tr>
+                            `).join('')}
+                        </tbody>
+                    </table>
+                </div>
+            `;
+        } else {
+            return `
+                <div class="print-section page-break">
+                    <h2>Professional Contacts (${this.contacts.length})</h2>
+                    ${sortedContacts.map(contact => `
+                        <div class="print-card">
+                            <h3>${this.capitalizeWords(contact.name)}</h3>
+                            ${contact.title ? `<p><strong>Title:</strong> ${this.capitalizeWords(contact.title)}</p>` : ''}
+                            ${contact.company ? `<p><strong>Company:</strong> ${this.capitalizeWords(contact.company)}</p>` : ''}
+                            ${contact.email ? `<p><strong>Email:</strong> ${contact.email}</p>` : ''}
+                            ${contact.phone ? `<p><strong>Phone:</strong> ${contact.phone}</p>` : ''}
+                            ${contact.linkedIn ? `<p><strong>LinkedIn:</strong> ${contact.linkedIn}</p>` : ''}
+                            ${contact.notes ? `<p><strong>Notes:</strong> ${contact.notes}</p>` : ''}
+                        </div>
+                    `).join('')}
+                </div>
+            `;
+        }
+    }
+
+    generateAnalyticsPrintSection() {
+        const stats = this.calculateStats();
+        const statusCounts = this.getStatusCounts();
+        const insights = this.calculateInsights();
+
+        return `
+            <div class="print-section page-break">
+                <h2>Analytics Summary</h2>
+                <div class="analytics-summary">
+                    <h3>Key Statistics</h3>
+                    <ul>
+                        <li>Total Applications: ${stats.totalApplications}</li>
+                        <li>Interviews Scheduled: ${stats.interviewsScheduled}</li>
+                        <li>Offers Received: ${stats.offersReceived}</li>
+                        <li>Response Rate: ${stats.responseRate}%</li>
+                    </ul>
+                    
+                    <h3>Status Breakdown</h3>
+                    <ul>
+                        ${Object.entries(statusCounts).filter(([status, count]) => count > 0).map(([status, count]) => 
+                            `<li>${this.capitalizeWords(status)}: ${count}</li>`
+                        ).join('')}
+                    </ul>
+                    
+                    <h3>Key Insights</h3>
+                    <ul>
+                        ${insights.map(insight => 
+                            `<li><strong>${insight.title}:</strong> ${insight.message}</li>`
+                        ).join('')}
+                    </ul>
+                </div>
+            </div>
+        `;
+    }
+
+    getPrintStyles() {
+        return `
+            * {
+                margin: 0;
+                padding: 0;
+                box-sizing: border-box;
+            }
+            
+            body {
+                font-family: 'Arial', sans-serif;
+                line-height: 1.4;
+                color: #333;
+                font-size: 12px;
+            }
+            
+            .print-header {
+                text-align: center;
+                margin-bottom: 2rem;
+                border-bottom: 2px solid #333;
+                padding-bottom: 1rem;
+            }
+            
+            .print-header h1 {
+                font-size: 24px;
+                margin-bottom: 0.5rem;
+                color: #2c3e50;
+            }
+            
+            .print-section {
+                margin-bottom: 2rem;
+                page-break-inside: avoid;
+            }
+            
+            .print-section h2 {
+                color: #333;
+                margin-bottom: 1rem;
+                font-size: 18px;
+                border-bottom: 1px solid #ddd;
+                padding-bottom: 0.5rem;
+            }
+            
+            .print-table {
+                width: 100%;
+                border-collapse: collapse;
+                margin-bottom: 1rem;
+                font-size: 10px;
+            }
+            
+            .print-table th,
+            .print-table td {
+                border: 1px solid #333;
+                padding: 6px;
+                text-align: left;
+                vertical-align: top;
+            }
+            
+            .print-table th {
+                background-color: #f0f0f0;
+                font-weight: bold;
+                font-size: 11px;
+            }
+            
+            .print-card {
+                border: 1px solid #ddd;
+                padding: 1rem;
+                margin-bottom: 1rem;
+                border-radius: 4px;
+                page-break-inside: avoid;
+            }
+            
+            .print-card h3 {
+                margin-bottom: 0.5rem;
+                color: #2c3e50;
+                font-size: 14px;
+            }
+            
+            .print-card p {
+                margin-bottom: 0.25rem;
+                font-size: 11px;
+            }
+            
+            .status-interested { background-color: #e3f2fd !important; }
+            .status-applied { background-color: #f3e5f5 !important; }
+            .status-interview { background-color: #fff3e0 !important; }
+            .status-offer { background-color: #e8f5e8 !important; }
+            .status-rejected { background-color: #ffebee !important; }
+            .status-accepted { background-color: #e8f5e8 !important; }
+            
+            .page-break {
+                page-break-before: always;
+            }
+            
+            .analytics-summary ul {
+                margin-left: 1rem;
+                margin-bottom: 1rem;
+            }
+            
+            .analytics-summary li {
+                margin-bottom: 0.25rem;
+            }
+            
+            @media print {
+                body {
+                    -webkit-print-color-adjust: exact;
+                    print-color-adjust: exact;
+                }
+            }
+        `;
+    }
+
+    // Handle contact creation from applications
+    handleContactFromApplication(formData) {
+        // Check if contact already exists
+        const existingContact = this.contacts.find(contact => 
+            contact.email && contact.email.toLowerCase() === formData.contactEmail.toLowerCase() ||
+            contact.name.toLowerCase() === formData.contactName.toLowerCase() && 
+            contact.company && contact.company.toLowerCase() === formData.company.toLowerCase()
+        );
+
+        if (existingContact) {
+            // Update existing contact with any new information
+            let updated = false;
+            if (formData.contactTitle && !existingContact.title) {
+                existingContact.title = formData.contactTitle;
+                updated = true;
+            }
+            if (formData.contactPhone && !existingContact.phone) {
+                existingContact.phone = formData.contactPhone;
+                updated = true;
+            }
+            if (formData.contactLinkedIn && !existingContact.linkedIn) {
+                existingContact.linkedIn = formData.contactLinkedIn;
+                updated = true;
+            }
+            if (!existingContact.company) {
+                existingContact.company = formData.company;
+                updated = true;
+            }
+            
+            if (updated) {
+                existingContact.dateModified = new Date().toISOString();
+                this.showNotification('Contact updated with application info', 'success');
+            }
+        } else {
+            // Create new contact
+            const newContact = {
+                id: this.generateId(),
+                name: formData.contactName,
+                title: formData.contactTitle || '',
+                company: formData.company,
+                email: formData.contactEmail || '',
+                phone: formData.contactPhone || '',
+                linkedIn: formData.contactLinkedIn || '',
+                notes: `Contact added from application: ${formData.jobTitle} at ${formData.company}`,
+                dateAdded: new Date().toISOString(),
+                dateModified: new Date().toISOString()
+            };
+            this.contacts.push(newContact);
+            this.showNotification('New contact created from application', 'success');
         }
     }
 
     // Utility Functions
     generateId() {
         return Date.now().toString(36) + Math.random().toString(36).substr(2);
+    }
+
+    capitalizeWords(str) {
+        if (!str) return '';
+        return str.toLowerCase().split(' ').map(word => 
+            word.charAt(0).toUpperCase() + word.slice(1)
+        ).join(' ');
     }
 
     formatDate(dateString) {
@@ -952,6 +1464,53 @@ class JobTracker {
             clearTimeout(timeout);
             timeout = setTimeout(later, wait);
         };
+    }
+
+    getInterviewDetailsHtml(app) {
+        if (app.status !== 'interview' || !app.interviewDate) {
+            return '';
+        }
+        
+        const interviewDate = new Date(app.interviewDate);
+        const now = new Date();
+        const isToday = interviewDate.toDateString() === now.toDateString();
+        const isTomorrow = interviewDate.toDateString() === new Date(now.getTime() + 24*60*60*1000).toDateString();
+        
+        let dateDisplay = '';
+        if (isToday) {
+            dateDisplay = 'Today';
+        } else if (isTomorrow) {
+            dateDisplay = 'Tomorrow';
+        } else {
+            dateDisplay = interviewDate.toLocaleDateString('en-US', { 
+                weekday: 'short', 
+                month: 'short', 
+                day: 'numeric' 
+            });
+        }
+        
+        const timeDisplay = app.interviewTime ? 
+            new Date(`2000-01-01T${app.interviewTime}`).toLocaleTimeString('en-US', {
+                hour: 'numeric',
+                minute: '2-digit',
+                hour12: true
+            }) : '';
+            
+        const typeIcons = {
+            phone: 'phone',
+            video: 'video',
+            'in-person': 'map-marker-alt',
+            panel: 'users',
+            technical: 'code'
+        };
+        
+        return `
+            <div class="interview-details">
+                <span class="interview-date"><i class="fas fa-calendar-alt"></i> <strong>Interview:</strong> ${dateDisplay}${timeDisplay ? ` at ${timeDisplay}` : ''}</span>
+                ${app.interviewType ? `<span class="interview-type"><i class="fas fa-${typeIcons[app.interviewType] || 'question'}"></i> ${this.capitalizeWords(app.interviewType.replace('-', ' '))}${app.interviewDuration ? ` (${app.interviewDuration} min)` : ''}</span>` : ''}
+                ${app.interviewLocation ? `<span class="interview-location"><i class="fas fa-${app.interviewType === 'video' ? 'link' : 'map-marker-alt'}"></i> ${app.interviewLocation.length > 40 ? app.interviewLocation.substring(0, 40) + '...' : app.interviewLocation}</span>` : ''}
+            </div>
+        `;
     }
 
     showNotification(message, type = 'info') {
@@ -999,7 +1558,64 @@ class JobTracker {
 // Initialize the application when DOM is loaded
 document.addEventListener('DOMContentLoaded', () => {
     window.jobTracker = new JobTracker();
+    
+    // Initialize footer date/time
+    updateFooterDateTime();
+    setInterval(updateFooterDateTime, 1000);
 });
+
+// Update footer with current date and time and handle interview timing
+function updateFooterDateTime() {
+    const footerDatetime = document.getElementById('footer-datetime');
+    if (footerDatetime) {
+        const now = new Date();
+        const options = {
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric',
+            hour: '2-digit',
+            minute: '2-digit',
+            second: '2-digit',
+            timeZoneName: 'short'
+        };
+        footerDatetime.textContent = now.toLocaleDateString('en-US', options);
+        
+        // Check for interview timing and apply clock styling
+        const clockStatus = getInterviewClockStatus();
+        footerDatetime.className = clockStatus;
+    }
+}
+
+// Check interview timing and return appropriate clock styling
+function getInterviewClockStatus() {
+    if (!window.jobTracker || !window.jobTracker.applications) {
+        return '';
+    }
+    
+    const now = new Date();
+    const interviews = window.jobTracker.applications.filter(app => 
+        app.status === 'interview' && app.interviewDate && app.interviewTime
+    );
+    
+    for (const interview of interviews) {
+        const interviewDateTime = new Date(`${interview.interviewDate}T${interview.interviewTime}`);
+        const duration = parseInt(interview.interviewDuration) || 60; // Default 60 minutes
+        const oneHourBefore = new Date(interviewDateTime.getTime() - (60 * 60 * 1000));
+        const interviewEnd = new Date(interviewDateTime.getTime() + (duration * 60 * 1000));
+        
+        // Red flash: 1 hour before interview
+        if (now >= oneHourBefore && now < interviewDateTime) {
+            return 'clock-warning';
+        }
+        
+        // Green flash: During interview time
+        if (now >= interviewDateTime && now <= interviewEnd) {
+            return 'clock-active';
+        }
+    }
+    
+    return '';
+}
 
 // Add CSS animations for notifications
 const style = document.createElement('style');

@@ -1,0 +1,839 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Help - JobTracker Pro</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        .help-container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 2rem;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+        }
+        
+        .help-header {
+            text-align: center;
+            margin-bottom: 3rem;
+            padding-bottom: 2rem;
+            border-bottom: 2px solid #f0f0f0;
+        }
+        
+        .help-header h1 {
+            color: #333;
+            margin-bottom: 1rem;
+            font-size: 2.5rem;
+        }
+        
+        .help-header p {
+            color: #666;
+            font-size: 1.1rem;
+        }
+        
+        .help-nav {
+            background: #f8f9fa;
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin-bottom: 2rem;
+        }
+        
+        .help-nav h3 {
+            margin-bottom: 1rem;
+            color: #333;
+        }
+        
+        .help-nav ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 0.5rem;
+        }
+        
+        .help-nav a {
+            color: #667eea;
+            text-decoration: none;
+            padding: 0.5rem;
+            border-radius: 4px;
+            transition: background 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .help-nav a:hover {
+            background: #e3f2fd;
+        }
+        
+        .help-section {
+            margin-bottom: 3rem;
+            padding-bottom: 2rem;
+            border-bottom: 1px solid #e0e0e0;
+        }
+        
+        .help-section:last-child {
+            border-bottom: none;
+        }
+        
+        .help-section h2 {
+            color: #333;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-size: 1.8rem;
+        }
+        
+        .help-section h3 {
+            color: #555;
+            margin: 1.5rem 0 1rem 0;
+            font-size: 1.3rem;
+        }
+        
+        .help-section h4 {
+            color: #666;
+            margin: 1rem 0 0.5rem 0;
+            font-size: 1.1rem;
+        }
+        
+        .help-section p {
+            color: #555;
+            line-height: 1.6;
+            margin-bottom: 1rem;
+        }
+        
+        .help-section ul {
+            margin-bottom: 1rem;
+            padding-left: 1.5rem;
+        }
+        
+        .help-section li {
+            color: #555;
+            margin-bottom: 0.5rem;
+            line-height: 1.6;
+        }
+        
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin: 1.5rem 0;
+        }
+        
+        .feature-card {
+            background: #f8f9fa;
+            padding: 1.5rem;
+            border-radius: 8px;
+            border-left: 4px solid #667eea;
+        }
+        
+        .feature-card h4 {
+            margin-top: 0;
+            color: #333;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .back-to-app {
+            text-align: center;
+            margin: 3rem 0;
+        }
+        
+        .back-to-app a {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            text-decoration: none;
+            padding: 1rem 2rem;
+            border-radius: 8px;
+            font-weight: bold;
+            transition: transform 0.3s ease;
+        }
+        
+        .back-to-app a:hover {
+            transform: translateY(-2px);
+        }
+        
+        .keyboard-shortcuts {
+            background: #f8f9fa;
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin: 1rem 0;
+        }
+        
+        .shortcut-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.5rem 0;
+            border-bottom: 1px solid #e0e0e0;
+        }
+        
+        .shortcut-item:last-child {
+            border-bottom: none;
+        }
+        
+        .shortcut-key {
+            background: #fff;
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            border: 1px solid #ddd;
+            font-family: monospace;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="help-container">
+        <div class="help-header">
+            <h1><i class="fas fa-question-circle"></i> JobTracker Pro Help</h1>
+            <p>Complete guide to using JobTracker Pro effectively</p>
+        </div>
+
+        <div class="help-nav">
+            <h3>Quick Navigation</h3>
+            <ul>
+                <li><a href="#getting-started"><i class="fas fa-play-circle"></i> Getting Started</a></li>
+                <li><a href="#applications"><i class="fas fa-file-alt"></i> Applications</a></li>
+                <li><a href="#interviews"><i class="fas fa-calendar-alt"></i> Interview Scheduling</a></li>
+                <li><a href="#contacts"><i class="fas fa-users"></i> Contacts</a></li>
+                <li><a href="#analytics"><i class="fas fa-chart-line"></i> Analytics</a></li>
+                <li><a href="#printing"><i class="fas fa-print"></i> Print Reports</a></li>
+                <li><a href="#data-management"><i class="fas fa-database"></i> Data Management</a></li>
+                <li><a href="#troubleshooting"><i class="fas fa-wrench"></i> Troubleshooting</a></li>
+            </ul>
+        </div>
+
+        <div class="back-to-app">
+            <a href="index.html">
+                <i class="fas fa-arrow-left"></i> Back to JobTracker Pro
+            </a>
+        </div>
+
+        <section class="help-section" id="getting-started">
+            <h2><i class="fas fa-play-circle"></i> Getting Started</h2>
+            
+            <h3>Welcome to JobTracker Pro!</h3>
+            <p>JobTracker Pro is your comprehensive job search companion, designed to help you organize applications, manage professional contacts, and track your career journey progress.</p>
+            
+            <h4>First Steps</h4>
+            <ol>
+                <li><strong>Explore the Interface</strong>: Familiarize yourself with the four main sections: Dashboard, Applications, Contacts, and Analytics</li>
+                <li><strong>Add Your First Application</strong>: Start by adding a job application to see how the system works</li>
+                <li><strong>Set Up Contacts</strong>: Add contact information for recruiters and hiring managers</li>
+                <li><strong>Review Analytics</strong>: Check your progress and insights as you add more data</li>
+            </ol>
+            
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <h4><i class="fas fa-chart-dashboard"></i> Dashboard</h4>
+                    <p>Your command center showing key statistics, recent activity, and upcoming tasks at a glance.</p>
+                </div>
+                <div class="feature-card">
+                    <h4><i class="fas fa-file-alt"></i> Applications</h4>
+                    <p>Track all your job applications with detailed information and status updates.</p>
+                </div>
+                <div class="feature-card">
+                    <h4><i class="fas fa-users"></i> Contacts</h4>
+                    <p>Manage your professional network and link contacts to specific applications.</p>
+                </div>
+                <div class="feature-card">
+                    <h4><i class="fas fa-chart-line"></i> Analytics</h4>
+                    <p>Gain insights into your job search patterns and track your success rates.</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="help-section" id="applications">
+            <h2><i class="fas fa-file-alt"></i> Managing Applications</h2>
+            
+            <h3>Adding New Applications</h3>
+            <ol>
+                <li>Click the <strong>"Add Application"</strong> button</li>
+                <li>Fill in the required fields:
+                    <ul>
+                        <li><strong>Job Title</strong> (required)</li>
+                        <li><strong>Company</strong> (required)</li>
+                    </ul>
+                </li>
+                <li>Add optional information:
+                    <ul>
+                        <li>Location</li>
+                        <li>Salary range</li>
+                        <li>Job URL</li>
+                        <li>Notes</li>
+                    </ul>
+                </li>
+                <li>Include contact information if available</li>
+                <li>Set the current status</li>
+                <li>Click <strong>"Save Application"</strong></li>
+            </ol>
+            
+            <h3>Application Statuses</h3>
+            <ul>
+                <li><strong>Interested</strong>: Jobs you're considering applying to</li>
+                <li><strong>Applied</strong>: Applications you've submitted</li>
+                <li><strong>Interview</strong>: Interviews scheduled or completed (enables interview scheduling fields)</li>
+                <li><strong>Offer</strong>: Job offers received</li>
+                <li><strong>Rejected</strong>: Applications that were declined</li>
+                <li><strong>Accepted</strong>: Offers you've accepted</li>
+            </ul>
+            
+            <h3>Interview Scheduling</h3>
+            <p>When you set an application status to "Interview", additional fields will appear to help you manage your interview details:</p>
+            
+            <h4>Interview Fields:</h4>
+            <ul>
+                <li><strong>Interview Date</strong>: The date of your interview</li>
+                <li><strong>Interview Time</strong>: The time of your interview</li>
+                <li><strong>Interview Type</strong>: Phone, Video, In-Person, Panel, or Technical</li>
+                <li><strong>Duration</strong>: How long the interview is expected to last (in minutes)</li>
+                <li><strong>Location/Meeting Link</strong>: Office address or video call URL</li>
+                <li><strong>Interview Notes</strong>: Preparation notes, questions to ask, research about the company</li>
+            </ul>
+            
+            <h4>Smart Clock Alerts:</h4>
+            <p>The footer clock provides visual alerts for your scheduled interviews:</p>
+            <ul>
+                <li><strong>Red Flashing</strong>: Appears 1 hour before any scheduled interview</li>
+                <li><strong>Green Flashing</strong>: Appears during the interview time period</li>
+                <li><strong>Normal Display</strong>: Returns to normal after the interview ends</li>
+            </ul>
+            
+            <h3>Contact Integration</h3>
+            <p>When adding applications, you can include contact information for hiring managers or recruiters. This information will automatically create or update contacts in your network, making it easy to track who you've been in touch with for each position.</p>
+            
+            <h4>Contact Fields:</h4>
+            <ul>
+                <li>Contact Name</li>
+                <li>Contact Title (e.g., "Hiring Manager")</li>
+                <li>Contact Email</li>
+                <li>Contact Phone</li>
+                <li>Contact LinkedIn</li>
+            </ul>
+            
+            <h3>Filtering Applications</h3>
+            <p>Use the filter options to find specific applications:</p>
+            <ul>
+                <li><strong>Status Filter</strong>: Show only applications with specific statuses</li>
+                <li><strong>Date Filter</strong>: Display applications added after a certain date</li>
+            </ul>
+        </section>
+
+        <section class="help-section" id="interviews">
+            <h2><i class="fas fa-calendar-alt"></i> Interview Scheduling System</h2>
+            
+            <h3>Complete Interview Management</h3>
+            <p>JobTracker Pro includes a comprehensive interview scheduling system that helps you manage all aspects of your interviews, from initial scheduling to timing alerts.</p>
+            
+            <h3>Setting Up Interviews</h3>
+            <ol>
+                <li>Open an application or create a new one</li>
+                <li>Set the status to <strong>"Interview"</strong></li>
+                <li>Interview scheduling fields will automatically appear</li>
+                <li>Fill in the interview details (see below)</li>
+                <li>Save the application</li>
+            </ol>
+            
+            <h3>Interview Details</h3>
+            
+            <h4>Required Information:</h4>
+            <ul>
+                <li><strong>Interview Date</strong>: Select the date using the date picker</li>
+                <li><strong>Interview Time</strong>: Enter the exact time of your interview</li>
+            </ul>
+            
+            <h4>Optional Information:</h4>
+            <ul>
+                <li><strong>Interview Type</strong>: Choose from:
+                    <ul>
+                        <li>Phone Interview</li>
+                        <li>Video Interview</li>
+                        <li>In-Person Interview</li>
+                        <li>Panel Interview</li>
+                        <li>Technical Interview</li>
+                    </ul>
+                </li>
+                <li><strong>Duration</strong>: Expected length in minutes (default: 60 minutes)</li>
+                <li><strong>Location/Meeting Link</strong>: Office address or video call URL</li>
+                <li><strong>Interview Notes</strong>: Preparation notes, questions to ask, company research</li>
+            </ul>
+            
+            <h3>Smart Clock System</h3>
+            <p>The footer clock provides real-time alerts for your scheduled interviews:</p>
+            
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <h4><i class="fas fa-exclamation-triangle" style="color: #ff4444;"></i> Pre-Interview Alert</h4>
+                    <p>Clock flashes <strong>red</strong> starting 1 hour before any scheduled interview to give you preparation time.</p>
+                </div>
+                <div class="feature-card">
+                    <h4><i class="fas fa-video" style="color: #44ff44;"></i> Active Interview</h4>
+                    <p>Clock flashes <strong>green</strong> during the entire duration of your interview time.</p>
+                </div>
+            </div>
+            
+            <h3>Enhanced Interview Cards</h3>
+            <p>Applications with scheduled interviews display with special styling and additional information:</p>
+            
+            <h4>Interview Card Features:</h4>
+            <ul>
+                <li><strong>Orange Accent</strong>: Special border and background gradient</li>
+                <li><strong>Interview Details Box</strong>: Highlighted section with all interview information</li>
+                <li><strong>Smart Date Display</strong>: Shows "Today", "Tomorrow", or formatted date</li>
+                <li><strong>Quick Actions</strong>: Context-aware buttons based on interview type:
+                    <ul>
+                        <li>"Join Call" for video interviews</li>
+                        <li>"Call" for phone interviews</li>
+                        <li>"Location" for in-person interviews</li>
+                    </ul>
+                </li>
+                <li><strong>Contact Information</strong>: Interviewer details prominently displayed</li>
+                <li><strong>Interview Notes</strong>: Preparation notes in a separate section</li>
+            </ul>
+            
+            <h3>Best Practices</h3>
+            
+            <h4>Before the Interview:</h4>
+            <ul>
+                <li>Fill in all interview details as soon as you schedule</li>
+                <li>Add detailed preparation notes</li>
+                <li>Include interviewer contact information</li>
+                <li>Test video call links in advance</li>
+                <li>Set a buffer time for technical issues</li>
+            </ul>
+            
+            <h4>Using the Clock Alerts:</h4>
+            <ul>
+                <li>Red flash means you have 1 hour to prepare</li>
+                <li>Use this time for final preparation and setup</li>
+                <li>Green flash confirms you're in the interview window</li>
+                <li>Clock returns to normal when interview time ends</li>
+            </ul>
+            
+            <h3>Interview Types Guide</h3>
+            
+            <h4>Phone Interview:</h4>
+            <ul>
+                <li>Include phone number in location field</li>
+                <li>Note if you're calling them or they're calling you</li>
+                <li>Prepare in a quiet environment</li>
+            </ul>
+            
+            <h4>Video Interview:</h4>
+            <ul>
+                <li>Add meeting link to location field</li>
+                <li>Test your camera and microphone beforehand</li>
+                <li>Check lighting and background</li>
+                <li>Have backup communication method ready</li>
+            </ul>
+            
+            <h4>In-Person Interview:</h4>
+            <ul>
+                <li>Include full address in location field</li>
+                <li>Plan travel time and parking</li>
+                <li>Dress code considerations</li>
+                <li>Bring printed copies of resume</li>
+            </ul>
+        </section>
+
+        <section class="help-section" id="contacts">
+            <h2><i class="fas fa-users"></i> Contact Management</h2>
+            
+            <h3>Building Your Professional Network</h3>
+            <p>Contacts are automatically created when you add contact information to job applications, but you can also manually add contacts to build your professional network.</p>
+            
+            <h3>Adding Contacts</h3>
+            <h4>Automatic Contact Creation:</h4>
+            <ul>
+                <li>When adding job applications, include contact information</li>
+                <li>Contacts are automatically created or updated</li>
+                <li>Duplicate contacts are prevented by email matching</li>
+            </ul>
+            
+            <h4>Manual Contact Addition:</h4>
+            <ol>
+                <li>Go to the Contacts section</li>
+                <li>Click <strong>"Add Contact"</strong></li>
+                <li>Fill in the contact information</li>
+                <li>Add notes about how you know them or interaction history</li>
+                <li>Save the contact</li>
+            </ol>
+            
+            <h3>Contact Features</h3>
+            <ul>
+                <li><strong>Alphabetical Sorting</strong>: Contacts are automatically sorted by name</li>
+                <li><strong>Proper Capitalization</strong>: Names and titles are automatically formatted</li>
+                <li><strong>Quick Communication</strong>: Click email or phone to contact directly</li>
+                <li><strong>LinkedIn Integration</strong>: Quick access to LinkedIn profiles</li>
+            </ul>
+        </section>
+
+        <section class="help-section" id="analytics">
+            <h2><i class="fas fa-chart-line"></i> Analytics & Insights</h2>
+            
+            <h3>Understanding Your Progress</h3>
+            <p>The Analytics section provides valuable insights into your job search performance and trends.</p>
+            
+            <h3>Available Analytics</h3>
+            
+            <h4>Status Distribution Chart</h4>
+            <ul>
+                <li>Visual breakdown of application statuses</li>
+                <li>Percentage and count for each status</li>
+                <li>Color-coded for easy interpretation</li>
+            </ul>
+            
+            <h4>Timeline Chart</h4>
+            <ul>
+                <li>Shows application activity over the last 7 days</li>
+                <li>Helps identify application patterns</li>
+                <li>Tracks daily application volume</li>
+            </ul>
+            
+            <h4>Key Insights</h4>
+            <p>Personalized insights based on your data:</p>
+            <ul>
+                <li><strong>Response Rate</strong>: Percentage of applications that received responses</li>
+                <li><strong>Interview Rate</strong>: Conversion rate from applications to interviews</li>
+                <li><strong>Success Rate</strong>: Applications resulting in offers</li>
+                <li><strong>Recent Activity</strong>: Summary of recent application additions</li>
+                <li><strong>Recommendations</strong>: Suggestions for improving your job search</li>
+            </ul>
+            
+            <h3>Using Analytics Effectively</h3>
+            <ul>
+                <li>Review analytics weekly to track progress</li>
+                <li>Use insights to identify areas for improvement</li>
+                <li>Follow recommendations to optimize your job search strategy</li>
+                <li>Track trends over time to see what's working</li>
+            </ul>
+        </section>
+
+        <section class="help-section" id="printing">
+            <h2><i class="fas fa-print"></i> Professional Print Reports</h2>
+            
+            <h3>Generate Professional Reports</h3>
+            <p>JobTracker Pro includes a comprehensive print system that allows you to create professional reports of your job search data. Perfect for sharing with career counselors, maintaining offline records, or creating portfolio documentation.</p>
+            
+            <h3>Accessing the Print Feature</h3>
+            <ol>
+                <li>Click the <strong>Print</strong> button in the header navigation</li>
+                <li>The print modal will open with various options</li>
+                <li>Select categories and format preferences</li>
+                <li>Click <strong>"Generate Print View"</strong></li>
+            </ol>
+            
+            <h3>Print Categories</h3>
+            <p>Choose which information to include in your report:</p>
+            
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <h4><i class="fas fa-file-alt"></i> Job Applications</h4>
+                    <p>Complete listing of all your job applications with status, dates, contact info, and interview details.</p>
+                </div>
+                <div class="feature-card">
+                    <h4><i class="fas fa-users"></i> Professional Contacts</h4>
+                    <p>Your complete professional network with contact details, companies, and relationship notes.</p>
+                </div>
+                <div class="feature-card">
+                    <h4><i class="fas fa-chart-line"></i> Analytics Summary</h4>
+                    <p>Key statistics, status breakdowns, and personalized insights about your job search progress.</p>
+                </div>
+            </div>
+            
+            <h3>Print Format Options</h3>
+            
+            <h4>Spreadsheet Format (Tables)</h4>
+            <ul>
+                <li><strong>Applications Table</strong>: Job Title, Company, Status, Location, Salary, Date Added, Contact, Interview</li>
+                <li><strong>Contacts Table</strong>: Name, Title, Company, Email, Phone, LinkedIn</li>
+                <li><strong>Compact Layout</strong>: Maximum information in minimal space</li>
+                <li><strong>Easy Scanning</strong>: Perfect for quick reference and sharing</li>
+            </ul>
+            
+            <h4>Card Format (Detailed)</h4>
+            <ul>
+                <li><strong>Complete Information</strong>: All details including notes, URLs, and interview specifics</li>
+                <li><strong>Application Cards</strong>: Full job details with interview information and contact data</li>
+                <li><strong>Contact Cards</strong>: Complete contact profiles with notes and relationship details</li>
+                <li><strong>Readable Layout</strong>: Easy-to-read format for detailed review</li>
+            </ul>
+            
+            <h3>Report Features</h3>
+            
+            <h4>Professional Headers</h4>
+            <ul>
+                <li>Report title: "JobTracker Pro - Career Report"</li>
+                <li>Generation date and time</li>
+                <li>Summary statistics (total applications and contacts)</li>
+                <li>Clean, professional appearance</li>
+            </ul>
+            
+            <h4>Smart Organization</h4>
+            <ul>
+                <li><strong>Applications</strong>: Sorted by date (newest first)</li>
+                <li><strong>Contacts</strong>: Sorted alphabetically by name</li>
+                <li><strong>Status Colors</strong>: Application statuses color-coded for easy identification</li>
+                <li><strong>Page Breaks</strong>: Automatic page breaks between sections</li>
+            </ul>
+            
+            <h4>Interview Integration</h4>
+            <ul>
+                <li>Interview dates and times clearly displayed</li>
+                <li>Interview types (Phone, Video, In-Person, etc.)</li>
+                <li>Contact information linked to interviews</li>
+                <li>Interview preparation notes included</li>
+            </ul>
+            
+            <h3>Print Best Practices</h3>
+            
+            <h4>Before Printing:</h4>
+            <ul>
+                <li>Ensure all data is up-to-date</li>
+                <li>Review application statuses for accuracy</li>
+                <li>Update contact information</li>
+                <li>Add any missing notes or details</li>
+            </ul>
+            
+            <h4>Choosing the Right Format:</h4>
+            <ul>
+                <li><strong>Spreadsheet</strong>: Best for quick overviews and sharing</li>
+                <li><strong>Card Format</strong>: Best for detailed reviews and portfolio inclusion</li>
+                <li><strong>Mixed Approach</strong>: Generate both formats for different purposes</li>
+            </ul>
+            
+            <h4>Using Print Reports:</h4>
+            <ul>
+                <li><strong>Career Counseling</strong>: Share with career advisors for guidance</li>
+                <li><strong>Interview Preparation</strong>: Quick reference for company research</li>
+                <li><strong>Networking Events</strong>: Contact list for follow-up opportunities</li>
+                <li><strong>Progress Tracking</strong>: Monthly or quarterly progress reports</li>
+                <li><strong>Job Search Documentation</strong>: Maintain records for future reference</li>
+            </ul>
+            
+            <h3>Technical Notes</h3>
+            
+            <h4>Print Process:</h4>
+            <ol>
+                <li>Report generates in a new browser window</li>
+                <li>Print dialog opens automatically</li>
+                <li>Window closes after printing (or manual close)</li>
+                <li>Original application remains open and functional</li>
+            </ol>
+            
+            <h4>Browser Compatibility:</h4>
+            <ul>
+                <li>Works with all modern browsers</li>
+                <li>Print styles optimized for standard paper sizes</li>
+                <li>Status colors preserved in compatible browsers</li>
+                <li>Automatic page breaks for clean printing</li>
+            </ul>
+            
+            <h4>Troubleshooting Print Issues:</h4>
+            <ul>
+                <li>If print dialog doesn't appear, manually trigger print (Ctrl+P)</li>
+                <li>For color printing, ensure browser print settings allow colors</li>
+                <li>If content is cut off, check browser print scale settings</li>
+                <li>For best results, use "More settings" → "Print backgrounds"</li>
+            </ul>
+        </section>
+
+        <section class="help-section" id="data-management">
+            <h2><i class="fas fa-database"></i> Data Management</h2>
+            
+            <h3>Data Storage</h3>
+            <p>JobTracker Pro stores all your data locally in your browser using HTML5 LocalStorage. This means:</p>
+            <ul>
+                <li>Your data stays private and secure on your device</li>
+                <li>No internet connection required after initial load</li>
+                <li>Data persists between browser sessions</li>
+                <li>No external servers or databases involved</li>
+            </ul>
+            
+            <h3>Data Backup & Export</h3>
+            <h4>To Export Your Data:</h4>
+            <ol>
+                <li>Click the <strong>Settings</strong> button (gear icon)</li>
+                <li>Click <strong>"Export Data"</strong></li>
+                <li>A JSON file will be downloaded with all your data</li>
+                <li>Store this file safely as a backup</li>
+            </ol>
+            
+            <h3>Data Import & Restore</h3>
+            <h4>To Import Data:</h4>
+            <ol>
+                <li>Click the <strong>Settings</strong> button</li>
+                <li>Click <strong>"Choose File"</strong> under Import Data</li>
+                <li>Select your exported JSON file</li>
+                <li>Your data will be restored</li>
+            </ol>
+            
+            <h3>Data Sync</h3>
+            <p>The Sync button currently simulates cloud synchronization. In future versions, this may connect to cloud storage services for automatic backup.</p>
+            
+            <h3>Clearing Data</h3>
+            <p><strong>Warning:</strong> The "Clear All Data" option permanently removes all applications and contacts. Only use this if you want to start completely fresh.</p>
+        </section>
+
+        <section class="help-section" id="troubleshooting">
+            <h2><i class="fas fa-wrench"></i> Troubleshooting</h2>
+            
+            <h3>Common Issues & Solutions</h3>
+            
+            <h4>Data Not Saving</h4>
+            <ul>
+                <li>Check if your browser allows LocalStorage</li>
+                <li>Ensure you're not in private/incognito mode</li>
+                <li>Try refreshing the page</li>
+                <li>Check browser storage settings</li>
+            </ul>
+            
+            <h4>Analytics Not Updating</h4>
+            <ul>
+                <li>Add more applications (minimum 1 required)</li>
+                <li>Switch to another section and back to Analytics</li>
+                <li>Refresh the page</li>
+            </ul>
+            
+            <h4>Contact Information Not Displaying</h4>
+            <ul>
+                <li>Ensure contact name is entered in the application form</li>
+                <li>Check that the contact was saved properly</li>
+                <li>Verify the contact appears in the Contacts section</li>
+            </ul>
+            
+            <h4>Application Filters Not Working</h4>
+            <ul>
+                <li>Clear all filters and try again</li>
+                <li>Check that applications exist with the selected criteria</li>
+                <li>Refresh the page to reset filters</li>
+            </ul>
+            
+            <h4>Interview Fields Not Appearing</h4>
+            <ul>
+                <li>Ensure application status is set to "Interview"</li>
+                <li>Save and reopen the application if fields don't appear</li>
+                <li>Refresh the page and try again</li>
+                <li>Check that JavaScript is enabled in your browser</li>
+            </ul>
+            
+            <h4>Clock Not Flashing for Interviews</h4>
+            <ul>
+                <li>Verify interview date and time are correctly entered</li>
+                <li>Check that your system clock is accurate</li>
+                <li>Ensure interview status is "Interview" not another status</li>
+                <li>Wait a few seconds for the clock to update</li>
+                <li>Refresh the page if clock appears stuck</li>
+            </ul>
+            
+            <h4>Interview Details Not Displaying on Cards</h4>
+            <ul>
+                <li>Confirm interview date and time are filled in</li>
+                <li>Check that application status is "Interview"</li>
+                <li>Save the application and refresh the applications page</li>
+                <li>Verify interview information was properly saved</li>
+            </ul>
+            
+            <h4>Print Feature Not Working</h4>
+            <ul>
+                <li>Ensure you have data to print (applications or contacts)</li>
+                <li>Check that at least one category is selected in print modal</li>
+                <li>Verify your browser allows pop-ups from this site</li>
+                <li>Try manually triggering print with Ctrl+P if dialog doesn't appear</li>
+                <li>Disable pop-up blockers for the print feature</li>
+            </ul>
+            
+            <h4>Print Content Issues</h4>
+            <ul>
+                <li>If colors don't print, enable "Print backgrounds" in browser settings</li>
+                <li>For cut-off content, adjust print scale in browser print settings</li>
+                <li>If tables are too wide, try "Card Format" instead of "Spreadsheet Format"</li>
+                <li>Check paper size settings match your printer</li>
+                <li>Use landscape orientation for wide content</li>
+            </ul>
+            
+            <h3>Browser Compatibility</h3>
+            <p>JobTracker Pro works best on modern browsers:</p>
+            <ul>
+                <li>Chrome 70+</li>
+                <li>Firefox 65+</li>
+                <li>Safari 12+</li>
+                <li>Edge 79+</li>
+            </ul>
+            
+            <h3>Performance Tips</h3>
+            <ul>
+                <li>Regular data exports for backup</li>
+                <li>Clear browser cache if experiencing issues</li>
+                <li>Use consistent data entry for better analytics</li>
+                <li>Keep contact information up to date</li>
+            </ul>
+            
+            <h3>Keyboard Shortcuts</h3>
+            <div class="keyboard-shortcuts">
+                <div class="shortcut-item">
+                    <span>Close modal/dialog</span>
+                    <span class="shortcut-key">Esc</span>
+                </div>
+                <div class="shortcut-item">
+                    <span>Quick sync</span>
+                    <span class="shortcut-key">Ctrl + S</span>
+                </div>
+            </div>
+        </section>
+
+        <div class="back-to-app">
+            <a href="index.html">
+                <i class="fas fa-arrow-left"></i> Back to JobTracker Pro
+            </a>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="app-footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-info">
+                    <p><strong>JobTracker Pro</strong> v1.0.0</p>
+                    <p id="footer-datetime"></p>
+                </div>
+                <div class="footer-links">
+                    <a href="help.html"><i class="fas fa-question-circle"></i> Help</a>
+                    <a href="documentation.html"><i class="fas fa-file-text"></i> Documentation</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Update footer with current date and time
+        function updateDateTime() {
+            const now = new Date();
+            const options = {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit',
+                second: '2-digit',
+                timeZoneName: 'short'
+            };
+            document.getElementById('footer-datetime').textContent = now.toLocaleDateString('en-US', options);
+        }
+
+        // Update time immediately and then every second
+        updateDateTime();
+        setInterval(updateDateTime, 1000);
+    </script>
+</body>
+</html>
+

@@ -26,6 +26,9 @@
                 </button>
             </nav>
             <div class="header-actions">
+                <button class="print-btn" id="printBtn">
+                    <i class="fas fa-print"></i> Print
+                </button>
                 <button class="sync-btn" id="syncBtn">
                     <i class="fas fa-sync-alt"></i> Sync
                 </button>
@@ -203,7 +206,7 @@
                 </div>
                 <div class="form-group">
                     <label for="status">Status</label>
-                    <select id="status">
+                    <select id="status" onchange="jobTracker.toggleInterviewFields()">
                         <option value="interested">Interested</option>
                         <option value="applied">Applied</option>
                         <option value="interview">Interview</option>
@@ -212,6 +215,45 @@
                         <option value="accepted">Accepted</option>
                     </select>
                 </div>
+                
+                <!-- Interview Details Section -->
+                <div class="form-section" id="interviewSection" style="display: none;">
+                    <h4><i class="fas fa-calendar-alt"></i> Interview Details</h4>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="interviewDate">Interview Date</label>
+                            <input type="date" id="interviewDate">
+                        </div>
+                        <div class="form-group">
+                            <label for="interviewTime">Interview Time</label>
+                            <input type="time" id="interviewTime">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="interviewType">Interview Type</label>
+                            <select id="interviewType">
+                                <option value="phone">Phone Interview</option>
+                                <option value="video">Video Interview</option>
+                                <option value="in-person">In-Person Interview</option>
+                                <option value="panel">Panel Interview</option>
+                                <option value="technical">Technical Interview</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="interviewDuration">Duration (minutes)</label>
+                            <input type="number" id="interviewDuration" placeholder="60" min="15" max="480">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="interviewLocation">Location/Meeting Link</label>
+                        <input type="text" id="interviewLocation" placeholder="Office address or video call link">
+                    </div>
+                    <div class="form-group">
+                        <label for="interviewNotes">Interview Notes</label>
+                        <textarea id="interviewNotes" rows="3" placeholder="Preparation notes, questions to ask, etc."></textarea>
+                    </div>
+                </div>
                 <div class="form-group">
                     <label for="jobUrl">Job URL</label>
                     <input type="url" id="jobUrl">
@@ -219,6 +261,35 @@
                 <div class="form-group">
                     <label for="notes">Notes</label>
                     <textarea id="notes" rows="4"></textarea>
+                </div>
+                
+                <!-- Contact Information Section -->
+                <div class="form-section">
+                    <h4><i class="fas fa-user"></i> Contact Information (Optional)</h4>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="contactPersonName">Contact Name</label>
+                            <input type="text" id="contactPersonName" placeholder="e.g., John Smith">
+                        </div>
+                        <div class="form-group">
+                            <label for="contactPersonTitle">Contact Title</label>
+                            <input type="text" id="contactPersonTitle" placeholder="e.g., Hiring Manager">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="contactPersonEmail">Contact Email</label>
+                            <input type="email" id="contactPersonEmail" placeholder="contact@company.com">
+                        </div>
+                        <div class="form-group">
+                            <label for="contactPersonPhone">Contact Phone</label>
+                            <input type="tel" id="contactPersonPhone" placeholder="(555) 123-4567">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="contactPersonLinkedIn">Contact LinkedIn</label>
+                        <input type="url" id="contactPersonLinkedIn" placeholder="https://linkedin.com/in/username">
+                    </div>
                 </div>
                 <div class="form-actions">
                     <button type="button" class="btn-secondary" id="cancelBtn">Cancel</button>
@@ -273,6 +344,93 @@
             </form>
         </div>
     </div>
+
+    <!-- Print Modal -->
+    <div class="modal" id="printModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Print Report</h3>
+                <button class="close-btn" id="closePrintModal">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="print-form">
+                <h4>Select Categories to Print:</h4>
+                <div class="print-options">
+                    <label class="checkbox-item">
+                        <input type="checkbox" id="printApplications" checked>
+                        <span class="checkmark"></span>
+                        <span class="checkbox-label">
+                            <i class="fas fa-file-alt"></i>
+                            Job Applications
+                            <small id="appCount">0 applications</small>
+                        </span>
+                    </label>
+                    <label class="checkbox-item">
+                        <input type="checkbox" id="printContacts" checked>
+                        <span class="checkmark"></span>
+                        <span class="checkbox-label">
+                            <i class="fas fa-users"></i>
+                            Professional Contacts
+                            <small id="contactCount">0 contacts</small>
+                        </span>
+                    </label>
+                    <label class="checkbox-item">
+                        <input type="checkbox" id="printAnalytics">
+                        <span class="checkmark"></span>
+                        <span class="checkbox-label">
+                            <i class="fas fa-chart-line"></i>
+                            Analytics Summary
+                            <small>Statistics and insights</small>
+                        </span>
+                    </label>
+                </div>
+                <div class="print-format-options">
+                    <h4>Format Options:</h4>
+                    <label class="radio-item">
+                        <input type="radio" name="printFormat" value="table" checked>
+                        <span class="radio-mark"></span>
+                        <span class="radio-label">
+                            <i class="fas fa-table"></i>
+                            Spreadsheet Format
+                            <small>Organized in tables for easy reading</small>
+                        </span>
+                    </label>
+                    <label class="radio-item">
+                        <input type="radio" name="printFormat" value="cards">
+                        <span class="radio-mark"></span>
+                        <span class="radio-label">
+                            <i class="fas fa-th-large"></i>
+                            Card Format
+                            <small>Detailed cards similar to screen view</small>
+                        </span>
+                    </label>
+                </div>
+                <div class="print-actions">
+                    <button type="button" class="btn-secondary" id="cancelPrintBtn">Cancel</button>
+                    <button type="button" class="btn-primary" id="generatePrintBtn">
+                        <i class="fas fa-print"></i> Generate Print View
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="app-footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-info">
+                    <p><strong>JobTracker Pro</strong> v1.0.0</p>
+                    <p id="footer-datetime"></p>
+                </div>
+                <div class="footer-links">
+                    <a href="help.html"><i class="fas fa-question-circle"></i> Help</a>
+                    <a href="documentation.html"><i class="fas fa-file-text"></i> Documentation</a>
+                </div>
+            </div>
+        </div>
+    </footer>
 
     <script src="script.js"></script>
 </body>

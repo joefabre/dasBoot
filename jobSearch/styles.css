@@ -10,6 +10,9 @@ body {
     line-height: 1.6;
     color: #333;
     background-color: #f5f7fa;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
 }
 
 .container {
@@ -81,7 +84,7 @@ body {
     align-items: center;
 }
 
-.sync-btn, .settings-btn {
+.sync-btn, .settings-btn, .print-btn {
     background: rgba(255,255,255,0.1);
     border: none;
     color: white;
@@ -94,14 +97,14 @@ body {
     gap: 0.5rem;
 }
 
-.sync-btn:hover, .settings-btn:hover {
+.sync-btn:hover, .settings-btn:hover, .print-btn:hover {
     background: rgba(255,255,255,0.2);
 }
 
 /* Main Content */
 .main {
     padding: 2rem 0;
-    min-height: calc(100vh - 80px);
+    flex: 1;
 }
 
 .section {
@@ -439,8 +442,53 @@ body {
 
 .contact-actions {
     display: flex;
+    gap: 0.75rem;
+    justify-content: flex-start;
+    align-items: center;
+    margin-top: 1rem;
+    padding-top: 1rem;
+    border-top: 1px solid #f0f0f0;
+}
+
+.contact-actions button {
+    padding: 0.5rem 1rem;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 0.85rem;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
     gap: 0.5rem;
-    flex-wrap: wrap;
+    min-width: 80px;
+    justify-content: center;
+}
+
+.contact-actions .edit-btn {
+    background: #e3f2fd;
+    color: #1976d2;
+    border: 1px solid #bbdefb;
+}
+
+.contact-actions .edit-btn:hover {
+    background: #bbdefb;
+    color: #0d47a1;
+    transform: translateY(-1px);
+    box-shadow: 0 2px 4px rgba(25, 118, 210, 0.2);
+}
+
+.contact-actions .delete-btn {
+    background: #ffebee;
+    color: #d32f2f;
+    border: 1px solid #ffcdd2;
+}
+
+.contact-actions .delete-btn:hover {
+    background: #ffcdd2;
+    color: #b71c1c;
+    transform: translateY(-1px);
+    box-shadow: 0 2px 4px rgba(211, 47, 47, 0.2);
 }
 
 /* Analytics Styles */
@@ -698,13 +746,44 @@ form {
     min-height: 100px;
 }
 
+.form-section {
+    margin-top: 2rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid #e0e0e0;
+}
+
+.form-section h4 {
+    margin: 0 0 1rem 0;
+    color: #2c3e50;
+    font-size: 1.1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.form-section h4 i {
+    color: #3498db;
+}
+
+.form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+}
+
+@media (max-width: 768px) {
+    .form-row {
+        grid-template-columns: 1fr;
+    }
+}
+
 .form-actions {
     display: flex;
     gap: 1rem;
     justify-content: flex-end;
+    margin-top: 2rem;
     padding-top: 1rem;
-    border-top: 1px solid #e1e5e9;
-    margin-top: 1rem;
+    border-top: 1px solid #e0e0e0;
 }
 
 /* Responsive Design */
@@ -835,6 +914,336 @@ form {
 @keyframes spin {
     0% { transform: rotate(0deg); }
     100% { transform: rotate(360deg); }
+}
+
+/* Footer Styles */
+.app-footer {
+    background: #2c3e50;
+    color: white;
+    padding: 1.5rem 0;
+    margin-top: auto;
+    position: sticky;
+    bottom: 0;
+    width: 100%;
+    z-index: 1000;
+}
+
+.footer-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.footer-info p {
+    margin: 0;
+    font-size: 0.9rem;
+}
+
+.footer-info p:first-child {
+    font-size: 1rem;
+    margin-bottom: 0.25rem;
+}
+
+.footer-links {
+    display: flex;
+    gap: 1.5rem;
+    align-items: center;
+}
+
+.footer-links a {
+    color: #bdc3c7;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.9rem;
+    transition: color 0.3s ease;
+}
+
+.footer-links a:hover {
+    color: white;
+}
+
+@media (max-width: 768px) {
+    .footer-content {
+        flex-direction: column;
+        text-align: center;
+    }
+    
+    .footer-links {
+        justify-content: center;
+    }
+}
+
+/* Clock Status Animations */
+.clock-warning {
+    animation: flashRed 1s infinite;
+    font-weight: bold;
+}
+
+.clock-active {
+    animation: flashGreen 1s infinite;
+    font-weight: bold;
+}
+
+@keyframes flashRed {
+    0%, 50% { color: #ff4444; }
+    51%, 100% { color: white; }
+}
+
+@keyframes flashGreen {
+    0%, 50% { color: #44ff44; }
+    51%, 100% { color: white; }
+}
+
+/* Interview Card Styling */
+.application-card.interview-scheduled {
+    border-left: 4px solid #ff9800;
+    background: linear-gradient(145deg, #fff9f3, #ffffff);
+}
+
+.interview-details {
+    margin-top: 1rem;
+    padding: 1rem;
+    background: #fff3e0;
+    border-radius: 8px;
+    border-left: 4px solid #ff9800;
+}
+
+.interview-details span {
+    display: block;
+    margin-bottom: 0.5rem;
+    color: #e65100;
+    font-size: 0.9rem;
+    font-weight: 500;
+}
+
+.interview-details span:last-child {
+    margin-bottom: 0;
+}
+
+.interview-details i {
+    color: #ff9800;
+    margin-right: 0.5rem;
+    width: 16px;
+}
+
+.interview-notes {
+    background: #fff3e0;
+    border-left: 4px solid #ff9800;
+    color: #e65100;
+    margin-top: 1rem;
+    padding: 0.75rem;
+    border-radius: 6px;
+    font-size: 0.9rem;
+}
+
+.interview-notes i {
+    color: #ff9800;
+    margin-right: 0.5rem;
+}
+
+.interview-link {
+    background: #ff9800 !important;
+    color: white !important;
+    border-color: #ff9800 !important;
+}
+
+.interview-link:hover {
+    background: #f57c00 !important;
+    color: white !important;
+}
+
+/* Print Modal Styles */
+.print-form {
+    padding: 1.5rem;
+}
+
+.print-form h4 {
+    margin: 0 0 1rem 0;
+    color: #333;
+    font-size: 1.1rem;
+}
+
+.print-options {
+    margin-bottom: 2rem;
+}
+
+.checkbox-item, .radio-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+    padding: 1rem;
+    margin-bottom: 0.5rem;
+    background: #f8f9fa;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+    position: relative;
+}
+
+.checkbox-item:hover, .radio-item:hover {
+    background: #e9ecef;
+}
+
+.checkbox-item input[type="checkbox"],
+.radio-item input[type="radio"] {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+    height: 0;
+    width: 0;
+}
+
+.checkmark, .radio-mark {
+    height: 20px;
+    width: 20px;
+    background-color: white;
+    border: 2px solid #ddd;
+    border-radius: 4px;
+    position: relative;
+    flex-shrink: 0;
+    margin-top: 2px;
+}
+
+.radio-mark {
+    border-radius: 50%;
+}
+
+.checkbox-item input:checked ~ .checkmark,
+.radio-item input:checked ~ .radio-mark {
+    background-color: #667eea;
+    border-color: #667eea;
+}
+
+.checkmark:after {
+    content: "";
+    position: absolute;
+    display: none;
+}
+
+.checkbox-item input:checked ~ .checkmark:after {
+    display: block;
+}
+
+.checkbox-item .checkmark:after {
+    left: 6px;
+    top: 2px;
+    width: 5px;
+    height: 10px;
+    border: solid white;
+    border-width: 0 2px 2px 0;
+    transform: rotate(45deg);
+}
+
+.radio-mark:after {
+    content: "";
+    position: absolute;
+    display: none;
+    top: 4px;
+    left: 4px;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: white;
+}
+
+.radio-item input:checked ~ .radio-mark:after {
+    display: block;
+}
+
+.checkbox-label, .radio-label {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+.checkbox-label i, .radio-label i {
+    color: #667eea;
+    margin-right: 0.5rem;
+}
+
+.checkbox-label small, .radio-label small {
+    color: #666;
+    font-size: 0.8rem;
+    display: block;
+}
+
+.print-format-options {
+    margin-bottom: 2rem;
+    border-top: 1px solid #e0e0e0;
+    padding-top: 1.5rem;
+}
+
+.print-actions {
+    display: flex;
+    gap: 1rem;
+    justify-content: flex-end;
+    padding-top: 1rem;
+    border-top: 1px solid #e0e0e0;
+}
+
+/* Print Styles */
+@media print {
+    body * {
+        visibility: hidden;
+    }
+    
+    .print-content, .print-content * {
+        visibility: visible;
+    }
+    
+    .print-content {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+    }
+    
+    .print-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-bottom: 2rem;
+        font-size: 12px;
+    }
+    
+    .print-table th,
+    .print-table td {
+        border: 1px solid #333;
+        padding: 8px;
+        text-align: left;
+        vertical-align: top;
+    }
+    
+    .print-table th {
+        background-color: #f0f0f0;
+        font-weight: bold;
+    }
+    
+    .print-header {
+        text-align: center;
+        margin-bottom: 2rem;
+        border-bottom: 2px solid #333;
+        padding-bottom: 1rem;
+    }
+    
+    .print-section {
+        margin-bottom: 2rem;
+        page-break-inside: avoid;
+    }
+    
+    .print-section h2 {
+        color: #333;
+        margin-bottom: 1rem;
+        font-size: 18px;
+    }
+    
+    .page-break {
+        page-break-before: always;
+    }
 }
 
 /* Utility Classes */

@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Documentation - JobTracker Pro</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        .docs-container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 2rem;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+        }
+        
+        .docs-header {
+            text-align: center;
+            margin-bottom: 3rem;
+            padding-bottom: 2rem;
+            border-bottom: 2px solid #f0f0f0;
+        }
+        
+        .docs-header h1 {
+            color: #333;
+            margin-bottom: 1rem;
+            font-size: 2.5rem;
+        }
+        
+        .badge-container {
+            margin: 1rem 0;
+            display: flex;
+            justify-content: center;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+        
+        .badge {
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            color: white;
+        }
+        
+        .badge-version { background: #007bff; }
+        .badge-license { background: #28a745; }
+        .badge-platform { background: #ff6b35; }
+        
+        .docs-nav {
+            background: #f8f9fa;
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin-bottom: 2rem;
+        }
+        
+        .docs-nav h3 {
+            margin-bottom: 1rem;
+            color: #333;
+        }
+        
+        .docs-nav ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 0.5rem;
+        }
+        
+        .docs-nav a {
+            color: #667eea;
+            text-decoration: none;
+            padding: 0.5rem;
+            border-radius: 4px;
+            transition: background 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .docs-nav a:hover {
+            background: #e3f2fd;
+        }
+        
+        .docs-section {
+            margin-bottom: 3rem;
+            padding-bottom: 2rem;
+            border-bottom: 1px solid #e0e0e0;
+        }
+        
+        .docs-section:last-child {
+            border-bottom: none;
+        }
+        
+        .docs-section h2 {
+            color: #333;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-size: 1.8rem;
+        }
+        
+        .docs-section h3 {
+            color: #555;
+            margin: 1.5rem 0 1rem 0;
+            font-size: 1.3rem;
+        }
+        
+        .docs-section h4 {
+            color: #666;
+            margin: 1rem 0 0.5rem 0;
+            font-size: 1.1rem;
+        }
+        
+        .docs-section p {
+            color: #555;
+            line-height: 1.6;
+            margin-bottom: 1rem;
+        }
+        
+        .docs-section ul {
+            margin-bottom: 1rem;
+            padding-left: 1.5rem;
+        }
+        
+        .docs-section li {
+            color: #555;
+            margin-bottom: 0.5rem;
+            line-height: 1.6;
+        }
+        
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin: 1.5rem 0;
+        }
+        
+        .feature-card {
+            background: #f8f9fa;
+            padding: 1.5rem;
+            border-radius: 8px;
+            border-left: 4px solid #667eea;
+        }
+        
+        .feature-card h4 {
+            margin-top: 0;
+            color: #333;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .back-to-app {
+            text-align: center;
+            margin: 3rem 0;
+        }
+        
+        .back-to-app a {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            text-decoration: none;
+            padding: 1rem 2rem;
+            border-radius: 8px;
+            font-weight: bold;
+            transition: transform 0.3s ease;
+        }
+        
+        .back-to-app a:hover {
+            transform: translateY(-2px);
+        }
+        
+        .code-block {
+            background: #f8f9fa;
+            padding: 1rem;
+            border-radius: 6px;
+            border-left: 4px solid #667eea;
+            font-family: 'Courier New', monospace;
+            margin: 1rem 0;
+            overflow-x: auto;
+        }
+    </style>
+</head>
+<body>
+    <div class="docs-container">
+        <div class="docs-header">
+            <h1><i class="fas fa-file-text"></i> JobTracker Pro Documentation</h1>
+            <div class="badge-container">
+                <span class="badge badge-version">Version 1.0.0</span>
+                <span class="badge badge-license">MIT License</span>
+                <span class="badge badge-platform">Web Platform</span>
+            </div>
+            <p>Complete documentation for your career journey manager</p>
+        </div>
+
+        <div class="docs-nav">
+            <h3>Quick Navigation</h3>
+            <ul>
+                <li><a href="#overview"><i class="fas fa-info-circle"></i> Overview</a></li>
+                <li><a href="#features"><i class="fas fa-star"></i> Features</a></li>
+                <li><a href="#installation"><i class="fas fa-download"></i> Installation</a></li>
+                <li><a href="#quick-start"><i class="fas fa-rocket"></i> Quick Start</a></li>
+                <li><a href="#best-practices"><i class="fas fa-lightbulb"></i> Best Practices</a></li>
+                <li><a href="#technical-details"><i class="fas fa-cogs"></i> Technical Details</a></li>
+                <li><a href="#support"><i class="fas fa-life-ring"></i> Support</a></li>
+            </ul>
+        </div>
+
+        <div class="back-to-app">
+            <a href="index.html">
+                <i class="fas fa-arrow-left"></i> Back to JobTracker Pro
+            </a>
+        </div>
+
+        <section class="docs-section" id="overview">
+            <h2><i class="fas fa-info-circle"></i> Overview</h2>
+            <p>JobTracker Pro is a comprehensive job search management application designed to help you organize applications, manage professional contacts, and track your career journey progress. Built with modern web technologies, it provides a complete solution for job seekers at any stage of their career.</p>
+            
+            <h3>Why JobTracker Pro?</h3>
+            <ul>
+                <li><strong>Complete Organization</strong>: Keep all your job search activities in one place</li>
+                <li><strong>Professional Network</strong>: Build and maintain valuable professional relationships</li>
+                <li><strong>Data-Driven Insights</strong>: Track your progress with detailed analytics</li>
+                <li><strong>Interview Management</strong>: Never miss an interview with smart scheduling and alerts</li>
+                <li><strong>Privacy Focused</strong>: All data stays securely on your device</li>
+                <li><strong>Professional Reports</strong>: Generate print-ready reports for sharing</li>
+            </ul>
+        </section>
+
+        <section class="docs-section" id="features">
+            <h2><i class="fas fa-star"></i> Features</h2>
+            
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <h4><i class="fas fa-file-alt"></i> Application Management</h4>
+                    <ul>
+                        <li>Track Job Applications</li>
+                        <li>Status Tracking (6 statuses)</li>
+                        <li>Application Details Storage</li>
+                        <li>Contact Integration</li>
+                        <li>Interview Scheduling</li>
+                        <li>Smart Interview Cards</li>
+                        <li>Filtering & Search</li>
+                    </ul>
+                </div>
+                
+                <div class="feature-card">
+                    <h4><i class="fas fa-users"></i> Contact Management</h4>
+                    <ul>
+                        <li>Professional Network Building</li>
+                        <li>Automatic Contact Creation</li>
+                        <li>Complete Contact Information</li>
+                        <li>Alphabetical Organization</li>
+                        <li>Contact Linking</li>
+                        <li>Professional Formatting</li>
+                    </ul>
+                </div>
+                
+                <div class="feature-card">
+                    <h4><i class="fas fa-chart-line"></i> Analytics & Insights</h4>
+                    <ul>
+                        <li>Dashboard Overview</li>
+                        <li>Status Distribution Charts</li>
+                        <li>Timeline Charts</li>
+                        <li>Response Rate Tracking</li>
+                        <li>Personalized Insights</li>
+                        <li>Success Metrics</li>
+                    </ul>
+                </div>
+                
+                <div class="feature-card">
+                    <h4><i class="fas fa-calendar-alt"></i> Interview Scheduling</h4>
+                    <ul>
+                        <li>Complete Interview Management</li>
+                        <li>Multiple Interview Types</li>
+                        <li>Smart Timing Alerts</li>
+                        <li>Interview Notes</li>
+                        <li>Location/Link Tracking</li>
+                        <li>Enhanced Cards</li>
+                    </ul>
+                </div>
+                
+                <div class="feature-card">
+                    <h4><i class="fas fa-bell"></i> Smart Clock Features</h4>
+                    <ul>
+                        <li>Pre-Interview Alert (Red Flash)</li>
+                        <li>Active Interview Indicator (Green Flash)</li>
+                        <li>Duration Aware Timing</li>
+                        <li>Multiple Interview Support</li>
+                        <li>Real-time Monitoring</li>
+                    </ul>
+                </div>
+                
+                <div class="feature-card">
+                    <h4><i class="fas fa-print"></i> Professional Reporting</h4>
+                    <ul>
+                        <li>Comprehensive Print Reports</li>
+                        <li>Selective Printing</li>
+                        <li>Multiple Formats</li>
+                        <li>Print Optimization</li>
+                        <li>Professional Headers</li>
+                        <li>Page Management</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <section class="docs-section" id="installation">
+            <h2><i class="fas fa-download"></i> Installation</h2>
+            
+            <h3>Option 1: Direct Usage</h3>
+            <ol>
+                <li>Download or clone this repository</li>
+                <li>Open <code>index.html</code> in your web browser</li>
+                <li>Start tracking your job applications!</li>
+            </ol>
+            
+            <h3>Option 2: Local Web Server</h3>
+            <div class="code-block">
+# Using Python 3<br>
+python -m http.server 8000<br><br>
+
+# Using Node.js (with http-server)<br>
+npx http-server<br><br>
+
+# Using PHP<br>
+php -S localhost:8000
+            </div>
+            <p>Then navigate to <code>http://localhost:8000</code> in your browser.</p>
+        </section>
+
+        <section class="docs-section" id="quick-start">
+            <h2><i class="fas fa-rocket"></i> Quick Start Guide</h2>
+            
+            <h3>Adding Your First Application</h3>
+            <ol>
+                <li>Click the <strong>Applications</strong> tab in the navigation</li>
+                <li>Click <strong>"Add Application"</strong> button</li>
+                <li>Fill in the job details:
+                    <ul>
+                        <li>Job Title (required)</li>
+                        <li>Company (required)</li>
+                        <li>Location, salary range, and job URL (optional)</li>
+                        <li>Current status</li>
+                        <li>Notes about the position</li>
+                    </ul>
+                </li>
+                <li><strong>For Interviews</strong>: If status is "Interview", fill in interview details</li>
+                <li><strong>Optional</strong>: Add contact information for the hiring manager or recruiter</li>
+                <li>Click <strong>"Save Application"</strong></li>
+            </ol>
+            
+            <h3>Scheduling Interviews</h3>
+            <ol>
+                <li>Set application status to "Interview"</li>
+                <li>Interview fields will automatically appear</li>
+                <li>Fill in date, time, type, duration, location/link, and notes</li>
+                <li>Save the application</li>
+                <li>Watch for clock alerts: Red (1 hour before) and Green (during interview)</li>
+            </ol>
+            
+            <h3>Generating Reports</h3>
+            <ol>
+                <li>Click the <strong>Print</strong> button in the header</li>
+                <li>Select categories: Applications, Contacts, Analytics</li>
+                <li>Choose format: Spreadsheet tables or detailed cards</li>
+                <li>Click <strong>"Generate Print View"</strong></li>
+                <li>Print or save as PDF</li>
+            </ol>
+        </section>
+
+        <section class="docs-section" id="best-practices">
+            <h2><i class="fas fa-lightbulb"></i> Best Practices</h2>
+            
+            <h3>Effective Application Tracking</h3>
+            <ul>
+                <li><strong>Update Status Regularly</strong>: Keep application statuses current</li>
+                <li><strong>Add Detailed Notes</strong>: Include interview dates, feedback, and next steps</li>
+                <li><strong>Track Contact Information</strong>: Always include recruiter or hiring manager details</li>
+                <li><strong>Use Interview Scheduling</strong>: Set up interviews with full details and alerts</li>
+            </ul>
+            
+            <h3>Contact Management</h3>
+            <ul>
+                <li><strong>Complete Profiles</strong>: Fill in as much contact information as possible</li>
+                <li><strong>Regular Updates</strong>: Keep contact information current</li>
+                <li><strong>LinkedIn Integration</strong>: Include LinkedIn profiles for easy networking</li>
+                <li><strong>Notes and Context</strong>: Add how you met them and interaction history</li>
+            </ul>
+            
+            <h3>Data Management</h3>
+            <ul>
+                <li><strong>Regular Backups</strong>: Export your data regularly using the settings menu</li>
+                <li><strong>Clean Data Entry</strong>: Use consistent formatting for better analytics</li>
+                <li><strong>Review Analytics</strong>: Check insights weekly to improve your strategy</li>
+                <li><strong>Professional Reports</strong>: Generate reports for career counseling sessions</li>
+            </ul>
+        </section>
+
+        <section class="docs-section" id="technical-details">
+            <h2><i class="fas fa-cogs"></i> Technical Details</h2>
+            
+            <h3>Browser Compatibility</h3>
+            <ul>
+                <li>Chrome 70+</li>
+                <li>Firefox 65+</li>
+                <li>Safari 12+</li>
+                <li>Edge 79+</li>
+            </ul>
+            
+            <h3>Data Storage</h3>
+            <ul>
+                <li>Uses HTML5 LocalStorage for data persistence</li>
+                <li>No server required - runs entirely in your browser</li>
+                <li>Data remains private and secure on your device</li>
+                <li>No external servers or databases involved</li>
+            </ul>
+            
+            <h3>Technology Stack</h3>
+            <ul>
+                <li><strong>Frontend</strong>: HTML5, CSS3, JavaScript (ES6+)</li>
+                <li><strong>Styling</strong>: CSS Grid, Flexbox, CSS Animations</li>
+                <li><strong>Icons</strong>: Font Awesome 6.0</li>
+                <li><strong>Charts</strong>: Custom CSS-based visualizations</li>
+            </ul>
+            
+            <h3>File Structure</h3>
+            <div class="code-block">
+jobsearch/<br>
+├── index.html &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;# Main application file<br>
+├── styles.css &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;# Application styles<br>
+├── script.js &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;# Application logic<br>
+├── help.html &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;# Help documentation<br>
+├── documentation.html &nbsp;&nbsp;&nbsp;# This file<br>
+└── README.md &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;# Project README
+            </div>
+        </section>
+
+        <section class="docs-section" id="support">
+            <h2><i class="fas fa-life-ring"></i> Support & Contributing</h2>
+            
+            <h3>Getting Help</h3>
+            <ul>
+                <li><strong>Help Documentation</strong>: Check the comprehensive help system</li>
+                <li><strong>This Documentation</strong>: Review this complete guide</li>
+                <li><strong>Browser Console</strong>: Check for any error messages</li>
+                <li><strong>Data Export</strong>: Backup your data before troubleshooting</li>
+            </ul>
+            
+            <h3>Feature Requests</h3>
+            <p>We welcome ideas for new features! Consider:</p>
+            <ul>
+                <li>Enhanced analytics and reporting</li>
+                <li>Integration with job boards</li>
+                <li>Email integration</li>
+                <li>Calendar integration</li>
+                <li>Advanced filtering options</li>
+            </ul>
+            
+            <h3>License</h3>
+            <p>This project is licensed under the MIT License, allowing free use, modification, and distribution.</p>
+        </section>
+
+        <div class="back-to-app">
+            <a href="index.html">
+                <i class="fas fa-arrow-left"></i> Back to JobTracker Pro
+            </a>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="app-footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-info">
+                    <p><strong>JobTracker Pro</strong> v1.0.0</p>
+                    <p id="footer-datetime"></p>
+                </div>
+                <div class="footer-links">
+                    <a href="help.html"><i class="fas fa-question-circle"></i> Help</a>
+                    <a href="documentation.html"><i class="fas fa-file-text"></i> Documentation</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Update footer with current date and time
+        function updateDateTime() {
+            const now = new Date();
+            const options = {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit',
+                second: '2-digit',
+                timeZoneName: 'short'
+            };
+            document.getElementById('footer-datetime').textContent = now.toLocaleDateString('en-US', options);
+        }
+
+        // Update time immediately and then every second
+        updateDateTime();
+        setInterval(updateDateTime, 1000);
+    </script>
+</body>
+</html>
+
