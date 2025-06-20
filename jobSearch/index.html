@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JobTracker Pro - Your Career Journey Manager</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <h1 class="logo"><i class="fas fa-briefcase"></i> JobTracker Pro</h1>
+            <nav class="nav">
+                <button class="nav-btn active" data-section="dashboard">
+                    <i class="fas fa-chart-dashboard"></i> Dashboard
+                </button>
+                <button class="nav-btn" data-section="applications">
+                    <i class="fas fa-file-alt"></i> Applications
+                </button>
+                <button class="nav-btn" data-section="contacts">
+                    <i class="fas fa-users"></i> Contacts
+                </button>
+                <button class="nav-btn" data-section="analytics">
+                    <i class="fas fa-chart-line"></i> Analytics
+                </button>
+            </nav>
+            <div class="header-actions">
+                <button class="sync-btn" id="syncBtn">
+                    <i class="fas fa-sync-alt"></i> Sync
+                </button>
+                <button class="settings-btn" id="settingsBtn">
+                    <i class="fas fa-cog"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main class="main">
+        <!-- Dashboard Section -->
+        <section class="section active" id="dashboard">
+            <div class="container">
+                <h2>Dashboard Overview</h2>
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-paper-plane"></i>
+                        </div>
+                        <div class="stat-content">
+                            <h3 id="totalApplications">0</h3>
+                            <p>Total Applications</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-eye"></i>
+                        </div>
+                        <div class="stat-content">
+                            <h3 id="interviewsScheduled">0</h3>
+                            <p>Interviews Scheduled</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-handshake"></i>
+                        </div>
+                        <div class="stat-content">
+                            <h3 id="offersReceived">0</h3>
+                            <p>Offers Received</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-percentage"></i>
+                        </div>
+                        <div class="stat-content">
+                            <h3 id="responseRate">0%</h3>
+                            <p>Response Rate</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="dashboard-content">
+                    <div class="recent-activity">
+                        <h3>Recent Activity</h3>
+                        <div class="activity-list" id="recentActivity">
+                            <div class="activity-item">
+                                <i class="fas fa-info-circle"></i>
+                                <p>Welcome to JobTracker Pro! Start by adding your first job application.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="upcoming-tasks">
+                        <h3>Upcoming Tasks</h3>
+                        <div class="task-list" id="upcomingTasks">
+                            <div class="task-item">
+                                <i class="fas fa-calendar"></i>
+                                <p>No upcoming tasks</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+        <!-- Applications Section -->
+        <section class="section" id="applications">
+            <div class="container">
+                <div class="section-header">
+                    <h2>Job Applications</h2>
+                    <button class="btn-primary" id="addApplicationBtn">
+                        <i class="fas fa-plus"></i> Add Application
+                    </button>
+                </div>
+                
+                <div class="application-filters">
+                    <select id="statusFilter">
+                        <option value="">All Statuses</option>
+                        <option value="interested">Interested</option>
+                        <option value="applied">Applied</option>
+                        <option value="interview">Interview</option>
+                        <option value="offer">Offer</option>
+                        <option value="rejected">Rejected</option>
+                        <option value="accepted">Accepted</option>
+                    </select>
+                    <input type="date" id="dateFilter" placeholder="Filter by date">
+                </div>
+
+                <div class="applications-grid" id="applicationsGrid">
+                    <!-- Applications will be dynamically added here -->
+                </div>
+            </div>
+        </section>
+
+        <!-- Contacts Section -->
+        <section class="section" id="contacts">
+            <div class="container">
+                <div class="section-header">
+                    <h2>Professional Contacts</h2>
+                    <button class="btn-primary" id="addContactBtn">
+                        <i class="fas fa-plus"></i> Add Contact
+                    </button>
+                </div>
+                <div class="contacts-grid" id="contactsGrid">
+                    <!-- Contacts will be dynamically added here -->
+                </div>
+            </div>
+        </section>
+
+        <!-- Analytics Section -->
+        <section class="section" id="analytics">
+            <div class="container">
+                <h2>Analytics & Insights</h2>
+                <div class="analytics-grid">
+                    <div class="chart-container">
+                        <h3>Application Status Distribution</h3>
+                        <div id="statusChart"></div>
+                    </div>
+                    <div class="chart-container">
+                        <h3>Applications Over Time</h3>
+                        <div id="timelineChart"></div>
+                    </div>
+                    <div class="insights-panel">
+                        <h3>Key Insights</h3>
+                        <div id="insightsList">
+                            <div class="insight-item">
+                                <i class="fas fa-lightbulb"></i>
+                                <p>Start tracking applications to see insights here</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Modal for Adding Applications -->
+    <div class="modal" id="applicationModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="modalTitle">Add New Application</h3>
+                <button class="close-btn" id="closeModal">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <form id="applicationForm">
+                <div class="form-group">
+                    <label for="jobTitle">Job Title *</label>
+                    <input type="text" id="jobTitle" required>
+                </div>
+                <div class="form-group">
+                    <label for="company">Company *</label>
+                    <input type="text" id="company" required>
+                </div>
+                <div class="form-group">
+                    <label for="location">Location</label>
+                    <input type="text" id="location">
+                </div>
+                <div class="form-group">
+                    <label for="salary">Salary Range</label>
+                    <input type="text" id="salary" placeholder="e.g., $80k - $120k">
+                </div>
+                <div class="form-group">
+                    <label for="status">Status</label>
+                    <select id="status">
+                        <option value="interested">Interested</option>
+                        <option value="applied">Applied</option>
+                        <option value="interview">Interview</option>
+                        <option value="offer">Offer</option>
+                        <option value="rejected">Rejected</option>
+                        <option value="accepted">Accepted</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="jobUrl">Job URL</label>
+                    <input type="url" id="jobUrl">
+                </div>
+                <div class="form-group">
+                    <label for="notes">Notes</label>
+                    <textarea id="notes" rows="4"></textarea>
+                </div>
+                <div class="form-actions">
+                    <button type="button" class="btn-secondary" id="cancelBtn">Cancel</button>
+                    <button type="submit" class="btn-primary">Save Application</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal for Adding Contacts -->
+    <div class="modal" id="contactModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Add New Contact</h3>
+                <button class="close-btn" id="closeContactModal">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <form id="contactForm">
+                <div class="form-group">
+                    <label for="contactName">Name *</label>
+                    <input type="text" id="contactName" required>
+                </div>
+                <div class="form-group">
+                    <label for="contactTitle">Title</label>
+                    <input type="text" id="contactTitle">
+                </div>
+                <div class="form-group">
+                    <label for="contactCompany">Company</label>
+                    <input type="text" id="contactCompany">
+                </div>
+                <div class="form-group">
+                    <label for="contactEmail">Email</label>
+                    <input type="email" id="contactEmail">
+                </div>
+                <div class="form-group">
+                    <label for="contactPhone">Phone</label>
+                    <input type="tel" id="contactPhone">
+                </div>
+                <div class="form-group">
+                    <label for="contactLinkedIn">LinkedIn</label>
+                    <input type="url" id="contactLinkedIn">
+                </div>
+                <div class="form-group">
+                    <label for="contactNotes">Notes</label>
+                    <textarea id="contactNotes" rows="3"></textarea>
+                </div>
+                <div class="form-actions">
+                    <button type="button" class="btn-secondary" id="cancelContactBtn">Cancel</button>
+                    <button type="submit" class="btn-primary">Save Contact</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
+
