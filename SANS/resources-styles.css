@@ -1,0 +1,430 @@
+/* Additional Resources Page Specific Styles */
+
+/* Navigation Header */
+.nav-header {
+    margin-bottom: 20px;
+    padding: 15px 0;
+    border-bottom: 2px solid #ecf0f1;
+}
+
+.nav-link {
+    text-decoration: none;
+    color: #2980b9;
+    font-weight: bold;
+    padding: 10px 15px;
+    border-radius: 5px;
+    background-color: #ecf0f1;
+    transition: all 0.3s ease;
+    display: inline-block;
+}
+
+.nav-link:hover {
+    background-color: #3498db;
+    color: white;
+    transform: translateY(-2px);
+}
+
+.nav-link i {
+    margin-right: 8px;
+}
+
+/* Resource Navigation Pills */
+.resource-nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 30px;
+    padding: 20px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border-radius: 10px;
+    justify-content: center;
+}
+
+.nav-pill {
+    text-decoration: none;
+    color: white;
+    padding: 10px 15px;
+    border-radius: 25px;
+    background-color: rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(10px);
+    transition: all 0.3s ease;
+    font-weight: 500;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.nav-pill:hover {
+    background-color: rgba(255, 255, 255, 0.3);
+    transform: translateY(-3px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+.nav-pill i {
+    margin-right: 8px;
+}
+
+/* Enhanced Resource Cards */
+.resource-card {
+    background: linear-gradient(145deg, #ffffff, #f1f3f4);
+    border: none;
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.resource-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, #3498db, #2ecc71, #f39c12, #e74c3c);
+}
+
+.resource-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
+}
+
+.resource-card.featured {
+    border: 2px solid #3498db;
+    background: linear-gradient(145deg, #e8f4fd, #ffffff);
+}
+
+.resource-card.featured::before {
+    background: linear-gradient(90deg, #3498db, #2980b9);
+    height: 6px;
+}
+
+/* Card Headers */
+.card-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 15px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #ecf0f1;
+}
+
+.card-header i {
+    font-size: 24px;
+    margin-right: 12px;
+    color: #3498db;
+    background: linear-gradient(135deg, #3498db, #2980b9);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.card-header h3 {
+    margin: 0;
+    color: #2c3e50;
+    font-size: 18px;
+}
+
+/* Resource Links */
+.resource-links {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.resource-links li {
+    margin-bottom: 12px;
+}
+
+.resource-links a {
+    text-decoration: none;
+    color: #34495e;
+    display: flex;
+    align-items: center;
+    padding: 8px 12px;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+    background-color: rgba(52, 152, 219, 0.05);
+    border-left: 3px solid transparent;
+}
+
+.resource-links a:hover {
+    background-color: rgba(52, 152, 219, 0.1);
+    border-left-color: #3498db;
+    transform: translateX(5px);
+    color: #2980b9;
+}
+
+.resource-links a i {
+    margin-right: 10px;
+    width: 16px;
+    text-align: center;
+    color: #3498db;
+}
+
+/* Framework Comparison Section */
+.framework-comparison {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    gap: 25px;
+    margin-top: 20px;
+}
+
+.framework-card {
+    background: white;
+    border-radius: 15px;
+    padding: 25px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+    border-top: 5px solid;
+}
+
+.framework-card.nist {
+    border-top-color: #e74c3c;
+    background: linear-gradient(135deg, #fff5f5, #ffffff);
+}
+
+.framework-card.iso {
+    border-top-color: #2ecc71;
+    background: linear-gradient(135deg, #f0fff4, #ffffff);
+}
+
+.framework-card.cis {
+    border-top-color: #f39c12;
+    background: linear-gradient(135deg, #fffdf5, #ffffff);
+}
+
+.framework-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+}
+
+.framework-logo {
+    display: flex;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.framework-logo i {
+    font-size: 28px;
+    margin-right: 15px;
+}
+
+.framework-card.nist .framework-logo i {
+    color: #e74c3c;
+}
+
+.framework-card.iso .framework-logo i {
+    color: #2ecc71;
+}
+
+.framework-card.cis .framework-logo i {
+    color: #f39c12;
+}
+
+.framework-logo h3 {
+    margin: 0;
+    color: #2c3e50;
+    font-size: 20px;
+}
+
+.framework-description {
+    color: #7f8c8d;
+    font-style: italic;
+    margin-bottom: 15px;
+    line-height: 1.5;
+}
+
+.framework-functions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 20px;
+}
+
+.function-badge {
+    background: linear-gradient(135deg, #3498db, #2980b9);
+    color: white;
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+/* NIST Framework specific badges */
+.framework-card.nist .function-badge.identify {
+    background: linear-gradient(135deg, #3498db, #2980b9);
+}
+
+.framework-card.nist .function-badge.protect {
+    background: linear-gradient(135deg, #2ecc71, #27ae60);
+}
+
+.framework-card.nist .function-badge.detect {
+    background: linear-gradient(135deg, #f39c12, #e67e22);
+}
+
+.framework-card.nist .function-badge.respond {
+    background: linear-gradient(135deg, #e74c3c, #c0392b);
+}
+
+.framework-card.nist .function-badge.recover {
+    background: linear-gradient(135deg, #9b59b6, #8e44ad);
+}
+
+/* CIS Controls specific badges */
+.framework-card.cis .function-badge.basic {
+    background: linear-gradient(135deg, #2ecc71, #27ae60);
+}
+
+.framework-card.cis .function-badge.foundational {
+    background: linear-gradient(135deg, #f39c12, #e67e22);
+}
+
+.framework-card.cis .function-badge.organizational {
+    background: linear-gradient(135deg, #e74c3c, #c0392b);
+}
+
+.framework-link {
+    display: inline-flex;
+    align-items: center;
+    text-decoration: none;
+    color: #3498db;
+    font-weight: bold;
+    padding: 10px 15px;
+    border: 2px solid #3498db;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+}
+
+.framework-link:hover {
+    background-color: #3498db;
+    color: white;
+    transform: translateY(-2px);
+}
+
+.framework-link i {
+    margin-right: 8px;
+}
+
+/* Back Link */
+.back-link {
+    display: inline-flex;
+    align-items: center;
+    text-decoration: none;
+    color: #3498db;
+    font-weight: bold;
+    padding: 12px 20px;
+    background-color: #ecf0f1;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+    margin-top: 20px;
+}
+
+.back-link:hover {
+    background-color: #3498db;
+    color: white;
+    transform: translateY(-2px);
+}
+
+.back-link i {
+    margin-right: 10px;
+}
+
+/* Enhanced Typography */
+h1 i {
+    margin-right: 15px;
+    color: #3498db;
+}
+
+h2 i {
+    margin-right: 12px;
+    color: #3498db;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .resource-nav {
+        flex-direction: column;
+        align-items: center;
+    }
+    
+    .nav-pill {
+        width: 100%;
+        text-align: center;
+    }
+    
+    .framework-comparison {
+        grid-template-columns: 1fr;
+    }
+    
+    .resource-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .card-header {
+        flex-direction: column;
+        text-align: center;
+        align-items: center;
+    }
+    
+    .card-header i {
+        margin-right: 0;
+        margin-bottom: 8px;
+    }
+}
+
+@media (max-width: 480px) {
+    .framework-card {
+        padding: 15px;
+    }
+    
+    .framework-functions {
+        justify-content: center;
+    }
+    
+    .resource-links a {
+        flex-direction: column;
+        text-align: center;
+        align-items: center;
+    }
+    
+    .resource-links a i {
+        margin-right: 0;
+        margin-bottom: 5px;
+    }
+}
+
+/* Loading Animation */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.section {
+    animation: fadeInUp 0.6s ease-out;
+}
+
+/* Hover Effects for Social Icons */
+.resource-links a[href*="twitter.com"]:hover i {
+    color: #1da1f2;
+}
+
+.resource-links a[href*="reddit.com"]:hover i {
+    color: #ff4500;
+}
+
+.resource-links a[href*="github.com"]:hover i {
+    color: #333;
+}
+
+.resource-links a[href*="medium.com"]:hover i {
+    color: #00ab6c;
+}
+

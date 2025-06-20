@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>16-Hour Fasting Tracker</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="data-manager.js"></script>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>16-Hour Fasting Tracker</h1>
+            <p class="schedule">Fasting Schedule: 4:00 PM - 8:00 AM (16 hours)</p>
+        </header>
+
+        <div class="stats-section">
+            <div class="stat-card">
+                <h3>Success Rate</h3>
+                <div class="percentage" id="successRate">0%</div>
+            </div>
+            <div class="stat-card">
+                <h3>Total Days</h3>
+                <div class="count" id="totalDays">0</div>
+            </div>
+            <div class="stat-card">
+                <h3>Successful Fasts</h3>
+                <div class="count" id="successfulFasts">0</div>
+            </div>
+            <div class="stat-card">
+                <h3>Total Miles</h3>
+                <div class="count" id="totalMiles">0</div>
+            </div>
+            <div class="stat-card">
+                <h3>Total Hours</h3>
+                <div class="count" id="totalHours">0</div>
+            </div>
+        </div>
+
+        <div class="input-section">
+            <h2>Today's Entry</h2>
+            <div class="entry-form">
+                <div class="form-group">
+                    <label for="todayDate">Date:</label>
+                    <input type="date" id="todayDate">
+                </div>
+                
+                <div class="form-group">
+                    <label for="fastingSuccess">Did you complete your 16-hour fast?</label>
+                    <div class="checkbox-group">
+                        <label class="checkbox-label">
+                            <input type="radio" name="fasting" value="yes" id="fastingYes">
+                            <span class="checkmark success">✓ Yes, I fasted</span>
+                        </label>
+                        <label class="checkbox-label">
+                            <input type="radio" name="fasting" value="no" id="fastingNo">
+                            <span class="checkmark fail">✗ No, I didn't fast</span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="weight">Weight (optional):</label>
+                    <div class="weight-input">
+                        <input type="number" id="weight" step="0.1" placeholder="Enter weight">
+                        <select id="weightUnit">
+                            <option value="lbs">lbs</option>
+                            <option value="kg">kg</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="miles">Miles Walked (optional):</label>
+                    <input type="number" id="miles" step="0.1" placeholder="Enter miles walked">
+                </div>
+
+                <div class="form-group">
+                    <label for="workout">1-Hour Workout Completed?</label>
+                    <div class="checkbox-group">
+                        <label class="checkbox-label">
+                            <input type="radio" name="workout" value="yes" id="workoutYes">
+                            <span class="checkmark success">✓ Yes, I worked out</span>
+                        </label>
+                        <label class="checkbox-label">
+                            <input type="radio" name="workout" value="no" id="workoutNo">
+                            <span class="checkmark fail">✗ No workout today</span>
+                        </label>
+                        <label class="checkbox-label">
+                            <input type="radio" name="workout" value="skip" id="workoutSkip">
+                            <span class="checkmark neutral">— Not tracking today</span>
+                        </label>
+                    </div>
+                </div>
+
+                <button onclick="saveEntry()" class="save-btn">Save Entry</button>
+                
+                <div class="data-management">
+                    <h3>Data Management</h3>
+                    <div class="button-group">
+                        <button onclick="exportData()" class="secondary-btn">
+                            💾 Export Data
+                        </button>
+                        <button onclick="importData()" class="secondary-btn">
+                            📂 Import Data
+                        </button>
+                        <button onclick="clearAllData()" class="secondary-btn warning">
+                            🗑️ Clear All Data
+                        </button>
+                    </div>
+                    <p class="data-info">Export your data to save it as a portable file that works across any computer or browser.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="history-section">
+            <h2>Fasting History</h2>
+            <div class="history-container" id="historyContainer">
+                <p class="no-data">No entries yet. Start tracking your fasting journey!</p>
+            </div>
+        </div>
+
+        <div class="weight-chart-section">
+            <h2>Weight Progress</h2>
+            <div class="chart-container" id="weightChart">
+                <p class="no-data">Weight data will appear here as you log entries.</p>
+            </div>
+        </div>
+
+        <div class="miles-chart-section">
+            <h2>Daily Miles Walked</h2>
+            <div class="chart-container" id="milesChart">
+                <p class="no-data">Miles data will appear here as you log entries.</p>
+            </div>
+        </div>
+
+        <div class="workout-chart-section">
+            <h2>Workout Consistency</h2>
+            <div class="chart-container" id="workoutChart">
+                <p class="no-data">Workout data will appear here as you log entries.</p>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
+
