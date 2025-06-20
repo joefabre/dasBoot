@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Condo Chore Manager - 950 sq ft</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+    
+    <header class="header" role="banner">
+        <div class="header-content">
+            <div class="date-time-display">
+                <div class="date-display" id="dateDisplay" role="text" aria-label="Current date" aria-live="polite"></div>
+                <div class="time-display" id="timeDisplay" role="text" aria-label="Current time" aria-live="polite"></div>
+            </div>
+            <div class="title-section">
+                <h1>🏠 Condo Chore Manager</h1>
+                <p class="subtitle">950 sq ft • 2BR/1BA • Sunday Rest Day</p>
+            </div>
+            <div class="stats-bar">
+                <div class="stat">
+                    <span class="stat-value" id="completedToday">0</span>
+                    <span class="stat-label">Completed Today</span>
+                </div>
+                <div class="stat">
+                    <span class="stat-value" id="weeklyProgress">0%</span>
+                    <span class="stat-label">Weekly Progress</span>
+                </div>
+                <div class="stat">
+                    <span class="stat-value" id="currentStreak">0</span>
+                    <span class="stat-label">Day Streak</span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <nav class="nav-tabs" role="tablist" aria-label="Task categories">
+        <button class="tab-btn active" data-tab="daily" role="tab" aria-selected="true" aria-controls="daily" id="tab-daily">📅 Daily</button>
+        <button class="tab-btn" data-tab="weekly" role="tab" aria-selected="false" aria-controls="weekly" id="tab-weekly">📋 Weekly</button>
+        <button class="tab-btn" data-tab="monthly" role="tab" aria-selected="false" aria-controls="monthly" id="tab-monthly">🗓️ Monthly</button>
+        <button class="tab-btn" data-tab="seasonal" role="tab" aria-selected="false" aria-controls="seasonal" id="tab-seasonal">🌱 Seasonal</button>
+        <button class="tab-btn" data-tab="maintenance" role="tab" aria-selected="false" aria-controls="maintenance" id="tab-maintenance">🔧 Maintenance</button>
+    </nav>
+
+    <main class="main-content">
+        <!-- Daily Tasks Tab -->
+        <div id="daily" class="tab-content active" role="tabpanel" aria-labelledby="tab-daily">
+            <div class="day-selector" role="group" aria-label="Select day of the week">
+                <button class="day-btn" data-day="monday" aria-label="Monday tasks">Mon</button>
+                <button class="day-btn" data-day="tuesday" aria-label="Tuesday tasks">Tue</button>
+                <button class="day-btn" data-day="wednesday" aria-label="Wednesday tasks">Wed</button>
+                <button class="day-btn" data-day="thursday" aria-label="Thursday tasks">Thu</button>
+                <button class="day-btn" data-day="friday" aria-label="Friday tasks">Fri</button>
+                <button class="day-btn" data-day="saturday" aria-label="Saturday tasks">Sat</button>
+                <button class="day-btn rest-day" data-day="sunday" aria-label="Sunday - Rest day">Sun</button>
+            </div>
+
+            <div class="room-filter">
+                <button class="filter-btn active" data-room="all">All Rooms</button>
+                <button class="filter-btn" data-room="bedroom1">🛏️ Master BR</button>
+                <button class="filter-btn" data-room="bedroom2">🛏️ Guest BR</button>
+                <button class="filter-btn" data-room="bathroom">🚿 Bathroom</button>
+                <button class="filter-btn" data-room="kitchen">🍳 Kitchen</button>
+                <button class="filter-btn" data-room="living">🛋️ Living Room</button>
+                <button class="filter-btn" data-room="utility">🧺 Utility/Entry</button>
+                <button class="filter-btn" data-room="garage">🚗 Garage</button>
+            </div>
+
+            <div class="daily-tasks" id="dailyTasks" role="region" aria-label="Daily task list" aria-live="polite">
+                <!-- Tasks will be populated by JavaScript -->
+            </div>
+        </div>
+
+        <!-- Weekly Tasks Tab -->
+        <div id="weekly" class="tab-content">
+            <div class="room-filter">
+                <button class="filter-btn active" data-room="all">All Rooms</button>
+                <button class="filter-btn" data-room="bedroom1">🛏️ Master BR</button>
+                <button class="filter-btn" data-room="bedroom2">🛏️ Guest BR</button>
+                <button class="filter-btn" data-room="bathroom">🚿 Bathroom</button>
+                <button class="filter-btn" data-room="kitchen">🍳 Kitchen</button>
+                <button class="filter-btn" data-room="living">🛋️ Living Room</button>
+                <button class="filter-btn" data-room="utility">🧺 Utility/Entry</button>
+                <button class="filter-btn" data-room="garage">🚗 Garage</button>
+            </div>
+
+            <div class="weekly-tasks" id="weeklyTasks">
+                <!-- Tasks will be populated by JavaScript -->
+            </div>
+        </div>
+
+        <!-- Monthly Tasks Tab -->
+        <div id="monthly" class="tab-content">
+            <div class="month-calendar" id="monthCalendar">
+                <!-- Calendar will be populated by JavaScript -->
+            </div>
+            <div class="monthly-tasks" id="monthlyTasks">
+                <!-- Tasks will be populated by JavaScript -->
+            </div>
+        </div>
+
+        <!-- Seasonal Tasks Tab -->
+        <div id="seasonal" class="tab-content">
+            <div class="season-selector">
+                <button class="season-btn" data-season="spring">🌸 Spring</button>
+                <button class="season-btn" data-season="summer">☀️ Summer</button>
+                <button class="season-btn" data-season="fall">🍂 Fall</button>
+                <button class="season-btn" data-season="winter">❄️ Winter</button>
+            </div>
+            <div class="seasonal-tasks" id="seasonalTasks">
+                <!-- Tasks will be populated by JavaScript -->
+            </div>
+        </div>
+
+        <!-- Maintenance Tab -->
+        <div id="maintenance" class="tab-content">
+            <div class="maintenance-categories">
+                <button class="category-btn active" data-category="all">All Systems</button>
+                <button class="category-btn" data-category="hvac">🌡️ HVAC</button>
+                <button class="category-btn" data-category="plumbing">🚰 Plumbing</button>
+                <button class="category-btn" data-category="electrical">⚡ Electrical</button>
+                <button class="category-btn" data-category="appliances">📱 Appliances</button>
+                <button class="category-btn" data-category="safety">🛡️ Safety</button>
+            </div>
+            <div class="maintenance-tasks" id="maintenanceTasks">
+                <!-- Tasks will be populated by JavaScript -->
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Task Modal -->
+    <div id="taskModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2 id="modalTitle">Task Details</h2>
+            <div class="modal-body">
+                <p id="modalDescription"></p>
+                <div class="modal-info">
+                    <span id="modalTime">⏱️ Est. Time: </span>
+                    <span id="modalDifficulty">💪 Difficulty: </span>
+                    <span id="modalFrequency">📅 Frequency: </span>
+                </div>
+                <div class="modal-tips" id="modalTips"></div>
+            </div>
+            <div class="modal-actions">
+                <button id="markCompleteBtn" class="btn-primary">✅ Mark Complete</button>
+                <button id="skipTaskBtn" class="btn-secondary">⏭️ Skip</button>
+                <button id="snoozeTaskBtn" class="btn-secondary">😴 Snooze 1hr</button>
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-data-management">
+                <div class="footer-button-group">
+                    <button onclick="exportData()" class="footer-btn">
+                        💾 Export
+                    </button>
+                    <button onclick="importData()" class="footer-btn">
+                        📂 Import
+                    </button>
+                    <button onclick="resetProgress()" class="footer-btn warning">
+                        🔄 Reset
+                    </button>
+                </div>
+            </div>
+            <div class="footer-info">
+                <p>&copy; 2024 Condo Chore Manager | Making home maintenance manageable</p>
+                <p class="footer-subtitle">🏠 950 sq ft • 2BR/1BA • Organized Living</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="data-manager.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
+
