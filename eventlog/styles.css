@@ -158,6 +158,112 @@ button:hover {
     font-size: 12px;
 }
 
+/* Modal Styles */
+.modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7);
+    z-index: 1000;
+}
+
+.modal-content {
+    background-color: #fff;
+    margin: 2% auto;
+    padding: 20px;
+    width: 90%;
+    max-width: 900px;
+    max-height: 90vh;
+    overflow-y: auto;
+    position: relative;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* Report Paper Styles */
+.report-paper {
+    background-color: #fff;
+    padding: 40px;
+    position: relative;
+}
+
+.report-header {
+    text-align: center;
+    margin-bottom: 30px;
+    border-bottom: 2px solid #2c3e50;
+    padding-bottom: 15px;
+}
+
+.report-datetime {
+    font-size: 14px;
+    color: #666;
+    margin-top: 5px;
+}
+
+.lined-paper {
+    background-image: linear-gradient(#eee 1px, transparent 1px);
+    background-size: 100% 2em;
+    line-height: 2em;
+    padding: 0 20px;
+}
+
+.report-event-item {
+    padding: 0.5em 0;
+    border-bottom: none !important;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-family: monospace;
+}
+
+.report-actions {
+    margin-top: 20px;
+    text-align: right;
+    padding-top: 20px;
+    border-top: 2px solid #2c3e50;
+}
+
+.print-btn {
+    background-color: #27ae60;
+    margin-right: 10px;
+}
+
+.print-btn:hover {
+    background-color: #219a52;
+}
+
+.close-btn {
+    background-color: #e74c3c;
+}
+
+.close-btn:hover {
+    background-color: #c0392b;
+}
+
+@media print {
+    body * {
+        visibility: hidden;
+    }
+    .modal-content, .modal-content * {
+        visibility: visible;
+    }
+    .modal-content {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        margin: 0;
+        padding: 15px;
+        box-shadow: none;
+    }
+    .report-actions {
+        display: none;
+    }
+}
+
 /* Report Section Styles */
 .report-filters {
     margin-bottom: 20px;

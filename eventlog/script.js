@@ -58,6 +58,14 @@ function saveEvent(e) {
 }
 
 // Generate report based on filters
+function closeReportModal() {
+    document.getElementById('reportModal').style.display = 'none';
+}
+
+function printReport() {
+    window.print();
+}
+
 function generateReport() {
     const startDate = document.getElementById('startDate').value;
     const endDate = document.getElementById('endDate').value;
@@ -89,6 +97,14 @@ function generateReport() {
 
 // Display report results
 function displayReport(filteredEvents) {
+    // Show modal
+    const modal = document.getElementById('reportModal');
+    modal.style.display = 'block';
+
+    // Set current date and time in report header
+    const now = new Date();
+    const dateTimeStr = now.toLocaleDateString() + ' ' + now.toLocaleTimeString();
+    document.querySelector('.report-datetime').textContent = dateTimeStr;
     const reportResults = document.getElementById('reportResults');
     
     if (filteredEvents.length === 0) {
@@ -96,25 +112,15 @@ function displayReport(filteredEvents) {
         return;
     }
 
-    // Group events by category
-    const groupedEvents = filteredEvents.reduce((acc, event) => {
-        acc[event.category] = acc[event.category] || [];
-        acc[event.category].push(event);
-        return acc;
-    }, {});
+    // Sort events by date and time
+    filteredEvents.sort((a, b) => {
+        const dateA = new Date(a.date + ' ' + a.time);
+        const dateB = new Date(b.date + ' ' + b.time);
+        return dateA - dateB;
+    });
 
     // Generate report HTML
-    let html = '<div class="report-summary">';
-    html += `<h3>Total Events: ${filteredEvents.length}</h3>`;
-    html += '<h3>Events by Category:</h3>';
-    html += '<ul>';
-    
-    for (const category in groupedEvents) {
-        html += `<li>${category}: ${groupedEvents[category].length} events</li>`;
-    }
-    
-    html += '</ul></div>';
-    html += '<h3>Detailed Events:</h3>';
+    let html = '';
     
     // Add filtered events
     html += filteredEvents.map(event => createEventHTML(event)).join('');
@@ -132,9 +138,15 @@ function displayEvents(eventsToDisplay = events) {
 }
 
 // Create HTML for a single event
-function createEventHTML(event) {
+function createEventHTML(event, isReport = false) {
+    if (isReport) {
+        return `
+        <div class="report-event-item">
+            ${event.date} ${event.time} - ${event.title}
+        </div>`;
+    }
     return `
-        <div class="event-item" data-id="${event.id}">
+        <div class="event-item"
             <div class="event-header">
                 <h3 class="event-title">${event.title}</h3>
                 <span class="event-datetime">${event.date} ${event.time}</span>
