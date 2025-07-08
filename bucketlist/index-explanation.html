@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HTML Explanation - index.html</title>
+    <style>
+        body { font-family: monospace; margin: 20px; line-height: 1.6; }
+        h1 { color: #333; border-bottom: 2px solid #333; }
+        .line { margin-bottom: 10px; }
+        .line-number { color: #666; font-weight: bold; }
+        .code { color: #0066cc; }
+        .explanation { color: #333; }
+    </style>
+</head>
+<body>
+    <h1>Line-by-Line Explanation: index.html</h1>
+    
+    <div class="line">
+        <span class="line-number">Line 1:</span> 
+        <code class="code">&lt;!DOCTYPE html&gt;</code>
+        <div class="explanation">Declares the document type as HTML5. This tells the browser to interpret the document using HTML5 standards.</div>
+    </div>
+    
+    <div class="line">
+        <span class="line-number">Line 2:</span> 
+        <code class="code">&lt;html lang="en"&gt;</code>
+        <div class="explanation">The root HTML element with language attribute set to English. This helps screen readers and search engines understand the document's language.</div>
+    </div>
+    
+    <div class="line">
+        <span class="line-number">Line 3:</span> 
+        <code class="code">&lt;head&gt;</code>
+        <div class="explanation">Opens the head section, which contains metadata about the document that isn't displayed on the page.</div>
+    </div>
+    
+    <div class="line">
+        <span class="line-number">Line 4:</span> 
+        <code class="code">&lt;meta charset="UTF-8"&gt;</code>
+        <div class="explanation">Sets the character encoding to UTF-8, ensuring proper display of special characters and international text.</div>
+    </div>
+    
+    <div class="line">
+        <span class="line-number">Line 5:</span> 
+        <code class="code">&lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;</code>
+        <div class="explanation">Ensures responsive design by setting the viewport width to device width and initial zoom to 100%.</div>
+    </div>
+    
+    <div class="line">
+        <span class="line-number">Line 6:</span> 
+        <code class="code">&lt;title&gt;Terminal Bucket List Manager - Accessible Web Application&lt;/title&gt;</code>
+        <div class="explanation">Sets the page title that appears in the browser tab and is used by search engines.</div>
+    </div>
+    
+    <div class="line">
+        <span class="line-number">Line 7:</span> 
+        <code class="code">&lt;meta name="description" content="A terminal-style bucket list manager..."&gt;</code>
+        <div class="explanation">Provides a description for search engines and social media sharing.</div>
+    </div>
+    
+    <div class="line">
+        <span class="line-number">Line 8:</span> 
+        <code class="code">&lt;meta name="keywords" content="bucket list, goals, terminal..."&gt;</code>
+        <div class="explanation">Lists keywords for SEO purposes (though less important in modern search algorithms).</div>
+    </div>
+    
+    <div class="line">
+        <span class="line-number">Line 9:</span> 
+        <code class="code">&lt;meta name="author" content="FABREulous Technology"&gt;</code>
+        <div class="explanation">Identifies the author/creator of the web page.</div>
+    </div>
+    
+    <div class="line">
+        <span class="line-number">Line 10:</span> 
+        <code class="code">&lt;link rel="stylesheet" href="style.css"&gt;</code>
+        <div class="explanation">Links to the external CSS stylesheet that contains all the visual styling rules.</div>
+    </div>
+    
+    <div class="line">
+        <span class="line-number">Lines 11-13:</span> 
+        <code class="code">Font preconnect and import links</code>
+        <div class="explanation">Preconnects to Google Fonts servers and imports the SF Mono font family for the terminal appearance.</div>
+    </div>
+    
+    <div class="line">
+        <span class="line-number">Line 16:</span> 
+        <code class="code">&lt;main class="terminal-window" role="main" aria-label="Terminal Bucket List Manager"&gt;</code>
+        <div class="explanation">Main content area with semantic role and accessibility label for screen readers.</div>
+    </div>
+    
+    <div class="line">
+        <span class="line-number">Lines 18-29:</span> 
+        <code class="code">Terminal Header Section</code>
+        <div class="explanation">Creates the terminal window header with close/minimize/maximize buttons and a date/time display, mimicking a real terminal window.</div>
+    </div>
+    
+    <div class="line">
+        <span class="line-number">Lines 32-50:</span> 
+        <code class="code">Welcome Message and ASCII Art</code>
+        <div class="explanation">Displays the application welcome message with ASCII art banner, simulating terminal startup output.</div>
+    </div>
+    
+    <div class="line">
+        <span class="line-number">Line 53:</span> 
+        <code class="code">&lt;section id="bucket-list-display" role="region" aria-label="Bucket list items" aria-live="polite"&gt;</code>
+        <div class="explanation">Dynamic content area for displaying bucket list items. 'aria-live="polite"' announces changes to screen readers.</div>
+    </div>
+    
+    <div class="line">
+        <span class="line-number">Lines 56-66:</span> 
+        <code class="code">Command Input Section</code>
+        <div class="explanation">Terminal-style command input field with proper labeling and accessibility attributes.</div>
+    </div>
+    
+    <div class="line">
+        <span class="line-number">Lines 69-71:</span> 
+        <code class="code">Screen Reader Help</code>
+        <div class="explanation">Hidden help text for screen readers listing available commands (class "sr-only" makes it invisible but accessible).</div>
+    </div>
+    
+    <div class="line">
+        <span class="line-number">Lines 74-125:</span> 
+        <code class="code">Add Item Form</code>
+        <div class="explanation">Hidden form for adding new bucket list items with fields for event, date, category, and priority. Includes accessibility labels and help text.</div>
+    </div>
+    
+    <div class="line">
+        <span class="line-number">Lines 128-179:</span> 
+        <code class="code">Edit Item Form</code>
+        <div class="explanation">Similar to add form but for editing existing items. Pre-populated with current values when activated.</div>
+    </div>
+    
+    <div class="line">
+        <span class="line-number">Line 184:</span> 
+        <code class="code">&lt;div id="audio-status" style="display: none;"&gt;Audio enabled&lt;/div&gt;</code>
+        <div class="explanation">Hidden element for tracking audio status (used by JavaScript for typewriter sound effects).</div>
+    </div>
+    
+    <div class="line">
+        <span class="line-number">Line 186:</span> 
+        <code class="code">&lt;script src="script.js"&gt;&lt;/script&gt;</code>
+        <div class="explanation">Links to the external JavaScript file that provides all the interactive functionality.</div>
+    </div>
+    
+    <div class="line">
+        <span class="line-number">Line 188:</span> 
+        <code class="code">&lt;/html&gt;</code>
+        <div class="explanation">Closes the HTML document.</div>
+    </div>
+
+</body>
+</html>

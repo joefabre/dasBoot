@@ -1,0 +1,1013 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Docker Commands Reference</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        background: linear-gradient(135deg, #43cea2 0%, #185a9d 100%);
+        min-height: 100vh;
+        padding: 20px;
+      }
+
+      .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        background: white;
+        border-radius: 15px;
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        overflow: hidden;
+      }
+
+      .header {
+        background: linear-gradient(135deg, #0077b6, #90e0ef);
+        color: white;
+        padding: 30px;
+        text-align: center;
+      }
+
+      .header h1 {
+        font-size: 2.5em;
+        margin-bottom: 10px;
+      }
+
+      .header p {
+        font-size: 1.1em;
+        opacity: 0.9;
+      }
+
+      .main-content {
+        display: flex;
+        min-height: 600px;
+      }
+
+      .sidebar {
+        width: 300px;
+        background: #f1f3f4;
+        border-right: 1px solid #e0e0e0;
+        overflow-y: auto;
+      }
+
+      .category {
+        border-bottom: 1px solid #e0e0e0;
+      }
+
+      .category-header {
+        background: #008cdb;
+        color: white;
+        padding: 15px 20px;
+        font-weight: bold;
+        font-size: 1.1em;
+        cursor: pointer;
+        transition: background-color 0.3s;
+      }
+
+      .category-header:hover {
+        background: #005f8b;
+      }
+
+      .category-header.active {
+        background: #003d66;
+      }
+
+      .commands-list {
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height 0.3s ease-out;
+      }
+
+      .commands-list.active {
+        max-height: 500px;
+      }
+
+      .command-item {
+        padding: 12px 20px;
+        border-bottom: 1px solid #e0e0e0;
+        cursor: pointer;
+        transition: background-color 0.2s;
+        font-family: "Courier New", monospace;
+      }
+
+      .command-item:hover {
+        background: #e0e0e0;
+      }
+
+      .command-item.selected {
+        background: #005f8b;
+        color: white;
+      }
+
+      .content-area {
+        flex: 1;
+        padding: 30px;
+      }
+
+      .welcome-message {
+        text-align: center;
+        color: #555555;
+        margin-top: 100px;
+      }
+
+      .command-details {
+        display: none;
+      }
+
+      .command-details.active {
+        display: block;
+        animation: fadeIn 0.3s ease-in;
+      }
+
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+        }
+        to {
+          opacity: 1;
+        }
+      }
+
+      .command-title {
+        font-size: 2em;
+        color: #1c3b57;
+        margin-bottom: 10px;
+        font-family: "Courier New", monospace;
+      }
+
+      .command-description {
+        font-size: 1.1em;
+        color: #545454;
+        margin-bottom: 20px;
+        line-height: 1.6;
+      }
+
+      .function-explanation {
+        background: #d4f1f9;
+        border-left: 4px solid #00a8cc;
+        padding: 15px;
+        margin-bottom: 20px;
+        border-radius: 0 5px 5px 0;
+      }
+
+      .function-explanation h3 {
+        color: #0077b6;
+        margin-bottom: 10px;
+        font-size: 1.2em;
+      }
+
+      .function-explanation p {
+        margin-bottom: 8px;
+        line-height: 1.5;
+      }
+
+      .use-cases {
+        background: #f3e5f5;
+        border-left: 4px solid #791e94;
+        padding: 15px;
+        margin-bottom: 20px;
+        border-radius: 0 5px 5px 0;
+      }
+
+      .use-cases h3 {
+        color: #4a148c;
+        margin-bottom: 10px;
+        font-size: 1.2em;
+      }
+
+      .use-cases ul {
+        margin-left: 20px;
+      }
+
+      .use-cases li {
+        margin-bottom: 5px;
+      }
+
+      .example-section {
+        background: #f1f8e9;
+        border: 1px solid #c8e6c9;
+        border-radius: 8px;
+        padding: 20px;
+        margin-bottom: 20px;
+      }
+
+      .example-title {
+        font-weight: bold;
+        color: #2e7d32;
+        margin-bottom: 10px;
+        font-size: 1.1em;
+      }
+
+      .code-block {
+        background: #263238;
+        color: #ffffff;
+        padding: 15px;
+        border-radius: 5px;
+        font-family: "Courier New", monospace;
+        overflow-x: auto;
+        margin: 10px 0;
+        position: relative;
+      }
+
+      .copy-btn {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        background: #4f5b62;
+        color: white;
+        border: none;
+        padding: 5px 10px;
+        border-radius: 3px;
+        cursor: pointer;
+        font-size: 12px;
+      }
+
+      .copy-btn:hover {
+        background: #37474f;
+      }
+
+      .syntax-highlight .keyword {
+        color: #ffab91;
+        font-weight: bold;
+      }
+      .syntax-highlight .string {
+        color: #80cbc4;
+      }
+      .syntax-highlight .comment {
+        color: #afb42b;
+        font-style: italic;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="header">
+        <h1>Docker Commands Reference</h1>
+        <p>Comprehensive guide to Docker CLI commands and usage</p>
+      </div>
+
+      <div class="main-content">
+        <div class="sidebar">
+          <div class="category">
+            <div class="category-header" onclick="toggleCategory('image-management')">
+              Image Management
+            </div>
+            <div class="commands-list" id="image-management">
+              <div class="command-item" onclick="showCommand('docker-build')">
+                docker build
+              </div>
+              <div class="command-item" onclick="showCommand('docker-pull')">
+                docker pull
+              </div>
+              <div class="command-item" onclick="showCommand('docker-push')">
+                docker push
+              </div>
+            </div>
+          </div>
+
+          <div class="category">
+            <div class="category-header" onclick="toggleCategory('container-management')">
+              Container Management
+            </div>
+            <div class="commands-list" id="container-management">
+              <div class="command-item" onclick="showCommand('docker-run')">
+                docker run
+              </div>
+              <div class="command-item" onclick="showCommand('docker-stop')">
+                docker stop
+              </div>
+              <div class="command-item" onclick="showCommand('docker-rm')">
+                docker rm
+              </div>
+            </div>
+          </div>
+
+          <div class="category">
+            <div class="category-header" onclick="toggleCategory('networking')">
+              Networking
+            </div>
+            <div class="commands-list" id="networking">
+              <div class="command-item" onclick="showCommand('docker-network-create')">
+                docker network create
+              </div>
+              <div class="command-item" onclick="showCommand('docker-network-ls')">
+                docker network ls
+              </div>
+              <div class="command-item" onclick="showCommand('docker-network-rm')">
+                docker network rm
+              </div>
+            </div>
+          </div>
+
+          <div class="category">
+            <div class="category-header" onclick="toggleCategory('volume-management')">
+              Volume Management
+            </div>
+            <div class="commands-list" id="volume-management">
+              <div class="command-item" onclick="showCommand('docker-volume-create')">
+                docker volume create
+              </div>
+              <div class="command-item" onclick="showCommand('docker-volume-ls')">
+                docker volume ls
+              </div>
+              <div class="command-item" onclick="showCommand('docker-volume-rm')">
+                docker volume rm
+              </div>
+            </div>
+          </div>
+
+          <div class="category">
+            <div class="category-header" onclick="toggleCategory('monitoring')">
+              Monitoring & Logs
+            </div>
+            <div class="commands-list" id="monitoring">
+              <div class="command-item" onclick="showCommand('docker-ps')">
+                docker ps
+              </div>
+              <div class="command-item" onclick="showCommand('docker-logs')">
+                docker logs
+              </div>
+              <div class="command-item" onclick="showCommand('docker-stats')">
+                docker stats
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="content-area">
+          <div class="welcome-message" id="welcome">
+            <h2>Welcome to Docker Commands Reference</h2>
+            <p>Select a command from the sidebar to view detailed examples and explanations.</p>
+          </div>
+
+          <!-- Command Details Templates -->
+          <div class="command-details" id="docker-build">
+            <h2 class="command-title">docker build</h2>
+            <p class="command-description">Builds an image from a Dockerfile.</p>
+
+            <div class="function-explanation">
+              <h3>How docker build Works</h3>
+              <p><strong>Purpose:</strong> Creates a Docker image from the instructions in a Dockerfile and a specified context (directory or URL).</p>
+              <p><strong>Function:</strong> Docker reads the Dockerfile and executes the commands sequentially, creating a new image layer for each instruction.</p>
+              <p><strong>Impact:</strong> Produces a new docker image locally that can be run as a container or pushed to a repository.</p>
+              <p><strong>Performance:</strong> Depends on the complexity and number of layers in the Dockerfile. Caching can significantly speed up rebuilds.</p>
+            </div>
+
+            <div class="use-cases">
+              <h3>Common Use Cases</h3>
+              <ul>
+                <li>Packaging applications and dependencies into an image</li>
+                <li>Building custom software stacks for development and production</li>
+                <li>Creating images for CI/CD pipelines</li>
+                <li>Building base images for various application runtimes</li>
+              </ul>
+            </div>
+
+            <div class="example-section">
+              <div class="example-title">Basic Image Build</div>
+              <div class="code-block">
+                <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                <div class="syntax-highlight">
+                  <span class="keyword">docker build</span> -t myapp:latest <span class="string">.</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="example-section">
+              <div class="example-title">Build with No Cache</div>
+              <div class="code-block">
+                <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                <div class="syntax-highlight">
+                  <span class="keyword">docker build</span> --no-cache -t myapp:no-cache <span class="string">.</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="command-details" id="docker-run">
+            <h2 class="command-title">docker run</h2>
+            <p class="command-description">Runs a command in a new container.</p>
+
+            <div class="function-explanation">
+              <h3>How docker run Works</h3>
+              <p><strong>Purpose:</strong> Creates and starts a new container from a Docker image.</p>
+              <p><strong>Function:</strong> Docker creates a container based on the specified image, allocates a filesystem, and executes the specified command within that container.</p>
+              <p><strong>Impact:</strong> Starts a new container instance, which runs until the specified command terminates.</p>
+              <p><strong>Performance:</strong> Fast startup due to layered file system. Resource usage depends on container configuration.</p>
+            </div>
+
+            <div class="use-cases">
+              <h3>Common Use Cases</h3>
+              <ul>
+                <li>Running isolated applications or microservices</li>
+                <li>Testing and debugging software in a controlled environment</li>
+                <li>Executing batch jobs and automation scripts</li>
+                <li>Starting development environments with all dependencies</li>
+              </ul>
+            </div>
+
+            <div class="example-section">
+              <div class="example-title">Run with Interactive Shell</div>
+              <div class="code-block">
+                <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                <div class="syntax-highlight">
+                  <span class="keyword">docker run</span> -it ubuntu bash
+                </div>
+              </div>
+            </div>
+
+            <div class="example-section">
+              <div class="example-title">Run Detached with Port Mapping</div>
+              <div class="code-block">
+                <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                <div class="syntax-highlight">
+                  <span class="keyword">docker run</span> -d -p 80:80 nginx
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- More command details can be added in the same format -->
+        </div>
+      </div>
+    </div>
+
+    <script>
+      const commands = {
+        "docker-pull": {
+          title: "docker pull",
+          description: "Downloads an image from a Docker registry.",
+          functionExplanation: {
+            purpose: "Fetches an image from a remote repository or registry to your local Docker host.",
+            function:
+              "Docker contacts the registry, downloads image layers that are not already present locally, and stores them in the local image cache.",
+            impact: "The image becomes available locally to create containers from it.",
+            performance:
+              "Depends on image size and network speed. Layer caching can reduce redundant downloads.",
+          },
+          useCases: [
+            "Fetching ready-to-use images for development and production",
+            "Updating local images with the latest versions from upstream",
+            "Preparing environments by pulling base images",
+            "Ensuring consistent environments by getting specific image tags",
+          ],
+          examples: [
+            {
+              title: "Pull Latest Image",
+              code: "docker pull node:latest",
+            },
+            {
+              title: "Pull Specific Version",
+              code: "docker pull mysql:5.7",
+            },
+          ],
+        },
+        "docker-stop": {
+          title: "docker stop",
+          description: "Stops one or more running containers.",
+          functionExplanation: {
+            purpose: "Gracefully stops running containers using SIGTERM, allowing processes to finish any shutdown behavior.",
+            function:
+              "Docker sends a SIGTERM signal to the main process inside the container, allowing it to perform cleanup activities before stopping the container.",
+            impact: "The container's state is preserved, and it can be restarted.",
+            performance:
+              "Stopping is usually fast, but depends on the grace period allowed to the container for shutdown.",
+          },
+          useCases: [
+            "Gracefully shutting down applications for maintenance",
+            "Stopping containers during a deployment process",
+            "Pausing resource utilization without destroying state",
+            "Automated ops scripts for orderly shutdown",
+          ],
+          examples: [
+            {
+              title: "Stop a Single Container",
+              code: "docker stop my_container",
+            },
+            {
+              title: "Stop Multiple Containers",
+              code: "docker stop $(docker ps -q)",
+            },
+          ],
+        },
+        "docker-push": {
+          title: "docker push",
+          description: "Uploads an image to a Docker registry.",
+          functionExplanation: {
+            purpose: "Uploads a locally built Docker image to a remote registry for sharing and deployment.",
+            function: "Docker compresses and uploads image layers to the specified registry. Only new or changed layers are uploaded to optimize bandwidth.",
+            impact: "Makes the image available for others to pull and use in their environments.",
+            performance: "Upload time depends on image size, network speed, and registry performance. Layer deduplication saves bandwidth."
+          },
+          useCases: [
+            "Publishing applications for production deployment",
+            "Sharing custom images with team members",
+            "CI/CD pipelines uploading built artifacts",
+            "Creating public images for open source projects"
+          ],
+          examples: [
+            {
+              title: "Push to Docker Hub",
+              code: "docker push username/myapp:latest"
+            },
+            {
+              title: "Push to Private Registry",
+              code: "docker push registry.company.com/myapp:v1.0"
+            }
+          ]
+        },
+        "docker-rm": {
+          title: "docker rm",
+          description: "Removes one or more containers.",
+          functionExplanation: {
+            purpose: "Permanently deletes stopped containers to free up disk space and clean up the system.",
+            function: "Docker removes the container's filesystem and metadata. Running containers must be stopped first unless using force flag.",
+            impact: "Container data is permanently lost unless volumes were used for persistent storage.",
+            performance: "Fast operation as it only removes metadata and filesystem layers."
+          },
+          useCases: [
+            "Cleaning up stopped containers to save disk space",
+            "Removing test containers after development work",
+            "Automated cleanup in CI/CD pipelines",
+            "Maintenance scripts for system hygiene"
+          ],
+          examples: [
+            {
+              title: "Remove Stopped Container",
+              code: "docker rm my_container"
+            },
+            {
+              title: "Force Remove Running Container",
+              code: "docker rm -f running_container"
+            }
+          ]
+        },
+        "docker-network-create": {
+          title: "docker network create",
+          description: "Creates a new Docker network.",
+          functionExplanation: {
+            purpose: "Creates isolated network environments for containers to communicate securely.",
+            function: "Docker creates a virtual network with its own IP range, allowing containers to communicate using container names as hostnames.",
+            impact: "Provides network isolation and enables secure inter-container communication.",
+            performance: "Minimal overhead as it's implemented using Linux networking features."
+          },
+          useCases: [
+            "Isolating multi-container applications",
+            "Creating development environments with multiple services",
+            "Implementing microservices architecture",
+            "Securing container communication in production"
+          ],
+          examples: [
+            {
+              title: "Create Bridge Network",
+              code: "docker network create myapp-network"
+            },
+            {
+              title: "Create Custom Subnet",
+              code: "docker network create --subnet=172.20.0.0/16 custom-net"
+            }
+          ]
+        },
+        "docker-network-ls": {
+          title: "docker network ls",
+          description: "Lists all Docker networks.",
+          functionExplanation: {
+            purpose: "Displays all available Docker networks and their basic information.",
+            function: "Docker queries its network database and displays network names, IDs, drivers, and scope.",
+            impact: "Provides visibility into network configuration for troubleshooting and management.",
+            performance: "Fast read-only operation that queries local Docker metadata."
+          },
+          useCases: [
+            "Troubleshooting network connectivity issues",
+            "Auditing network configuration",
+            "Discovering available networks for container deployment",
+            "Network inventory and documentation"
+          ],
+          examples: [
+            {
+              title: "List All Networks",
+              code: "docker network ls"
+            },
+            {
+              title: "Filter by Driver Type",
+              code: "docker network ls --filter driver=bridge"
+            }
+          ]
+        },
+        "docker-volume-create": {
+          title: "docker volume create",
+          description: "Creates a Docker volume for persistent storage.",
+          functionExplanation: {
+            purpose: "Creates persistent storage that survives container restarts and removals.",
+            function: "Docker creates a managed storage area that can be mounted into containers, providing data persistence and sharing capabilities.",
+            impact: "Enables data persistence across container lifecycles and data sharing between containers.",
+            performance: "Storage performance depends on the underlying storage driver and host filesystem."
+          },
+          useCases: [
+            "Persisting database data across container restarts",
+            "Sharing files between multiple containers",
+            "Backing up and restoring application data",
+            "Storing configuration files and logs"
+          ],
+          examples: [
+            {
+              title: "Create Named Volume",
+              code: "docker volume create myapp-data"
+            },
+            {
+              title: "Create with Specific Driver",
+              code: "docker volume create --driver local --opt type=nfs myapp-nfs"
+            }
+          ]
+        },
+        "docker-ps": {
+          title: "docker ps",
+          description: "Lists running containers.",
+          functionExplanation: {
+            purpose: "Displays information about currently running containers on the Docker host.",
+            function: "Docker queries its container database and shows container ID, image, command, creation time, status, ports, and names.",
+            impact: "Provides visibility into active containers for monitoring and management.",
+            performance: "Very fast read-only operation that queries local Docker metadata."
+          },
+          useCases: [
+            "Monitoring active containers and their status",
+            "Troubleshooting container issues",
+            "Getting container IDs for other Docker commands",
+            "Checking port mappings and resource usage"
+          ],
+          examples: [
+            {
+              title: "List Running Containers",
+              code: "docker ps"
+            },
+            {
+              title: "List All Containers (including stopped)",
+              code: "docker ps -a"
+            }
+          ]
+        },
+        "docker-logs": {
+          title: "docker logs",
+          description: "Fetches logs from a container.",
+          functionExplanation: {
+            purpose: "Retrieves and displays the logs generated by a specific container.",
+            function: "Docker reads the container's log files and outputs them to the terminal. Can follow logs in real-time or show historical logs.",
+            impact: "Essential for debugging applications and monitoring container behavior.",
+            performance: "Performance depends on log size. Large log files may take time to display."
+          },
+          useCases: [
+            "Debugging application errors and issues",
+            "Monitoring application behavior in real-time",
+            "Auditing container activities",
+            "Troubleshooting deployment problems"
+          ],
+          examples: [
+            {
+              title: "View Container Logs",
+              code: "docker logs my_container"
+            },
+            {
+              title: "Follow Logs in Real-time",
+              code: "docker logs -f my_container"
+            }
+          ]
+        },
+        "docker-stats": {
+          title: "docker stats",
+          description: "Displays real-time resource usage statistics for containers.",
+          functionExplanation: {
+            purpose: "Shows live performance metrics including CPU, memory, network, and disk I/O usage for running containers.",
+            function: "Docker monitors container resource consumption and displays real-time statistics in a table format, updating continuously.",
+            impact: "Enables performance monitoring and resource optimization for containerized applications.",
+            performance: "Minimal overhead as it uses Linux cgroups to gather statistics."
+          },
+          useCases: [
+            "Monitoring container resource consumption",
+            "Identifying performance bottlenecks",
+            "Capacity planning and resource allocation",
+            "Detecting memory leaks or CPU spikes"
+          ],
+          examples: [
+            {
+              title: "Show Stats for All Containers",
+              code: "docker stats"
+            },
+            {
+              title: "Show Stats for Specific Container",
+              code: "docker stats my_container"
+            }
+          ]
+        },
+        "docker-network-rm": {
+          title: "docker network rm",
+          description: "Removes one or more Docker networks.",
+          functionExplanation: {
+            purpose: "Permanently deletes Docker networks that are no longer needed.",
+            function: "Docker removes the network configuration and frees up associated resources. Networks with connected containers cannot be removed unless forced.",
+            impact: "Network is permanently deleted and containers lose connectivity through that network.",
+            performance: "Fast operation that updates network configuration and routing tables."
+          },
+          useCases: [
+            "Cleaning up unused networks to save resources",
+            "Removing test networks after development",
+            "Network maintenance and reorganization",
+            "Automated cleanup scripts in CI/CD pipelines"
+          ],
+          examples: [
+            {
+              title: "Remove Single Network",
+              code: "docker network rm myapp-network"
+            },
+            {
+              title: "Remove Multiple Networks",
+              code: "docker network rm network1 network2 network3"
+            }
+          ]
+        },
+        "docker-volume-ls": {
+          title: "docker volume ls",
+          description: "Lists all Docker volumes.",
+          functionExplanation: {
+            purpose: "Displays all available Docker volumes and their basic information.",
+            function: "Docker queries its volume database and shows volume names, drivers, and mount points.",
+            impact: "Provides visibility into storage resources for management and troubleshooting.",
+            performance: "Fast read-only operation that queries local Docker volume metadata."
+          },
+          useCases: [
+            "Auditing persistent storage usage",
+            "Finding volumes for backup operations",
+            "Troubleshooting storage-related issues",
+            "Managing disk space and volume cleanup"
+          ],
+          examples: [
+            {
+              title: "List All Volumes",
+              code: "docker volume ls"
+            },
+            {
+              title: "Filter Dangling Volumes",
+              code: "docker volume ls --filter dangling=true"
+            }
+          ]
+        },
+        "docker-volume-rm": {
+          title: "docker volume rm",
+          description: "Removes one or more Docker volumes.",
+          functionExplanation: {
+            purpose: "Permanently deletes Docker volumes and all data stored within them.",
+            function: "Docker removes the volume and all its data from the storage backend. Volumes in use by containers cannot be removed unless forced.",
+            impact: "All data in the volume is permanently lost and cannot be recovered.",
+            performance: "Speed depends on volume size and storage backend. Large volumes may take time to delete."
+          },
+          useCases: [
+            "Cleaning up unused volumes to free disk space",
+            "Removing test data volumes after development",
+            "Storage maintenance and cleanup operations",
+            "Preparing for fresh deployments"
+          ],
+          examples: [
+            {
+              title: "Remove Single Volume",
+              code: "docker volume rm myapp-data"
+            },
+            {
+              title: "Remove All Unused Volumes",
+              code: "docker volume prune"
+            }
+          ]
+        },
+        "create-index": {
+          title: "CREATE INDEX",
+          description: "Creates an index on table columns to improve query performance.",
+          functionExplanation: {
+            purpose: "Creates a database index to speed up data retrieval operations on specific columns.",
+            function: "The database engine creates a separate data structure that points to table rows, allowing faster lookups, sorting, and filtering.",
+            impact: "Significantly improves SELECT query performance but adds overhead to INSERT, UPDATE, and DELETE operations.",
+            performance: "Index creation can be time-consuming on large tables but provides substantial query performance benefits."
+          },
+          useCases: [
+            "Optimizing frequently queried columns",
+            "Improving JOIN performance between tables",
+            "Speeding up WHERE clause filtering",
+            "Enhancing ORDER BY and GROUP BY operations"
+          ],
+          examples: [
+            {
+              title: "Create Simple Index",
+              code: "CREATE INDEX idx_employee_email ON employees(email);"
+            },
+            {
+              title: "Create Composite Index",
+              code: "CREATE INDEX idx_employee_dept_salary ON employees(department_id, salary);"
+            }
+          ]
+        },
+        "create-database": {
+          title: "CREATE DATABASE",
+          description: "Creates a new database instance.",
+          functionExplanation: {
+            purpose: "Creates a new database with its own namespace, security settings, and storage allocation.",
+            function: "The database engine initializes a new database instance with system tables, default schemas, and configuration settings.",
+            impact: "Establishes a separate environment for storing tables, views, procedures, and other database objects.",
+            performance: "Usually fast operation that sets up database metadata and directory structures."
+          },
+          useCases: [
+            "Setting up databases for new applications",
+            "Creating separate environments (dev, test, prod)",
+            "Isolating different projects or tenants",
+            "Establishing backup and disaster recovery targets"
+          ],
+          examples: [
+            {
+              title: "Create Basic Database",
+              code: "CREATE DATABASE myapp_production;"
+            },
+            {
+              title: "Create with Character Set",
+              code: "CREATE DATABASE myapp_production CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;"
+            }
+          ]
+        }
+      };
+
+      function toggleCategory(categoryId) {
+        const commandsList = document.getElementById(categoryId);
+        const header = commandsList.previousElementSibling;
+
+        // Close all other categories
+        document.querySelectorAll(".commands-list").forEach((list) => {
+          if (list.id !== categoryId) {
+            list.classList.remove("active");
+            list.previousElementSibling.classList.remove("active");
+          }
+        });
+
+        // Toggle current category
+        commandsList.classList.toggle("active");
+        header.classList.toggle("active");
+      }
+
+      function showCommand(commandId) {
+        // Hide welcome message
+        document.getElementById("welcome").style.display = "none";
+
+        // Hide all command details
+        document.querySelectorAll(".command-details").forEach((detail) => {
+          detail.classList.remove("active");
+        });
+
+        // Remove selection from all command items
+        document.querySelectorAll(".command-item").forEach((item) => {
+          item.classList.remove("selected");
+        });
+
+        // Add selection to clicked item
+        event.target.classList.add("selected");
+
+        // Show selected command details or generate if not exists
+        let commandDetail = document.getElementById(commandId);
+        if (!commandDetail && commands[commandId]) {
+          commandDetail = createCommandDetail(commandId, commands[commandId]);
+          document.querySelector(".content-area").appendChild(commandDetail);
+        }
+
+        if (commandDetail) {
+          commandDetail.classList.add("active");
+        }
+      }
+
+      function createCommandDetail(commandId, commandData) {
+        const div = document.createElement("div");
+        div.className = "command-details";
+        div.id = commandId;
+
+        // Function explanation HTML
+        let functionExplanationHtml = "";
+        if (commandData.functionExplanation) {
+          const fe = commandData.functionExplanation;
+          functionExplanationHtml = `
+            <div class="function-explanation">
+              <h3>How ${commandData.title} Works</h3>
+              <p><strong>Purpose:</strong> ${fe.purpose}</p>
+              <p><strong>Function:</strong> ${fe.function}</p>
+              ${fe.impact ? `<p><strong>Impact:</strong> ${fe.impact}</p>` : ""}
+              ${fe.performance ? `<p><strong>Performance:</strong> ${fe.performance}</p>` : ""}
+              ${fe.result ? `<p><strong>Result:</strong> ${fe.result}</p>` : ""}
+              ${fe.flexibility ? `<p><strong>Flexibility:</strong> ${fe.flexibility}</p>` : ""}
+            </div>
+          `;
+        }
+
+        // Use cases HTML
+        let useCasesHtml = "";
+        if (commandData.useCases) {
+          const useCasesList = commandData.useCases
+            .map((useCase) => `<li>${useCase}</li>`)
+            .join("");
+          useCasesHtml = `
+            <div class="use-cases">
+              <h3>Common Use Cases</h3>
+              <ul>
+                ${useCasesList}
+              </ul>
+            </div>
+          `;
+        }
+
+        // Examples HTML
+        let examplesHtml = "";
+        commandData.examples.forEach((example) => {
+          examplesHtml += `
+            <div class="example-section">
+              <div class="example-title">${example.title}</div>
+              <div class="code-block">
+                <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                <div class="syntax-highlight">
+                  ${highlightSyntax(example.code)}
+                </div>
+              </div>
+            </div>
+          `;
+        });
+
+        div.innerHTML = `
+          <h2 class="command-title">${commandData.title}</h2>
+          <p class="command-description">${commandData.description}</p>
+          ${functionExplanationHtml}
+          ${useCasesHtml}
+          ${examplesHtml}
+        `;
+
+        return div;
+      }
+
+      function highlightSyntax(code) {
+        const keywords = [
+          "docker build",
+          "docker run",
+          "docker pull",
+          "docker stop",
+          "docker rm",
+          "docker network",
+          "docker volume",
+          "docker push",
+        ];
+
+        let highlighted = code;
+        keywords.forEach((keyword) => {
+          const regex = new RegExp(`\\b${keyword}\\b`, "gi");
+          highlighted = highlighted.replace(
+            regex,
+            `<span class="keyword">${keyword}</span>`
+          );
+        });
+
+        // Highlight strings
+        highlighted = highlighted.replace(
+          /'([^']*)'/g,
+          "<span class=\"string\">'$1'</span>"
+        );
+        highlighted = highlighted.replace(
+          /\"([^\"]*)\"/g,
+          '<span class="string">"$1"</span>'
+        );
+
+        // Highlight comments
+        highlighted = highlighted.replace(
+          /\/\/.*$/gm,
+          '<span class="comment">$&</span>'
+        );
+
+        return highlighted;
+      }
+
+      function copyCode(button) {
+        const codeBlock = button.nextElementSibling;
+        const code = codeBlock.innerText;
+
+        navigator.clipboard.writeText(code).then(() => {
+          const originalText = button.textContent;
+          button.textContent = "Copied!";
+          button.style.background = "#00c853";
+
+          setTimeout(() => {
+            button.textContent = originalText;
+            button.style.background = "#4f5b62";
+          }, 2000);
+        });
+      }
+
+      // Initialize first category as open
+      document.addEventListener("DOMContentLoaded", function () {
+        toggleCategory("image-management");
+      });
+    </script>
+  </body>
+</html>
+

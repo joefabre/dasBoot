@@ -1,203 +1,647 @@
-// Initialize events array from localStorage or empty array
-let events = JSON.parse(localStorage.getItem('events')) || [];
-
-// Show/Hide form sections
-function showAddEvent() {
-    document.getElementById('addEventForm').style.display = 'block';
-    document.getElementById('reportsSection').style.display = 'none';
-    // Set default date and time
+// Update date and time in header
+function updateDateTime() {
     const now = new Date();
-    document.getElementById('eventDate').value = now.toISOString().split('T')[0];
-    document.getElementById('eventTime').value = now.toTimeString().slice(0, 5);
-}
-
-function showReports() {
-    document.getElementById('addEventForm').style.display = 'none';
-    document.getElementById('reportsSection').style.display = 'block';
-    // Set default date range (last 30 days)
-    const end = new Date();
-    const start = new Date();
-    start.setDate(start.getDate() - 30);
-    document.getElementById('startDate').value = start.toISOString().split('T')[0];
-    document.getElementById('endDate').value = end.toISOString().split('T')[0];
-}
-
-// Save new event
-function saveEvent(e) {
-    e.preventDefault();
-
-    const event = {
-        id: Date.now(), // Unique ID for the event
-        date: document.getElementById('eventDate').value,
-        time: document.getElementById('eventTime').value,
-        category: document.getElementById('eventCategory').value,
-        title: document.getElementById('eventTitle').value,
-        description: document.getElementById('eventDescription').value,
-        tags: document.getElementById('eventTags').value
-            .split(',')
-            .map(tag => tag.trim())
-            .filter(tag => tag), // Remove empty tags
-        timestamp: new Date().toISOString()
-    };
-
-    events.unshift(event); // Add to beginning of array
-    localStorage.setItem('events', JSON.stringify(events));
     
-    // Reset form
-    e.target.reset();
-    // Set current date and time again
-    const now = new Date();
-    document.getElementById('eventDate').value = now.toISOString().split('T')[0];
-    document.getElementById('eventTime').value = now.toTimeString().slice(0, 5);
-
-    // Refresh events list
-    displayEvents(events);
-
-    // Show success message
-    alert('Event saved successfully!');
+    // Update date with day and date on separate lines
+    const weekday = now.toLocaleDateString('en-US', { weekday: 'long' });
+    const date = now.toLocaleDateString('en-US', { 
+        month: 'long',
+        day: 'numeric',
+        year: 'numeric'
+    });
+    document.getElementById('currentDate').innerHTML = `${weekday}<br>${date}`;
+    
+    // Update time
+    const timeOptions = { 
+        hour: '2-digit', 
+        minute: '2-digit', 
+        second: '2-digit', 
+        hour12: false 
+    };
+    document.getElementById('currentTime').textContent = now.toLocaleTimeString('en-US', timeOptions);
 }
 
-// Generate report based on filters
-function closeReportModal() {
-    document.getElementById('reportModal').style.display = 'none';
+// Load events when the page loads
+// Helper function to group events by day
+function groupEventsByDay(events) {
+    return events.reduce((groups, event) => {
+        const day = new Date(event.timestamp).toISOString().split('T')[0];
+        if (!groups[day]) {
+            groups[day] = [];
+        }
+        groups[day].push(event);
+        return groups;
+    }, {});
 }
 
-function printReport() {
-    window.print();
+function formatDate(date) {
+    return date.toLocaleDateString('en-US', {
+        weekday: 'long',
+        month: 'long',
+        day: 'numeric',
+        year: 'numeric'
+    });
 }
 
-function generateReport() {
-    const startDate = document.getElementById('startDate').value;
-    const endDate = document.getElementById('endDate').value;
-    const category = document.getElementById('filterCategory').value;
-    const tags = document.getElementById('filterTags').value
-        .split(',')
-        .map(tag => tag.trim().toLowerCase())
-        .filter(tag => tag);
+function toggleDayContent(content) {
+    content.classList.toggle('expanded');
+}
 
-    let filteredEvents = events.filter(event => {
-        // Date range filter
-        const eventDate = event.date;
-        const dateMatch = (!startDate || eventDate >= startDate) && 
-                         (!endDate || eventDate <= endDate);
+function collapseAllDaysExceptToday() {
+    const today = new Date().toDateString();
+    const dayContents = document.querySelectorAll('.day-content');
+    dayContents.forEach(content => {
+        const dayHeader = content.previousElementSibling;
+        const dayDate = new Date(dayHeader.textContent).toDateString();
+        if (dayDate !== today) {
+            content.classList.remove('expanded');
+        } else {
+            content.classList.add('expanded');
+        }
+    });
+}
 
-        // Category filter
-        const categoryMatch = !category || event.category === category;
+document.addEventListener('DOMContentLoaded', () => {
+    // Initial date/time update
+    updateDateTime();
+    
+    // Update date/time every second
+    setInterval(updateDateTime, 1000);
+    loadEvents();
+    // Set initial date range (last 30 days)
+    const endDate = new Date();
+    const startDate = new Date();
+    startDate.setDate(startDate.getDate() - 30);
+    
+    document.getElementById('startDate').valueAsDate = startDate;
+    document.getElementById('endDate').valueAsDate = endDate;
 
-        // Tags filter
-        const eventTags = event.tags.map(tag => tag.toLowerCase());
-        const tagsMatch = tags.length === 0 || 
-                         tags.some(tag => eventTags.includes(tag));
+    // Initialize event display
+    loadEvents();
 
-        return dateMatch && categoryMatch && tagsMatch;
+    // Set up interval checks for midnight and week end
+    setInterval(checkMidnight, 60000); // Check every minute
+    setInterval(checkWeekEnd, 60000);
+});
+
+
+// Modal functionality
+function openReadmeModal() {
+    document.getElementById('readme-modal').style.display = 'block';
+}
+
+function closeReadmeModal() {
+    document.getElementById('readme-modal').style.display = 'none';
+}
+
+// Close modal when clicking outside
+window.onclick = function(event) {
+    const modal = document.getElementById('readme-modal');
+    if (event.target === modal) {
+        closeReadmeModal();
+    }
+}
+
+// Add event listeners when DOM is loaded
+document.addEventListener('DOMContentLoaded', () => {
+    // README button event listener
+    document.getElementById('readme-btn').addEventListener('click', openReadmeModal);
+    document.querySelector('.close').addEventListener('click', closeReadmeModal);
+    // Event listener for Enter key in event summary
+    document.getElementById('eventSummary').addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') {
+            logEvent();
+        }
     });
 
-    displayReport(filteredEvents);
-}
+    // Event listener for filter text
+    document.getElementById('filterText').addEventListener('input', applyFilters);
 
-// Display report results
-function displayReport(filteredEvents) {
-    // Show modal
-    const modal = document.getElementById('reportModal');
-    modal.style.display = 'block';
+    // Event listener for log button
+    document.getElementById('log-btn').addEventListener('click', logEvent);
+});
 
-    // Set current date and time in report header
-    const now = new Date();
-    const dateTimeStr = now.toLocaleDateString() + ' ' + now.toLocaleTimeString();
-    document.querySelector('.report-datetime').textContent = dateTimeStr;
-    const reportResults = document.getElementById('reportResults');
+function logEvent() {
+    const summary = document.getElementById('eventSummary').value.trim();
     
-    if (filteredEvents.length === 0) {
-        reportResults.innerHTML = '<p>No events found matching the criteria.</p>';
+    if (!summary) {
+        alert('Please enter an event summary');
         return;
     }
 
-    // Sort events by date and time
-    filteredEvents.sort((a, b) => {
-        const dateA = new Date(a.date + ' ' + a.time);
-        const dateB = new Date(b.date + ' ' + b.time);
-        return dateA - dateB;
+    // Get existing events or initialize new array
+    const events = JSON.parse(localStorage.getItem('eventLog') || '[]');
+    
+    // Create new event
+    const newEvent = {
+        summary: summary,
+        timestamp: new Date().toISOString()
+    };
+
+    // Check if this event belongs in the current log
+    const now = new Date();
+    const startOfWeek = new Date(now);
+    startOfWeek.setDate(now.getDate() - now.getDay());
+    startOfWeek.setHours(0, 0, 0, 0);
+
+    // Always add to current log if it's a newer event
+    events.push(newEvent);
+
+    // Sort events by timestamp, newest first
+    events.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+    
+    // Save to localStorage
+    localStorage.setItem('eventLog', JSON.stringify(events));
+    
+    // Clear the input
+    document.getElementById('eventSummary').value = '';
+    
+    // Reload events
+    loadEvents();
+}
+
+function loadEvents() {
+    const events = JSON.parse(localStorage.getItem('eventLog') || '[]');
+    displayEvents(events);
+}
+
+// Check for midnight to collapse previous day
+function checkMidnight() {
+    const now = new Date();
+    if (now.getHours() === 0 && now.getMinutes() === 0) {
+        collapseAllDaysExceptToday();
+    }
+}
+
+// Check for end of week (Sunday 23:59) to archive
+function checkWeekEnd() {
+    const now = new Date();
+    if (now.getDay() === 0 && now.getHours() === 23 && now.getMinutes() === 59) {
+        archiveCurrentWeek();
+    }
+}
+
+// Archive the current week's events
+function archiveCurrentWeek() {
+    const events = JSON.parse(localStorage.getItem('eventLog') || '[]');
+    const archives = JSON.parse(localStorage.getItem('eventLogArchives') || '[]');
+    
+    // Get start of the week (last Sunday)
+    const now = new Date();
+    const startOfWeek = new Date(now);
+    startOfWeek.setDate(now.getDate() - now.getDay());
+    startOfWeek.setHours(0, 0, 0, 0);
+
+    // Get end of current week (Saturday 23:59:59)
+    const endOfWeek = new Date(startOfWeek);
+    endOfWeek.setDate(endOfWeek.getDate() + 6);
+    endOfWeek.setHours(23, 59, 59, 999);
+
+    // Filter events for the current week
+    const weekEvents = events.filter(event => {
+        const eventDate = new Date(event.timestamp);
+        return eventDate >= startOfWeek && eventDate <= endOfWeek;
     });
 
-    // Generate report HTML
-    let html = '';
-    
-    // Add filtered events
-    html += filteredEvents.map(event => createEventHTML(event)).join('');
-    
-    reportResults.innerHTML = html;
-}
+    if (weekEvents.length > 0) {
+        // Add to archives
+        archives.push({
+            weekOf: startOfWeek.toISOString(),
+            events: weekEvents
+        });
 
-// Display events in the recent events list
-function displayEvents(eventsToDisplay = events) {
-    const eventsList = document.getElementById('eventsList');
-    eventsList.innerHTML = eventsToDisplay
-        .slice(0, 10) // Show only the 10 most recent events
-        .map(event => createEventHTML(event))
-        .join('');
-}
+        // Keep only events that are after this week
+        const newEvents = events.filter(event => {
+            const eventDate = new Date(event.timestamp);
+            return eventDate > endOfWeek;
+        });
 
-// Create HTML for a single event
-function createEventHTML(event, isReport = false) {
-    if (isReport) {
-        return `
-        <div class="report-event-item">
-            ${event.date} ${event.time} - ${event.title}
-        </div>`;
-    }
-    return `
-        <div class="event-item"
-            <div class="event-header">
-                <h3 class="event-title">${event.title}</h3>
-                <span class="event-datetime">${event.date} ${event.time}</span>
-            </div>
-            <span class="event-category ${event.category}">${event.category}</span>
-            <p class="event-description">${event.description}</p>
-            <div class="event-tags">
-                ${event.tags.map(tag => `<span class="tag">${tag}</span>`).join('')}
-            </div>
-            <button onclick="deleteEvent(${event.id})" class="delete-btn">Delete</button>
-        </div>
-    `;
-}
+        // Create a new empty day for today if it doesn't exist
+        const today = new Date().toISOString().split('T')[0];
+        const hasToday = newEvents.some(event => {
+            const eventDate = new Date(event.timestamp).toISOString().split('T')[0];
+            return eventDate === today;
+        });
 
-// Delete an event
-function deleteEvent(eventId) {
-    if (confirm('Are you sure you want to delete this event?')) {
-        events = events.filter(event => event.id !== eventId);
-        localStorage.setItem('events', JSON.stringify(events));
-        displayEvents();
-        // If reports section is visible, refresh the report
-        if (document.getElementById('reportsSection').style.display !== 'none') {
-            generateReport();
+        if (!hasToday) {
+            newEvents.push({
+                summary: "New day started",
+                timestamp: new Date().toISOString()
+            });
         }
+
+        // Save changes
+        localStorage.setItem('eventLogArchives', JSON.stringify(archives));
+        localStorage.setItem('eventLog', JSON.stringify(newEvents));
+
+        // Reload events
+        loadEvents();
     }
 }
 
-// Export events to CSV
-function exportToCSV() {
-    const headers = ['Date', 'Time', 'Category', 'Title', 'Description', 'Tags'];
-    const csvContent = [
-        headers.join(','),
-        ...events.map(event => [
-            event.date,
-            event.time,
-            event.category,
-            `"${event.title.replace(/"/g, '""')}"`,
-            `"${event.description.replace(/"/g, '""')}"`,
-            `"${event.tags.join(', ')}"`
-        ].join(','))
-    ].join('\n');
+function displayEvents(events) {
+    const eventsList = document.getElementById('eventsList');
+    eventsList.innerHTML = '';
+    
+    // Get today's date without time
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    
+    // Create sections for each day
+    const daySection = document.createElement('div');
+    daySection.className = 'day-section';
+    
+    const dayHeader = document.createElement('div');
+    dayHeader.className = 'day-header';
+    dayHeader.innerHTML = `<h2>${formatDate(today)}</h2>`;
+    dayHeader.addEventListener('click', () => toggleDayContent(dayHeader.nextElementSibling));
+    
+    const dayContent = document.createElement('div');
+    dayContent.className = 'day-content expanded';
+    
+    // Filter today's events
+    const todayEvents = events.filter(event => {
+        const eventDate = new Date(event.timestamp);
+        return eventDate.toDateString() === today.toDateString();
+    });
+    
+    if (todayEvents.length === 0) {
+        dayContent.innerHTML = '<div class="event">No events yet today</div>';
+    } else {
+        todayEvents.forEach((event, index) => {
+            const containerDiv = document.createElement('div');
+            containerDiv.className = 'event-container';
+            
+            const eventDiv = document.createElement('div');
+            eventDiv.className = 'event';
+            
+            const timestamp = new Date(event.timestamp);
+            const formattedTimestamp = formatTimestamp(timestamp);
+            
+            eventDiv.innerHTML = `
+                <div class="event-timestamp">[${formattedTimestamp}]</div>
+                <div class="event-summary">${event.summary}</div>
+            `;
+            
+            const checkbox = document.createElement('input');
+            checkbox.type = 'checkbox';
+            checkbox.className = 'event-checkbox';
+            checkbox.setAttribute('data-index', index);
+            checkbox.addEventListener('change', updateDeleteControls);
+            
+            containerDiv.appendChild(eventDiv);
+            containerDiv.appendChild(checkbox);
+            dayContent.appendChild(containerDiv);
+        });
+    }
+    
+    daySection.appendChild(dayHeader);
+    daySection.appendChild(dayContent);
+    eventsList.appendChild(daySection);
+    
+    // Handle previous days' events
+    const previousEvents = events.filter(event => {
+        const eventDate = new Date(event.timestamp);
+        return eventDate.toDateString() !== today.toDateString();
+    });
+    
+    if (previousEvents.length > 0) {
+        const eventsByDay = groupEventsByDay(previousEvents);
 
-    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
-    const link = document.createElement('a');
-    link.href = URL.createObjectURL(blob);
-    link.download = `events_export_${new Date().toISOString().split('T')[0]}.csv`;
-    link.click();
+        Object.entries(eventsByDay).forEach(([day, dayEvents]) => {
+            const prevDaySection = document.createElement('div');
+            prevDaySection.className = 'day-section';
+    
+            const prevDayHeader = document.createElement('div');
+            prevDayHeader.className = 'day-header';
+            const dayDate = new Date(day);
+            prevDayHeader.innerHTML = `<h2>${formatDate(dayDate)}</h2>`;
+            prevDayHeader.addEventListener('click', () => toggleDayContent(prevDayHeader.nextElementSibling));
+    
+            const prevDayContent = document.createElement('div');
+            prevDayContent.className = 'day-content';
+    
+
+    dayEvents.forEach((event, index) => {
+        const containerDiv = document.createElement('div');
+        containerDiv.className = 'event-container';
+        
+        const eventDiv = document.createElement('div');
+        eventDiv.className = 'event';
+        if (event.type) {
+            eventDiv.setAttribute('data-type', event.type);
+        }
+        
+        const timestamp = new Date(event.timestamp);
+        const formattedTimestamp = formatTimestamp(timestamp);
+        
+        eventDiv.innerHTML = `
+            <div class="event-timestamp">[${formattedTimestamp}]</div>
+            <div class="event-summary">${event.summary}</div>
+        `;
+
+        const checkbox = document.createElement('input');
+        checkbox.type = 'checkbox';
+        checkbox.className = 'event-checkbox';
+        checkbox.setAttribute('data-index', index);
+        checkbox.addEventListener('change', updateDeleteControls);
+        
+        
+        containerDiv.appendChild(eventDiv);
+        containerDiv.appendChild(checkbox);
+                prevDayContent.appendChild(containerDiv);
+            });
+    
+            prevDaySection.appendChild(prevDayHeader);
+            prevDaySection.appendChild(prevDayContent);
+            eventsList.appendChild(prevDaySection);
+        });
+    }
 }
 
-// Initialize the display
-document.addEventListener('DOMContentLoaded', () => {
-    showAddEvent(); // Show the add event form by default
-    displayEvents(); // Display recent events
-});
+function formatTimestamp(timestamp) {
+    return timestamp.toLocaleString('en-US', {
+        year: 'numeric',
+        month: '2-digit',
+        day: '2-digit',
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit',
+        hour12: false
+    });
+}
+
+function applyFilters() {
+    const filterText = document.getElementById('filterText').value.toLowerCase();
+    const startDate = document.getElementById('startDate').valueAsDate;
+    const endDate = document.getElementById('endDate').valueAsDate;
+    
+    if (endDate) {
+        // Set end date to end of day
+        endDate.setHours(23, 59, 59, 999);
+    }
+
+    const events = JSON.parse(localStorage.getItem('eventLog') || '[]');
+    
+    const filteredEvents = events.filter(event => {
+        const eventDate = new Date(event.timestamp);
+        const matchesText = event.summary.toLowerCase().includes(filterText);
+        const matchesDate = (!startDate || eventDate >= startDate) && 
+                           (!endDate || eventDate <= endDate);
+        
+        return matchesText && matchesDate;
+    });
+    
+    displayEvents(filteredEvents);
+}
+
+function downloadEventLog(format) {
+    const events = JSON.parse(localStorage.getItem('eventLog') || '[]');
+    const archives = JSON.parse(localStorage.getItem('eventLogArchives') || '[]');
+    
+    const data = {
+        current: events,
+        archives: archives
+    };
+
+    let content, filename, type;
+
+    if (format === 'json') {
+        content = JSON.stringify(data, null, 2);
+        filename = `eventlog_backup_${new Date().toISOString().split('T')[0]}.json`;
+        type = 'application/json';
+    } else if (format === 'csv') {
+        // Convert to CSV format
+        const rows = ['Timestamp,Summary,Type'];
+        
+        // Add current events
+        events.forEach(event => {
+            rows.push(`${event.timestamp},"${event.summary.replace(/"/g, '""')}",current`);
+        });
+        
+        // Add archived events
+        archives.forEach(archive => {
+            archive.events.forEach(event => {
+                rows.push(`${event.timestamp},"${event.summary.replace(/"/g, '""')}",archived`);
+            });
+        });
+        
+        content = rows.join('\n');
+        filename = `eventlog_backup_${new Date().toISOString().split('T')[0]}.csv`;
+        type = 'text/csv';
+    }
+
+    const blob = new Blob([content], { type: type });
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = filename;
+    a.click();
+    window.URL.revokeObjectURL(url);
+}
+
+function importEventLog(file) {
+    const reader = new FileReader();
+    
+    reader.onload = function(e) {
+        try {
+            if (file.name.endsWith('.json')) {
+                const data = JSON.parse(e.target.result);
+                if (data.current && data.archives) {
+                    localStorage.setItem('eventLog', JSON.stringify(data.current));
+                    localStorage.setItem('eventLogArchives', JSON.stringify(data.archives));
+                    alert('Event log imported successfully!');
+                    loadEvents();
+                } else {
+                    throw new Error('Invalid JSON format');
+                }
+            } else if (file.name.endsWith('.csv')) {
+                const rows = e.target.result.split('\n');
+                const current = [];
+                const archives = [];
+                let currentArchive = null;
+                
+                // Skip header row
+                for (let i = 1; i < rows.length; i++) {
+                    if (!rows[i].trim()) continue;
+                    
+                    const [timestamp, quotedSummary, type] = rows[i].split(',');
+                    const summary = quotedSummary.replace(/^"|"$/g, '').replace(/""/g, '"');
+                    
+                    const event = { timestamp, summary };
+                    
+                    if (type === 'current') {
+                        current.push(event);
+                    } else {
+                        // Group archived events by week
+                        const eventDate = new Date(timestamp);
+                        const weekStart = new Date(eventDate);
+                        weekStart.setDate(weekStart.getDate() - weekStart.getDay());
+                        weekStart.setHours(0, 0, 0, 0);
+                        
+                        if (!currentArchive || currentArchive.weekOf !== weekStart.toISOString()) {
+                            if (currentArchive) {
+                                archives.push(currentArchive);
+                            }
+                            currentArchive = {
+                                weekOf: weekStart.toISOString(),
+                                events: []
+                            };
+                        }
+                        currentArchive.events.push(event);
+                    }
+                }
+                
+                if (currentArchive && currentArchive.events.length > 0) {
+                    archives.push(currentArchive);
+                }
+                
+                localStorage.setItem('eventLog', JSON.stringify(current));
+                localStorage.setItem('eventLogArchives', JSON.stringify(archives));
+                alert('Event log imported successfully!');
+                loadEvents();
+            } else {
+                throw new Error('Unsupported file format');
+            }
+        } catch (error) {
+            alert('Error importing file: ' + error.message);
+        }
+    };
+    
+    reader.readAsText(file);
+}
+
+function clearFilters() {
+    document.getElementById('filterText').value = '';
+    const endDate = new Date();
+    const startDate = new Date();
+    startDate.setDate(startDate.getDate() - 30);
+    
+    document.getElementById('startDate').valueAsDate = startDate;
+    document.getElementById('endDate').valueAsDate = endDate;
+    
+    loadEvents();
+}
+
+function printEvents() {
+    const events = JSON.parse(localStorage.getItem('eventLog') || '[]');
+    const printArea = document.getElementById('printArea');
+    
+    // Apply current filters
+    const filterText = document.getElementById('filterText').value.toLowerCase();
+    const startDate = document.getElementById('startDate').valueAsDate;
+    const endDate = document.getElementById('endDate').valueAsDate;
+    
+    const filteredEvents = events.filter(event => {
+        const eventDate = new Date(event.timestamp);
+        const matchesText = event.summary.toLowerCase().includes(filterText);
+        const matchesDate = (!startDate || eventDate >= startDate) && 
+                           (!endDate || eventDate <= endDate);
+        
+        return matchesText && matchesDate;
+    });
+
+    // Generate print content
+    let printContent = `<h2>Event Log</h2>
+    <p>Generated: ${new Date().toLocaleString()}</p>
+    <hr>`;
+
+    if (filterText || startDate || endDate) {
+        printContent += '<p>Filters applied:</p>';
+        if (filterText) printContent += `<p>Text: ${filterText}</p>`;
+        if (startDate) printContent += `<p>From: ${startDate.toLocaleDateString()}</p>`;
+        if (endDate) printContent += `<p>To: ${endDate.toLocaleDateString()}</p>`;
+        printContent += '<hr>';
+    }
+
+    filteredEvents.forEach(event => {
+        const timestamp = new Date(event.timestamp);
+        printContent += `
+        <div class="print-event">
+            <div class="print-timestamp">[${formatTimestamp(timestamp)}]</div>
+            <div class="print-summary">${event.summary}</div>
+        </div>`;
+    });
+
+    printArea.innerHTML = printContent;
+    window.print();
+}
+
+function updateDeleteControls() {
+    const checkboxes = document.querySelectorAll('.event-checkbox:checked');
+    const deleteControls = document.getElementById('deleteControls');
+    const deleteCount = document.getElementById('deleteCount');
+
+    if (checkboxes.length > 0) {
+        deleteControls.classList.add('visible');
+        deleteCount.textContent = `${checkboxes.length} selected`;
+    } else {
+        deleteControls.classList.remove('visible');
+    }
+}
+
+async function handleGitPush() {
+    try {
+        const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
+        const commitMessage = `Update event log - ${timestamp}`;
+
+        // Add all changes
+        await executeGitCommand('git add .');
+        
+        // Commit changes
+        await executeGitCommand(`git commit -m "${commitMessage}"`);
+        
+        // Push to remote
+        await executeGitCommand('git push origin main');
+
+        alert('Successfully pushed to GitHub!');
+    } catch (error) {
+        console.error('Git operation failed:', error);
+        alert('Failed to push to GitHub. Check console for details.');
+    }
+}
+
+async function executeGitCommand(command) {
+    return new Promise((resolve, reject) => {
+        const process = require('child_process').exec(command);
+        
+        process.stdout.on('data', (data) => {
+            console.log(data.toString());
+        });
+
+        process.stderr.on('data', (data) => {
+            console.error(data.toString());
+        });
+
+        process.on('close', (code) => {
+            if (code === 0) {
+                resolve();
+            } else {
+                reject(new Error(`Git command failed with code ${code}`));
+            }
+        });
+    });
+}
+
+function deleteSelectedEvents() {
+    const checkboxes = document.querySelectorAll('.event-checkbox:checked');
+    const events = JSON.parse(localStorage.getItem('eventLog') || '[]');
+    const indicesToDelete = Array.from(checkboxes).map(cb => parseInt(cb.getAttribute('data-index')));
+    
+    // Confirm deletion
+    if (!confirm(`Delete ${checkboxes.length} selected event${checkboxes.length > 1 ? 's' : ''}?`)) {
+        return;
+    }
+
+    // Remove selected events
+    const updatedEvents = events.filter((_, index) => !indicesToDelete.includes(index));
+    
+    // Update localStorage
+    localStorage.setItem('eventLog', JSON.stringify(updatedEvents));
+    
+    // Hide delete controls
+    document.getElementById('deleteControls').classList.remove('visible');
+    
+    // Reload events
+    loadEvents();
+}

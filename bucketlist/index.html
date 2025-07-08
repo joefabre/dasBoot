@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Terminal Bucket List Manager - Accessible Web Application</title>
+    <meta name="description" content="A terminal-style bucket list manager with full accessibility support for managing your life goals and aspirations.">
+    <meta name="keywords" content="bucket list, goals, terminal, accessibility, tasks, planning">
+    <meta name="author" content="FABREulous Technology">
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=SF+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+</head>
+<body>
+    <main class="terminal-window" role="main" aria-label="Terminal Bucket List Manager">
+        <!-- Terminal Header -->
+        <header class="terminal-header" role="banner">
+            <div class="buttons" role="group" aria-label="Window controls">
+                <button class="button close" aria-label="Close window or tab"></button>
+                <button class="button minimize" aria-label="Minimize application window"></button>
+                <button class="button maximize" aria-label="Maximize browser window or restore from minimized"></button>
+            </div>
+            <h1 class="title">Terminal — bucket_list.sh</h1>
+            <div class="datetime-display" id="datetime-display" role="timer" aria-label="Current date and time">
+                <time id="current-time" aria-label="Current time">00:00:00</time>
+                <time id="current-date" aria-label="Current date">Jan 1, 2025</time>
+            </div>
+        </header>
+        
+        <!-- Terminal Content -->
+        <section class="terminal-content" role="application" aria-label="Terminal interface">
+            <!-- Welcome Message -->
+            <div class="output" role="log" aria-label="Terminal welcome message">
+                <span class="prompt" aria-label="Command prompt">user@macbook-pro ~ %</span> <span class="command" aria-label="Executed command">./bucket_list.sh</span>
+            </div>
+            <div class="output">
+                <pre class="ascii-art" aria-label="Bucket List ASCII art logo">
+██████╗ ██╗   ██╗ ██████╗██╗  ██╗███████╗████████╗    ██╗     ██╗███████╗████████╗
+██╔══██╗██║   ██║██╔════╝██║ ██╔╝██╔════╝╚══██╔══╝    ██║     ██║██╔════╝╚══██╔══╝
+██████╔╝██║   ██║██║     █████╔╝ █████╗     ██║       ██║     ██║███████╗   ██║   
+██╔══██╗██║   ██║██║     ██╔═██╗ ██╔══╝     ██║       ██║     ██║╚════██║   ██║   
+██████╔╝╚██████╔╝╚██████╗██║  ██╗███████╗   ██║       ███████╗██║███████║   ██║   
+╚═════╝  ╚═════╝  ╚═════╝╚═╝  ╚═╝╚══════╝   ╚═╝       ╚══════╝╚═╝╚══════╝   ╚═╝   
+                </pre>
+            </div>
+            <div class="output">Welcome to Terminal Bucket List Manager v1.0</div>
+            <div class="output">©2025 by FABREulous Technology</div>
+            <div class="output">Type 'help' for available commands</div>
+            <div class="output">═══════════════════════════════════════════════════</div>
+            
+            <!-- Bucket List Display -->
+            <section id="bucket-list-display" role="region" aria-label="Bucket list items" aria-live="polite"></section>
+            
+            <!-- Input Section -->
+            <section class="input-section" role="region" aria-label="Command input">
+                <label for="command-input" class="prompt" aria-label="Command prompt">bucket_list@terminal ~ %</label>
+                <input type="text" 
+                       id="command-input" 
+                       class="terminal-input" 
+                       placeholder="Enter command (type 'help' for available commands)" 
+                       autocomplete="off"
+                       aria-label="Terminal command input"
+                       aria-describedby="command-help"
+                       role="textbox">
+            </section>
+            
+            <!-- Screen reader help -->
+            <div id="command-help" class="sr-only">
+                Available commands: help, add, list, edit [id], delete [id], complete [id], stats, export, import, clear, exit
+            </div>
+            
+            <!-- Add Item Form (Hidden by default) -->
+            <form id="add-form" class="form-section" style="display: none;" role="form" aria-labelledby="add-form-title">
+                <h2 id="add-form-title" class="output">Add New Bucket List Item:</h2>
+                <div class="form-group">
+                    <label for="event-input" class="form-prompt">Event:</label>
+                    <input type="text" 
+                           id="event-input" 
+                           class="terminal-input" 
+                           placeholder="What do you want to accomplish?"
+                           required
+                           aria-required="true"
+                           aria-describedby="event-help">
+                    <div id="event-help" class="sr-only">Describe what you want to accomplish</div>
+                </div>
+                <div class="form-group">
+                    <label for="date-input" class="form-prompt">Due Date:</label>
+                    <input type="date" 
+                           id="date-input" 
+                           class="terminal-input"
+                           aria-describedby="date-help">
+                    <div id="date-help" class="sr-only">Optional: Set a target completion date</div>
+                </div>
+                <div class="form-group">
+                    <label for="category-input" class="form-prompt">Category:</label>
+                    <select id="category-input" class="terminal-input" aria-describedby="category-help">
+                        <option value="adventure">Adventure</option>
+                        <option value="travel">Travel</option>
+                        <option value="learning">Learning</option>
+                        <option value="fitness">Fitness</option>
+                        <option value="career">Career</option>
+                        <option value="personal">Personal</option>
+                        <option value="creative">Creative</option>
+                        <option value="social">Social</option>
+                        <option value="financial">Financial</option>
+                    </select>
+                    <div id="category-help" class="sr-only">Choose the category that best fits this goal</div>
+                </div>
+                <div class="form-group">
+                    <label for="priority-input" class="form-prompt">Priority:</label>
+                    <select id="priority-input" class="terminal-input" aria-describedby="priority-help">
+                        <option value="high">High Priority</option>
+                        <option value="medium">Medium Priority</option>
+                        <option value="low">Low Priority</option>
+                    </select>
+                    <div id="priority-help" class="sr-only">Set the importance level for this goal</div>
+                </div>
+                <div class="form-actions" role="group" aria-label="Form actions">
+                    <button type="submit" id="save-btn" class="terminal-btn" aria-describedby="save-help">Save Item</button>
+                    <button type="button" id="cancel-btn" class="terminal-btn" aria-describedby="cancel-help">Cancel</button>
+                    <div id="save-help" class="sr-only">Save this bucket list item</div>
+                    <div id="cancel-help" class="sr-only">Cancel and return to main interface</div>
+                </div>
+            </form>
+            
+            <!-- Edit Item Form (Hidden by default) -->
+            <form id="edit-form" class="form-section" style="display: none;" role="form" aria-labelledby="edit-form-title">
+                <h2 id="edit-form-title" class="output">Edit Bucket List Item:</h2>
+                <div class="form-group">
+                    <label for="edit-event-input" class="form-prompt">Event:</label>
+                    <input type="text" 
+                           id="edit-event-input" 
+                           class="terminal-input" 
+                           placeholder="What do you want to accomplish?"
+                           required
+                           aria-required="true"
+                           aria-describedby="edit-event-help">
+                    <div id="edit-event-help" class="sr-only">Describe what you want to accomplish</div>
+                </div>
+                <div class="form-group">
+                    <label for="edit-date-input" class="form-prompt">Due Date:</label>
+                    <input type="date" 
+                           id="edit-date-input" 
+                           class="terminal-input"
+                           aria-describedby="edit-date-help">
+                    <div id="edit-date-help" class="sr-only">Optional: Set a target completion date</div>
+                </div>
+                <div class="form-group">
+                    <label for="edit-category-input" class="form-prompt">Category:</label>
+                    <select id="edit-category-input" class="terminal-input" aria-describedby="edit-category-help">
+                        <option value="adventure">Adventure</option>
+                        <option value="travel">Travel</option>
+                        <option value="learning">Learning</option>
+                        <option value="fitness">Fitness</option>
+                        <option value="career">Career</option>
+                        <option value="personal">Personal</option>
+                        <option value="creative">Creative</option>
+                        <option value="social">Social</option>
+                        <option value="financial">Financial</option>
+                    </select>
+                    <div id="edit-category-help" class="sr-only">Choose the category that best fits this goal</div>
+                </div>
+                <div class="form-group">
+                    <label for="edit-priority-input" class="form-prompt">Priority:</label>
+                    <select id="edit-priority-input" class="terminal-input" aria-describedby="edit-priority-help">
+                        <option value="high">High Priority</option>
+                        <option value="medium">Medium Priority</option>
+                        <option value="low">Low Priority</option>
+                    </select>
+                    <div id="edit-priority-help" class="sr-only">Set the importance level for this goal</div>
+                </div>
+                <div class="form-actions" role="group" aria-label="Form actions">
+                    <button type="submit" id="update-btn" class="terminal-btn" aria-describedby="update-help">Update Item</button>
+                    <button type="button" id="cancel-edit-btn" class="terminal-btn" aria-describedby="cancel-edit-help">Cancel</button>
+                    <div id="update-help" class="sr-only">Save changes to this bucket list item</div>
+                    <div id="cancel-edit-help" class="sr-only">Cancel editing and return to main interface</div>
+                </div>
+            </form>
+        </div>
+    </div>
+    
+    <!-- Typewriter sounds generated via Web Audio API -->
+    <div id="audio-status" style="display: none;">Audio enabled</div>
+    
+    <script src="script.js"></script>
+</body>
+</html>

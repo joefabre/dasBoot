@@ -1,0 +1,1416 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Database Commands Reference</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #2c3e50, #3498db);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            font-size: 1.1em;
+            opacity: 0.9;
+        }
+
+        .main-content {
+            display: flex;
+            min-height: 600px;
+        }
+
+        .sidebar {
+            width: 300px;
+            background: #f8f9fa;
+            border-right: 1px solid #e9ecef;
+            overflow-y: auto;
+        }
+
+        .category {
+            border-bottom: 1px solid #e9ecef;
+        }
+
+        .category-header {
+            background: #343a40;
+            color: white;
+            padding: 15px 20px;
+            font-weight: bold;
+            font-size: 1.1em;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .category-header:hover {
+            background: #495057;
+        }
+
+        .category-header.active {
+            background: #007bff;
+        }
+
+        .commands-list {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out;
+        }
+
+        .commands-list.active {
+            max-height: 500px;
+        }
+
+        .command-item {
+            padding: 12px 20px;
+            border-bottom: 1px solid #e9ecef;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            font-family: 'Courier New', monospace;
+        }
+
+        .command-item:hover {
+            background: #e9ecef;
+        }
+
+        .command-item.selected {
+            background: #007bff;
+            color: white;
+        }
+
+        .content-area {
+            flex: 1;
+            padding: 30px;
+        }
+
+        .welcome-message {
+            text-align: center;
+            color: #6c757d;
+            margin-top: 100px;
+        }
+
+        .command-details {
+            display: none;
+        }
+
+        .command-details.active {
+            display: block;
+            animation: fadeIn 0.3s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .command-title {
+            font-size: 2em;
+            color: #2c3e50;
+            margin-bottom: 10px;
+            font-family: 'Courier New', monospace;
+        }
+
+        .command-description {
+            font-size: 1.1em;
+            color: #6c757d;
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+
+        .function-explanation {
+            background: #e3f2fd;
+            border-left: 4px solid #2196f3;
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 0 5px 5px 0;
+        }
+
+        .function-explanation h3 {
+            color: #1565c0;
+            margin-bottom: 10px;
+            font-size: 1.2em;
+        }
+
+        .function-explanation p {
+            margin-bottom: 8px;
+            line-height: 1.5;
+        }
+
+        .use-cases {
+            background: #f3e5f5;
+            border-left: 4px solid #9c27b0;
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 0 5px 5px 0;
+        }
+
+        .use-cases h3 {
+            color: #7b1fa2;
+            margin-bottom: 10px;
+            font-size: 1.2em;
+        }
+
+        .use-cases ul {
+            margin-left: 20px;
+        }
+
+        .use-cases li {
+            margin-bottom: 5px;
+        }
+
+        .example-section {
+            background: #f8f9fa;
+            border: 1px solid #e9ecef;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .example-title {
+            font-weight: bold;
+            color: #495057;
+            margin-bottom: 10px;
+            font-size: 1.1em;
+        }
+
+        .code-block {
+            background: #2d3748;
+            color: #e2e8f0;
+            padding: 15px;
+            border-radius: 5px;
+            font-family: 'Courier New', monospace;
+            overflow-x: auto;
+            margin: 10px 0;
+            position: relative;
+        }
+
+        .copy-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: #4a5568;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 3px;
+            cursor: pointer;
+            font-size: 12px;
+        }
+
+        .copy-btn:hover {
+            background: #2d3748;
+        }
+
+        .syntax-highlight .keyword { color: #f7fafc; font-weight: bold; }
+        .syntax-highlight .string { color: #68d391; }
+        .syntax-highlight .comment { color: #a0aec0; font-style: italic; }
+
+        /* Search functionality styles */
+        .search-container {
+            padding: 20px;
+            background: #f8f9fa;
+            border-bottom: 1px solid #e9ecef;
+        }
+
+        .search-box {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            font-size: 16px;
+            outline: none;
+            transition: border-color 0.3s;
+        }
+
+        .search-box:focus {
+            border-color: #007bff;
+        }
+
+        .search-results {
+            max-height: 300px;
+            overflow-y: auto;
+            background: white;
+            border: 1px solid #e9ecef;
+            border-top: none;
+            border-radius: 0 0 8px 8px;
+            display: none;
+        }
+
+        .search-result-item {
+            padding: 12px 15px;
+            border-bottom: 1px solid #f1f3f4;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .search-result-item:hover {
+            background: #f8f9fa;
+        }
+
+        .search-result-title {
+            font-weight: bold;
+            color: #2c3e50;
+            margin-bottom: 4px;
+        }
+
+        .search-result-description {
+            color: #6c757d;
+            font-size: 14px;
+        }
+
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Database Commands Reference</h1>
+            <p>Comprehensive guide to SQL and NoSQL database commands</p>
+        </div>
+
+        <!-- Search Functionality -->
+        <div class="search-container">
+            <input type="text" class="search-box" id="searchBox" placeholder="Search commands... (e.g., SELECT, JOIN, INSERT)" oninput="searchCommands()">
+            <div class="search-results" id="searchResults"></div>
+        </div>
+
+        <div class="main-content">
+            <div class="sidebar">
+                <div class="category">
+                    <div class="category-header" onclick="toggleCategory('data-definition')">
+                        Data Definition (DDL)
+                    </div>
+                    <div class="commands-list" id="data-definition">
+                        <div class="command-item" onclick="showCommand('create-table')">CREATE TABLE</div>
+                        <div class="command-item" onclick="showCommand('alter-table')">ALTER TABLE</div>
+                        <div class="command-item" onclick="showCommand('drop-table')">DROP TABLE</div>
+                        <div class="command-item" onclick="showCommand('create-index')">CREATE INDEX</div>
+                        <div class="command-item" onclick="showCommand('create-database')">CREATE DATABASE</div>
+                    </div>
+                </div>
+
+                <div class="category">
+                    <div class="category-header" onclick="toggleCategory('data-manipulation')">
+                        Data Manipulation (DML)
+                    </div>
+                    <div class="commands-list" id="data-manipulation">
+                        <div class="command-item" onclick="showCommand('select')">SELECT</div>
+                        <div class="command-item" onclick="showCommand('insert')">INSERT</div>
+                        <div class="command-item" onclick="showCommand('update')">UPDATE</div>
+                        <div class="command-item" onclick="showCommand('delete')">DELETE</div>
+                    </div>
+                </div>
+
+                <div class="category">
+                    <div class="category-header" onclick="toggleCategory('joins')">
+                        Joins & Relationships
+                    </div>
+                    <div class="commands-list" id="joins">
+                        <div class="command-item" onclick="showCommand('inner-join')">INNER JOIN</div>
+                        <div class="command-item" onclick="showCommand('left-join')">LEFT JOIN</div>
+                        <div class="command-item" onclick="showCommand('right-join')">RIGHT JOIN</div>
+                        <div class="command-item" onclick="showCommand('full-join')">FULL OUTER JOIN</div>
+                        <div class="command-item" onclick="showCommand('on')">ON</div>
+                    </div>
+                </div>
+
+                <div class="category">
+                    <div class="category-header" onclick="toggleCategory('aggregate')">
+                        Aggregate Functions
+                    </div>
+                    <div class="commands-list" id="aggregate">
+                        <div class="command-item" onclick="showCommand('count')">COUNT</div>
+                        <div class="command-item" onclick="showCommand('sum')">SUM</div>
+                        <div class="command-item" onclick="showCommand('avg')">AVG</div>
+                        <div class="command-item" onclick="showCommand('group-by')">GROUP BY</div>
+                        <div class="command-item" onclick="showCommand('having')">HAVING</div>
+                    </div>
+                </div>
+
+                <div class="category">
+                    <div class="category-header" onclick="toggleCategory('constraints')">
+                        Constraints & Keys
+                    </div>
+                    <div class="commands-list" id="constraints">
+                        <div class="command-item" onclick="showCommand('primary-key')">PRIMARY KEY</div>
+                        <div class="command-item" onclick="showCommand('foreign-key')">FOREIGN KEY</div>
+                        <div class="command-item" onclick="showCommand('unique')">UNIQUE</div>
+                        <div class="command-item" onclick="showCommand('not-null')">NOT NULL</div>
+                        <div class="command-item" onclick="showCommand('check')">CHECK</div>
+                    </div>
+                </div>
+
+                <div class="category">
+                    <div class="category-header" onclick="toggleCategory('nosql')">
+                        NoSQL Commands
+                    </div>
+                    <div class="commands-list" id="nosql">
+                        <div class="command-item" onclick="showCommand('mongodb-find')">MongoDB Find</div>
+                        <div class="command-item" onclick="showCommand('mongodb-insert')">MongoDB Insert</div>
+                        <div class="command-item" onclick="showCommand('mongodb-update')">MongoDB Update</div>
+                        <div class="command-item" onclick="showCommand('mongodb-aggregate')">MongoDB Aggregate</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="content-area">
+                <div class="welcome-message" id="welcome">
+                    <h2>Welcome to Database Commands Reference</h2>
+                    <p>Select a command from the sidebar to view detailed examples and explanations.</p>
+                </div>
+
+                <!-- Command Details Templates -->
+                <div class="command-details" id="create-table">
+                    <h2 class="command-title">CREATE TABLE</h2>
+                    <p class="command-description">Creates a new table in the database with specified columns and constraints.</p>
+                    
+                    <div class="function-explanation">
+                        <h3>How CREATE TABLE Works</h3>
+                        <p><strong>Purpose:</strong> Defines the structure of a new table by specifying column names, data types, and constraints.</p>
+                        <p><strong>Function:</strong> The database engine creates a new empty table with the defined schema. Each column must have a data type (INT, VARCHAR, DATE, etc.) and can include constraints like NOT NULL, UNIQUE, or PRIMARY KEY.</p>
+                        <p><strong>Impact:</strong> Once created, the table becomes available for data insertion, querying, and modification operations.</p>
+                    </div>
+                    
+                    <div class="use-cases">
+                        <h3>Common Use Cases</h3>
+                        <ul>
+                            <li>Setting up initial database schema for new applications</li>
+                            <li>Creating lookup tables for reference data</li>
+                            <li>Establishing relationships between entities with foreign keys</li>
+                            <li>Creating temporary tables for data processing</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="example-section">
+                        <div class="example-title">Basic Table Creation</div>
+                        <div class="code-block">
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                            <div class="syntax-highlight">
+<span class="keyword">CREATE TABLE</span> employees (
+    id <span class="keyword">INT</span> <span class="keyword">PRIMARY KEY</span>,
+    first_name <span class="keyword">VARCHAR</span>(50) <span class="keyword">NOT NULL</span>,
+    last_name <span class="keyword">VARCHAR</span>(50) <span class="keyword">NOT NULL</span>,
+    email <span class="keyword">VARCHAR</span>(100) <span class="keyword">UNIQUE</span>,
+    hire_date <span class="keyword">DATE</span>,
+    salary <span class="keyword">DECIMAL</span>(10,2)
+);
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="example-section">
+                        <div class="example-title">Table with Auto-Increment and Foreign Key</div>
+                        <div class="code-block">
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                            <div class="syntax-highlight">
+<span class="keyword">CREATE TABLE</span> orders (
+    order_id <span class="keyword">INT</span> <span class="keyword">AUTO_INCREMENT</span> <span class="keyword">PRIMARY KEY</span>,
+    customer_id <span class="keyword">INT</span>,
+    order_date <span class="keyword">DATETIME</span> <span class="keyword">DEFAULT</span> <span class="keyword">CURRENT_TIMESTAMP</span>,
+    total_amount <span class="keyword">DECIMAL</span>(10,2),
+    <span class="keyword">FOREIGN KEY</span> (customer_id) <span class="keyword">REFERENCES</span> customers(id)
+);
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="command-details" id="select">
+                    <h2 class="command-title">SELECT</h2>
+                    <p class="command-description">Retrieves data from one or more tables based on specified criteria.</p>
+                    
+                    <div class="function-explanation">
+                        <h3>How SELECT Works</h3>
+                        <p><strong>Purpose:</strong> Queries the database to extract specific data from tables based on conditions you specify.</p>
+                        <p><strong>Function:</strong> The database engine scans through table rows, applies WHERE conditions to filter data, sorts results if ORDER BY is specified, and returns only the columns you've selected. It's the most fundamental operation for data retrieval.</p>
+                        <p><strong>Performance:</strong> Can use indexes to speed up searches. Without proper indexing on WHERE clause columns, it may scan entire tables.</p>
+                        <p><strong>Impact:</strong> Read-only operation that doesn't modify data, but can consume significant resources on large datasets.</p>
+                    </div>
+                    
+                    <div class="use-cases">
+                        <h3>Common Use Cases</h3>
+                        <ul>
+                            <li>Generating reports and analytics from business data</li>
+                            <li>Populating user interfaces with dynamic content</li>
+                            <li>Data validation and quality checks</li>
+                            <li>Exporting data for external systems</li>
+                            <li>Building dashboards and monitoring systems</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="example-section">
+                        <div class="example-title">Basic SELECT</div>
+                        <div class="code-block">
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                            <div class="syntax-highlight">
+<span class="keyword">SELECT</span> first_name, last_name, email
+<span class="keyword">FROM</span> employees
+<span class="keyword">WHERE</span> salary > 50000;
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="example-section">
+                        <div class="example-title">SELECT with ORDER BY and LIMIT</div>
+                        <div class="code-block">
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                            <div class="syntax-highlight">
+<span class="keyword">SELECT</span> *
+<span class="keyword">FROM</span> employees
+<span class="keyword">WHERE</span> department = <span class="string">'Sales'</span>
+<span class="keyword">ORDER BY</span> hire_date <span class="keyword">DESC</span>
+<span class="keyword">LIMIT</span> 10;
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="command-details" id="inner-join">
+                    <h2 class="command-title">INNER JOIN</h2>
+                    <p class="command-description">Returns records that have matching values in both tables.</p>
+                    
+                    <div class="function-explanation">
+                        <h3>How INNER JOIN Works</h3>
+                        <p><strong>Purpose:</strong> Combines rows from two or more tables based on a related column between them.</p>
+                        <p><strong>Function:</strong> The database engine compares each row in the first table with every row in the second table. When the join condition is met (usually equality between foreign key and primary key), it creates a new row containing columns from both tables.</p>
+                        <p><strong>Result:</strong> Only returns rows where there's a match in both tables. Rows without matches are excluded from the result set.</p>
+                        <p><strong>Performance:</strong> Benefits greatly from indexes on the join columns. Large table joins can be resource-intensive.</p>
+                    </div>
+                    
+                    <div class="use-cases">
+                        <h3>Common Use Cases</h3>
+                        <ul>
+                            <li>Retrieving customer information with their orders</li>
+                            <li>Combining employee data with department details</li>
+                            <li>Joining product information with category data</li>
+                            <li>Merging user profiles with their activity logs</li>
+                            <li>Creating comprehensive reports from normalized tables</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="example-section">
+                        <div class="example-title">Basic INNER JOIN</div>
+                        <div class="code-block">
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                            <div class="syntax-highlight">
+<span class="keyword">SELECT</span> e.first_name, e.last_name, d.department_name
+<span class="keyword">FROM</span> employees e
+<span class="keyword">INNER JOIN</span> departments d <span class="keyword">ON</span> e.department_id = d.id
+<span class="keyword">WHERE</span> e.status = <span class="string">'active'</span>;
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="command-details" id="mongodb-find">
+                    <h2 class="command-title">MongoDB Find</h2>
+                    <p class="command-description">Retrieves documents from a MongoDB collection based on query criteria.</p>
+                    
+                    <div class="function-explanation">
+                        <h3>How MongoDB Find Works</h3>
+                        <p><strong>Purpose:</strong> Queries a MongoDB collection to retrieve documents that match specified criteria using MongoDB's flexible document-based query language.</p>
+                        <p><strong>Function:</strong> MongoDB scans the collection and evaluates each document against the query filter. It supports complex queries using operators like $gt, $lt, $in, $and, $or, and many others. Unlike SQL, it works with nested objects and arrays naturally.</p>
+                        <p><strong>Flexibility:</strong> Can query nested fields, array elements, and use powerful aggregation operators. Supports projection to return only specific fields.</p>
+                        <p><strong>Performance:</strong> Benefits from indexes on frequently queried fields. Can use compound indexes for multi-field queries.</p>
+                    </div>
+                    
+                    <div class="use-cases">
+                        <h3>Common Use Cases</h3>
+                        <ul>
+                            <li>Retrieving user profiles and preferences</li>
+                            <li>Searching products by multiple criteria (price, category, ratings)</li>
+                            <li>Finding documents with nested data structures</li>
+                            <li>Querying arrays and embedded documents</li>
+                            <li>Building flexible search and filter functionality</li>
+                            <li>Real-time data retrieval for web applications</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="example-section">
+                        <div class="example-title">Basic Find Query</div>
+                        <div class="code-block">
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                            <div class="syntax-highlight">
+<span class="comment">// Find all users with age greater than 25</span>
+db.users.find({ age: { $gt: 25 } });
+
+<span class="comment">// Find with specific fields</span>
+db.users.find(
+    { status: <span class="string">"active"</span> },
+    { name: 1, email: 1, _id: 0 }
+);
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="example-section">
+                        <div class="example-title">Advanced Find with Sorting and Limiting</div>
+                        <div class="code-block">
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                            <div class="syntax-highlight">
+<span class="comment">// Find with complex query, sort and limit</span>
+db.products.find({
+    $and: [
+        { price: { $gte: 100 } },
+        { category: <span class="string">"electronics"</span> }
+    ]
+})
+.sort({ price: -1 })
+.limit(10);
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Add more command details as needed -->
+            </div>
+        </div>
+    </div>
+
+
+    <script>
+        // Command definitions with examples
+        const commands = {
+            'alter-table': {
+                title: 'ALTER TABLE',
+                description: 'Modifies the structure of an existing table.',
+                functionExplanation: {
+                    purpose: 'Changes the schema of an existing table without losing existing data.',
+                    function: 'The database engine modifies the table structure by adding, dropping, or modifying columns and constraints. It may need to rebuild the table internally depending on the change.',
+                    impact: 'Can affect application compatibility if columns are removed or data types changed. May lock the table during modification.',
+                    performance: 'Large tables may take significant time to alter, especially when changing data types or adding NOT NULL columns.'
+                },
+                useCases: [
+                    'Adding new features that require additional columns',
+                    'Changing column data types to accommodate larger values',
+                    'Adding or removing constraints for data integrity',
+                    'Optimizing storage by modifying column definitions'
+                ],
+                examples: [
+                    {
+                        title: 'Add Column',
+                        code: `ALTER TABLE employees
+ADD COLUMN phone VARCHAR(15);`
+                    },
+                    {
+                        title: 'Modify Column',
+                        code: `ALTER TABLE employees
+MODIFY COLUMN salary DECIMAL(12,2);`
+                    }
+                ]
+            },
+            'avg': {
+                title: 'AVG',
+                description: 'Calculates the average value of a numeric column.',
+                functionExplanation: {
+                    purpose: 'To compute the average of values in a numeric column.',
+                    function: 'The database engine sums all numeric values in the result set and divides by the number of non-null values.',
+                    impact: 'Read-only operation; does not modify data.',
+                    performance: 'Can be resource-intensive if applied to large datasets without indexing.'
+                },
+                useCases: [
+                    'Calculating average sales figures',
+                    'Determining average customer ratings',
+                    'Analyzing average performance metrics'
+                ],
+                examples: [
+                    {
+                        title: 'Calculate Average Salary',
+                        code: `SELECT AVG(salary) FROM employees;`
+                    },
+                    {
+                        title: 'Average Sales by Department',
+                        code: `SELECT department, AVG(sales) FROM sales_data GROUP BY department;`
+                    }
+                ]
+            },
+            'check': {
+                title: 'CHECK',
+                description: 'Ensures that all values in a column satisfy a specific condition.',
+                functionExplanation: {
+                    purpose: 'To enforce domain integrity by restricting the values that can be stored in a column.',
+                    function: 'The database engine checks that each value meets the condition before allowing it into the column.',
+                    impact: 'Prevents invalid data from being stored; may require table re-scan when added to existing data.'
+                },
+                useCases: [
+                    'Ensuring age is greater than 18',
+                    'Restricting status values to specific options'
+                ],
+                examples: [
+                    {
+                        title: 'Add CHECK Constraint',
+                        code: `ALTER TABLE users ADD CONSTRAINT chk_age CHECK (age >= 18);`
+                    }
+                ]
+            },
+            'create-database': {
+                title: 'CREATE DATABASE',
+                description: 'Creates a new database with the specified name.',
+                functionExplanation: {
+                    purpose: 'To establish a new database cluster where schemas, tables, and other data structures can be created.',
+                    function: 'The database system allocates resources and sets up initial configurations for a new database.',
+                    impact: 'Starts fresh data storage area for new applications.'
+                },
+                useCases: [
+                    'Setting up new application data storage',
+                    'Establishing environments for development or testing'
+                ],
+                examples: [
+                    {
+                        title: 'Create a New Database',
+                        code: `CREATE DATABASE project_db;`
+                    }
+                ]
+            },
+            'create-index': {
+                title: 'CREATE INDEX',
+                description: 'Creates an index on a table.',
+                functionExplanation: {
+                    purpose: 'To speed up retrieval of rows by indexing key columns.',
+                    function: 'The database creates a data structure that allows quick lookup of record locations.',
+                    impact: 'Improves query performance but adds overhead on writes.'
+                },
+                useCases: [
+                    'Indexing frequently searched columns',
+                    'Speeding up JOIN operations'
+                ],
+                examples: [
+                    {
+                        title: 'Create Index on Column',
+                        code: `CREATE INDEX idx_employee_name ON employees (last_name);`
+                    }
+                ]
+            },
+            'having': {
+                title: 'HAVING',
+                description: 'Filters groups based on aggregate calculations.',
+                functionExplanation: {
+                    purpose: 'To specify filtering conditions on groups created by GROUP BY.',
+                    function: 'The database filters grouped results after aggregates are applied.',
+                    impact: 'Provides advanced filtering beyond individual rows.'
+                },
+                useCases: [
+                    'Filtering aggregated results',
+                    'Defining complex query conditions'
+                ],
+                examples: [
+                    {
+                        title: 'Filter Groups with HAVING',
+                        code: `SELECT department, COUNT(*)
+FROM employees
+GROUP BY department
+HAVING COUNT(*) > 5;`
+                    }
+                ]
+            },
+            'mongodb-aggregate': {
+                title: 'MongoDB Aggregate',
+                description: 'Processes data through a series of stages.',
+                functionExplanation: {
+                    purpose: 'To perform complex data transformations and aggregations in MongoDB.',
+                    function: 'Documents pass through a sequence of stages such as filtering, grouping, and reshaping.',
+                    impact: 'Allows powerful data analysis and transformation.'
+                },
+                useCases: [
+                    'Building complex reports',
+                    'Aggregating sales data by category or time period'
+                ],
+                examples: [
+                    {
+                        title: 'Aggregate Pipeline',
+                        code: `db.orders.aggregate([
+    { $match: { status: 'shipped' } },
+    { $group: { _id: '$customerId', total: { $sum: '$amount' } } }
+]);`
+                    }
+                ]
+            },
+            'primary-key': {
+                title: 'PRIMARY KEY',
+                description: 'Uniquely identifies each row in a table.',
+                functionExplanation: {
+                    purpose: 'To enforce uniqueness and identify each row.',
+                    function: 'Combines unique constraint with not-null to ensure identifier integrity.',
+                    impact: 'Critical for database normalization and integrity.'
+                },
+                useCases: [
+                    'Defining primary identifiers for tables',
+                    'Ensuring row uniqueness'
+                ],
+                examples: [
+                    {
+                        title: 'Add Primary Key to Table',
+                        code: `ALTER TABLE customers ADD PRIMARY KEY (customer_id);`
+                    }
+                ]
+            },
+            'right-join': {
+                title: 'RIGHT JOIN',
+                description: 'Returns all records from the right table and matched records from the left table.',
+                functionExplanation: {
+                    purpose: 'To include all records from one table and only matching ones from the other.',
+                    function: 'Performs a join that returns all records from the right table and matched records from the left.',
+                    impact: 'Helps in retrieving unmatched right-side records.'
+                },
+                useCases: [
+                    'Retrieving foreign keys',
+                    'Highlighting mismatched data'
+                ],
+                examples: [
+                    {
+                        title: 'Basic RIGHT JOIN Query',
+                        code: `SELECT orders.order_id, customers.name
+FROM orders
+RIGHT JOIN customers ON orders.customer_id = customers.id;`
+                    }
+                ]
+            },
+            'sum': {
+                title: 'SUM',
+                description: 'Calculates the sum of a numeric column.',
+                functionExplanation: {
+                    purpose: 'To sum values in a numeric column.',
+                    function: 'Iterates over all numeric values and totals them.',
+                    impact: 'Read-only operation.'
+                },
+                useCases: [
+                    'Calculating total sales figures',
+                    'Summing transaction amounts'
+                ],
+                examples: [
+                    {
+                        title: 'Sum of Salaries',
+                        code: `SELECT SUM(salary) FROM employees;`
+                    }
+                ]
+            },
+            'unique': {
+                title: 'UNIQUE',
+                description: 'Ensures all values in a column are different.',
+                functionExplanation: {
+                    purpose: 'To enforce column uniqueness.',
+                    function: 'Restricts duplicate entries.',
+                    impact: 'Ensures data integrity and consistency.'
+                },
+                useCases: [
+                    'Ensuring unique email addresses'
+                ],
+                examples: [
+                    {
+                        title: 'Create UNIQUE Constraint',
+                        code: `ALTER TABLE users ADD CONSTRAINT email_unique UNIQUE (email);`
+                    }
+                ]
+            },
+            'drop-table': {
+                title: 'DROP TABLE',
+                description: 'Removes a table and all its data from the database.',
+                functionExplanation: {
+                    purpose: 'Permanently removes a table and all its data from the database.',
+                    function: 'The database engine deletes the table structure and all stored data. This operation is irreversible and cannot be undone.',
+                    impact: 'All data in the table is lost permanently. Any foreign key references to this table will become invalid.',
+                    performance: 'Usually fast operation, but may take time on very large tables. Some databases may need to update statistics and indexes.'
+                },
+                useCases: [
+                    'Removing temporary tables after data processing',
+                    'Cleaning up unused tables during database maintenance',
+                    'Dropping test tables in development environments',
+                    'Removing deprecated tables during application updates'
+                ],
+                examples: [
+                    {
+                        title: 'Drop Table',
+                        code: `DROP TABLE old_employees;`
+                    },
+                    {
+                        title: 'Drop Table if Exists',
+                        code: `DROP TABLE IF EXISTS temp_data;`
+                    }
+                ]
+            },
+            'insert': {
+                title: 'INSERT',
+                description: 'Adds new rows of data to a table.',
+                functionExplanation: {
+                    purpose: 'Adds new records (rows) to an existing table with specified column values.',
+                    function: 'The database engine validates the data against column constraints, checks for unique key violations, and adds the new rows to the table. Auto-increment columns are automatically assigned values.',
+                    impact: 'Increases table size and may trigger index updates. Can fail if constraints are violated (e.g., duplicate primary keys).',
+                    performance: 'Single inserts are fast, but bulk inserts are more efficient. Large inserts may affect concurrent read operations.'
+                },
+                useCases: [
+                    'Adding new customer registrations to user tables',
+                    'Logging application events and user activities',
+                    'Importing data from external sources',
+                    'Creating new records from form submissions',
+                    'Bulk loading data during migrations'
+                ],
+                examples: [
+                    {
+                        title: 'Insert Single Row',
+                        code: `INSERT INTO employees (first_name, last_name, email, salary)
+VALUES ('John', 'Doe', 'john.doe@email.com', 75000);`
+                    },
+                    {
+                        title: 'Insert Multiple Rows',
+                        code: `INSERT INTO employees (first_name, last_name, email, salary)
+VALUES 
+    ('Jane', 'Smith', 'jane.smith@email.com', 65000),
+    ('Bob', 'Johnson', 'bob.johnson@email.com', 70000);`
+                    }
+                ]
+            },
+            'on': {
+                title: 'ON',
+                description: 'Specifies conditions for join operations.',
+                functionExplanation: {
+                    purpose: 'To define the condition used to join tables.',
+                    function: 'Combines records from two tables where the join condition is met, such as matching foreign keys.',
+                    impact: 'Vital to retrieve correct data; incorrect conditions can produce unexpected results.'
+                },
+                useCases: [
+                    'Joining tables with foreign key relationships',
+                    'Merging related data from separate tables'
+                ],
+                examples: [
+                    {
+                        title: 'Join with ON Clause',
+                        code: `SELECT employees.name, departments.department_name
+FROM employees
+JOIN departments
+ON employees.department_id = departments.id;`
+                    }
+                ]
+            },
+            'delete': {
+                title: 'DELETE',
+                description: 'Removes rows from a table that match a specified condition.',
+                functionExplanation: {
+                    purpose: 'To remove data from a table based on specified criteria.',
+                    function: 'Deletes rows from the table based on the condition specified in the WHERE clause. Without WHERE, all rows are deleted.',
+                    impact: 'Permanently removes data. Cannot be undone without backup restoration.',
+                    performance: 'Efficient but may require caution in large datasets without proper indexing.'
+                },
+                useCases: [
+                    'Removing outdated or incorrect records',
+                    'Cleaning up data that no longer meets business rules',
+                    'Purging old logs or temporary data'
+                ],
+                examples: [
+                    {
+                        title: 'Delete Old Records',
+                        code: `DELETE FROM sessions WHERE last_access < '2024-01-01';`
+                    },
+                    {
+                        title: 'Delete by ID',
+                        code: `DELETE FROM employees WHERE employee_id = 123;`
+                    }
+                ]
+            },
+            'left-join': {
+                title: 'LEFT JOIN',
+                description: 'Returns all records from the left table and matched records from the right table.',
+                functionExplanation: {
+                    purpose: 'To include all records from the left table regardless of matches in the right table.',
+                    function: 'Combines all rows from the left table with matching rows from the right table. Unmatched left rows show NULL for right table columns.',
+                    impact: 'Useful for finding unmatched records and preserving all left table data.',
+                    performance: 'Generally efficient with proper indexing on join columns.'
+                },
+                useCases: [
+                    'Finding customers with no orders',
+                    'Retrieving all employees with optional department info',
+                    'Audit reports showing missing relationships'
+                ],
+                examples: [
+                    {
+                        title: 'Employees with Department Info',
+                        code: `SELECT employees.name, departments.name as dept_name
+FROM employees
+LEFT JOIN departments ON employees.dept_id = departments.id;`
+                    }
+                ]
+            },
+            'full-join': {
+                title: 'FULL OUTER JOIN',
+                description: 'Returns all records from both tables, with NULLs for unmatched rows.',
+                functionExplanation: {
+                    purpose: 'To combine all records from both tables, showing unmatched rows from either side.',
+                    function: 'Returns all rows from both tables. Where no match exists, NULL values are shown for the missing side.',
+                    impact: 'Comprehensive view of data relationships, including orphaned records.',
+                    performance: 'Can be resource-intensive on large datasets.'
+                },
+                useCases: [
+                    'Data reconciliation between systems',
+                    'Finding all mismatched records',
+                    'Complete audit of table relationships'
+                ],
+                examples: [
+                    {
+                        title: 'All Employees and Departments',
+                        code: `SELECT e.name, d.name as dept_name
+FROM employees e
+FULL OUTER JOIN departments d ON e.dept_id = d.id;`
+                    }
+                ]
+            },
+            'foreign-key': {
+                title: 'FOREIGN KEY',
+                description: 'Ensures referential integrity between tables.',
+                functionExplanation: {
+                    purpose: 'To maintain data consistency by ensuring references to other tables are valid.',
+                    function: 'Prevents insertion of invalid references and can cascade changes or restrict deletions.',
+                    impact: 'Enforces data integrity but adds overhead to insert/update/delete operations.',
+                    performance: 'May slow write operations due to integrity checks.'
+                },
+                useCases: [
+                    'Linking orders to valid customers',
+                    'Ensuring employee departments exist',
+                    'Maintaining product category references'
+                ],
+                examples: [
+                    {
+                        title: 'Add Foreign Key Constraint',
+                        code: `ALTER TABLE orders
+ADD CONSTRAINT fk_customer
+FOREIGN KEY (customer_id) REFERENCES customers(id);`
+                    }
+                ]
+            },
+            'not-null': {
+                title: 'NOT NULL',
+                description: 'Ensures a column cannot contain NULL values.',
+                functionExplanation: {
+                    purpose: 'To enforce that required fields always have values.',
+                    function: 'Prevents insertion or update of rows where the column would be NULL.',
+                    impact: 'Ensures data completeness for critical fields.',
+                    performance: 'Minimal performance impact on operations.'
+                },
+                useCases: [
+                    'Requiring email addresses for users',
+                    'Ensuring product names are always specified',
+                    'Making timestamps mandatory for logs'
+                ],
+                examples: [
+                    {
+                        title: 'Add NOT NULL Constraint',
+                        code: `ALTER TABLE users
+MODIFY COLUMN email VARCHAR(255) NOT NULL;`
+                    }
+                ]
+            },
+            'mongodb-insert': {
+                title: 'MongoDB Insert',
+                description: 'Adds new documents to a MongoDB collection.',
+                functionExplanation: {
+                    purpose: 'To add new documents to a MongoDB collection.',
+                    function: 'Inserts documents into the collection, automatically assigning _id if not specified.',
+                    impact: 'Increases collection size and updates indexes.',
+                    performance: 'Generally fast, with bulk operations being more efficient.'
+                },
+                useCases: [
+                    'Adding new user profiles',
+                    'Logging application events',
+                    'Storing product information'
+                ],
+                examples: [
+                    {
+                        title: 'Insert Single Document',
+                        code: `db.users.insertOne({
+    name: "John Doe",
+    email: "john@example.com",
+    age: 30
+});`
+                    },
+                    {
+                        title: 'Insert Multiple Documents',
+                        code: `db.products.insertMany([
+    { name: "Laptop", price: 999 },
+    { name: "Mouse", price: 25 }
+]);`
+                    }
+                ]
+            },
+            'mongodb-update': {
+                title: 'MongoDB Update',
+                description: 'Modifies existing documents in a MongoDB collection.',
+                functionExplanation: {
+                    purpose: 'To update existing documents based on specified criteria.',
+                    function: 'Finds documents matching the filter and applies update operations.',
+                    impact: 'Modifies document structure and values, updates indexes.',
+                    performance: 'Performance depends on query optimization and indexing.'
+                },
+                useCases: [
+                    'Updating user profiles',
+                    'Modifying product prices',
+                    'Changing document status'
+                ],
+                examples: [
+                    {
+                        title: 'Update Single Document',
+                        code: `db.users.updateOne(
+    { email: "john@example.com" },
+    { $set: { age: 31 } }
+);`
+                    },
+                    {
+                        title: 'Update Multiple Documents',
+                        code: `db.products.updateMany(
+    { category: "electronics" },
+    { $mul: { price: 0.9 } }
+);`
+                    }
+                ]
+            },
+            'update': {
+                title: 'UPDATE',
+                description: 'Modifies existing data in a table.',
+                functionExplanation: {
+                    purpose: 'Changes existing data in table rows that match specified conditions.',
+                    function: 'The database engine locates rows matching the WHERE clause and updates the specified columns with new values. Without a WHERE clause, all rows in the table are updated.',
+                    impact: 'Modifies existing data permanently. Can affect multiple rows simultaneously. May trigger constraint checks and index updates.',
+                    performance: 'Performance depends on the WHERE clause and available indexes. Updating many rows can be slow and may lock the table.'
+                },
+                useCases: [
+                    'Correcting data entry errors in customer records',
+                    'Applying bulk price changes to product catalogs',
+                    'Updating user status or preferences',
+                    'Modifying inventory quantities after transactions',
+                    'Implementing business rule changes across datasets'
+                ],
+                examples: [
+                    {
+                        title: 'Update Single Record',
+                        code: `UPDATE employees
+SET salary = 80000
+WHERE employee_id = 1;`
+                    },
+                    {
+                        title: 'Update Multiple Records',
+                        code: `UPDATE employees
+SET salary = salary * 1.1
+WHERE department = 'Engineering' AND hire_date < '2020-01-01';`
+                    }
+                ]
+            },
+            'count': {
+                title: 'COUNT',
+                description: 'Returns the number of rows that match specified criteria.',
+                functionExplanation: {
+                    purpose: 'Calculates the number of rows in a result set or the number of non-NULL values in a specific column.',
+                    function: 'The database engine scans through the table or result set and counts rows. COUNT(*) counts all rows including those with NULL values, while COUNT(column) counts only non-NULL values in that column.',
+                    impact: 'Read-only operation that doesn\'t modify data. Can be resource-intensive on large tables without proper indexing.',
+                    performance: 'Performance varies by database engine. Some maintain row counts for optimization, others must scan the entire table.'
+                },
+                useCases: [
+                    'Generating summary statistics and reports',
+                    'Validating data completeness and quality',
+                    'Monitoring application usage and growth metrics',
+                    'Calculating pagination totals for user interfaces',
+                    'Performance monitoring and capacity planning'
+                ],
+                examples: [
+                    {
+                        title: 'Count All Rows',
+                        code: `SELECT COUNT(*) FROM employees;`
+                    },
+                    {
+                        title: 'Count with Condition',
+                        code: `SELECT COUNT(*) as active_employees
+FROM employees
+WHERE status = 'active';`
+                    }
+                ]
+            },
+            'group-by': {
+                title: 'GROUP BY',
+                description: 'Groups rows that have the same values in specified columns.',
+                functionExplanation: {
+                    purpose: 'Organizes query results into groups based on one or more column values, allowing aggregate functions to be applied to each group.',
+                    function: 'The database engine sorts or hashes rows by the specified grouping columns, creating separate groups for each unique combination of values. Aggregate functions like COUNT, SUM, AVG then operate on each group separately.',
+                    impact: 'Transforms detailed row-level data into summarized group-level results. Essential for reporting and analytics.',
+                    performance: 'Can be memory and CPU intensive on large datasets. Benefits from indexes on the grouped columns. May require temporary storage for sorting.'
+                },
+                useCases: [
+                    'Creating summary reports by category or department',
+                    'Calculating totals, averages, and counts per group',
+                    'Identifying patterns and trends in data',
+                    'Generating business intelligence dashboards',
+                    'Data aggregation for APIs and web applications'
+                ],
+                examples: [
+                    {
+                        title: 'Group by Department',
+                        code: `SELECT department, COUNT(*) as employee_count, AVG(salary) as avg_salary
+FROM employees
+GROUP BY department;`
+                    },
+                    {
+                        title: 'Group by Multiple Columns',
+                        code: `SELECT department, status, COUNT(*) as count
+FROM employees
+GROUP BY department, status
+ORDER BY department, status;`
+                    }
+                ]
+            }
+        };
+
+        function toggleCategory(categoryId) {
+            const commandsList = document.getElementById(categoryId);
+            const header = commandsList.previousElementSibling;
+            
+            // Close all other categories
+            document.querySelectorAll('.commands-list').forEach(list => {
+                if (list.id !== categoryId) {
+                    list.classList.remove('active');
+                    list.previousElementSibling.classList.remove('active');
+                }
+            });
+            
+            // Toggle current category
+            commandsList.classList.toggle('active');
+            header.classList.toggle('active');
+        }
+
+        function showCommand(commandId) {
+            // Hide welcome message
+            document.getElementById('welcome').style.display = 'none';
+            
+            // Hide all command details
+            document.querySelectorAll('.command-details').forEach(detail => {
+                detail.classList.remove('active');
+            });
+            
+            // Remove selection from all command items
+            document.querySelectorAll('.command-item').forEach(item => {
+                item.classList.remove('selected');
+            });
+            
+            // Add selection to clicked item
+            event.target.classList.add('selected');
+            
+            // Show selected command details or generate if not exists
+            let commandDetail = document.getElementById(commandId);
+            if (!commandDetail && commands[commandId]) {
+                commandDetail = createCommandDetail(commandId, commands[commandId]);
+                document.querySelector('.content-area').appendChild(commandDetail);
+            }
+            
+            if (commandDetail) {
+                commandDetail.classList.add('active');
+            }
+        }
+
+        function createCommandDetail(commandId, commandData) {
+            const div = document.createElement('div');
+            div.className = 'command-details';
+            div.id = commandId;
+            
+            // Function explanation HTML
+            let functionExplanationHtml = '';
+            if (commandData.functionExplanation) {
+                const fe = commandData.functionExplanation;
+                functionExplanationHtml = `
+                    <div class="function-explanation">
+                        <h3>How ${commandData.title} Works</h3>
+                        <p><strong>Purpose:</strong> ${fe.purpose}</p>
+                        <p><strong>Function:</strong> ${fe.function}</p>
+                        ${fe.impact ? `<p><strong>Impact:</strong> ${fe.impact}</p>` : ''}
+                        ${fe.performance ? `<p><strong>Performance:</strong> ${fe.performance}</p>` : ''}
+                        ${fe.result ? `<p><strong>Result:</strong> ${fe.result}</p>` : ''}
+                        ${fe.flexibility ? `<p><strong>Flexibility:</strong> ${fe.flexibility}</p>` : ''}
+                    </div>
+                `;
+            }
+            
+            // Use cases HTML
+            let useCasesHtml = '';
+            if (commandData.useCases) {
+                const useCasesList = commandData.useCases.map(useCase => `<li>${useCase}</li>`).join('');
+                useCasesHtml = `
+                    <div class="use-cases">
+                        <h3>Common Use Cases</h3>
+                        <ul>
+                            ${useCasesList}
+                        </ul>
+                    </div>
+                `;
+            }
+            
+            // Examples HTML
+            let examplesHtml = '';
+            commandData.examples.forEach(example => {
+                examplesHtml += `
+                    <div class="example-section">
+                        <div class="example-title">${example.title}</div>
+                        <div class="code-block">
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                            <div class="syntax-highlight">
+                                ${highlightSyntax(example.code)}
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+            
+            div.innerHTML = `
+                <h2 class="command-title">${commandData.title}</h2>
+                <p class="command-description">${commandData.description}</p>
+                ${functionExplanationHtml}
+                ${useCasesHtml}
+                ${examplesHtml}
+            `;
+            
+            return div;
+        }
+
+        function highlightSyntax(code) {
+            const keywords = ['SELECT', 'FROM', 'WHERE', 'INSERT', 'UPDATE', 'DELETE', 'CREATE', 'ALTER', 'DROP', 'TABLE', 'INTO', 'VALUES', 'SET', 'JOIN', 'INNER', 'LEFT', 'RIGHT', 'FULL', 'OUTER', 'ON', 'GROUP BY', 'ORDER BY', 'HAVING', 'COUNT', 'SUM', 'AVG', 'MAX', 'MIN', 'DISTINCT', 'AS', 'AND', 'OR', 'NOT', 'NULL', 'PRIMARY KEY', 'FOREIGN KEY', 'UNIQUE', 'CHECK', 'DEFAULT', 'AUTO_INCREMENT'];
+            
+            let highlighted = code;
+            keywords.forEach(keyword => {
+                const regex = new RegExp(`\\b${keyword}\\b`, 'gi');
+                highlighted = highlighted.replace(regex, `<span class="keyword">${keyword}</span>`);
+            });
+            
+            // Highlight strings
+            highlighted = highlighted.replace(/'([^']*)'/g, '<span class="string">\'$1\'</span>');
+            highlighted = highlighted.replace(/"([^"]*)"/g, '<span class="string">"$1"</span>');
+            
+            // Highlight comments
+            highlighted = highlighted.replace(/\/\*[\s\S]*?\*\//g, '<span class="comment">$&</span>');
+            highlighted = highlighted.replace(/--.*$/gm, '<span class="comment">$&</span>');
+            highlighted = highlighted.replace(/\/\/.*$/gm, '<span class="comment">$&</span>');
+            
+            return highlighted;
+        }
+
+        function copyCode(button) {
+            const codeBlock = button.nextElementSibling;
+            const code = codeBlock.innerText;
+            
+            navigator.clipboard.writeText(code).then(() => {
+                const originalText = button.textContent;
+                button.textContent = 'Copied!';
+                button.style.background = '#28a745';
+                
+                setTimeout(() => {
+                    button.textContent = originalText;
+                    button.style.background = '#4a5568';
+                }, 2000);
+            });
+        }
+
+        // Search functionality
+        function searchCommands() {
+            const searchTerm = document.getElementById('searchBox').value.toLowerCase();
+            const searchResults = document.getElementById('searchResults');
+            
+            if (searchTerm.length < 2) {
+                searchResults.style.display = 'none';
+                return;
+            }
+            
+            const results = [];
+            
+            // Search through all commands
+            Object.keys(commands).forEach(key => {
+                const command = commands[key];
+                if (command.title.toLowerCase().includes(searchTerm) ||
+                    command.description.toLowerCase().includes(searchTerm) ||
+                    (command.useCases && command.useCases.some(useCase => useCase.toLowerCase().includes(searchTerm)))) {
+                    results.push({ key, command });
+                }
+            });
+            
+            // Also search hardcoded commands
+            const hardcodedCommands = {
+                'create-table': { title: 'CREATE TABLE', description: 'Creates a new table in the database' },
+                'select': { title: 'SELECT', description: 'Retrieves data from tables' },
+                'inner-join': { title: 'INNER JOIN', description: 'Returns matching records from both tables' },
+                'mongodb-find': { title: 'MongoDB Find', description: 'Retrieves documents from MongoDB collection' }
+            };
+            
+            Object.keys(hardcodedCommands).forEach(key => {
+                const command = hardcodedCommands[key];
+                if (command.title.toLowerCase().includes(searchTerm) ||
+                    command.description.toLowerCase().includes(searchTerm)) {
+                    if (!results.find(r => r.key === key)) {
+                        results.push({ key, command });
+                    }
+                }
+            });
+            
+            displaySearchResults(results);
+        }
+        
+        function displaySearchResults(results) {
+            const searchResults = document.getElementById('searchResults');
+            
+            if (results.length === 0) {
+                searchResults.innerHTML = '<div class="search-result-item">No commands found</div>';
+            } else {
+                searchResults.innerHTML = results.map(result => `
+                    <div class="search-result-item" onclick="selectSearchResult('${result.key}')">
+                        <div class="search-result-title">${result.command.title}</div>
+                        <div class="search-result-description">${result.command.description}</div>
+                    </div>
+                `).join('');
+            }
+            
+            searchResults.style.display = 'block';
+        }
+        
+        function selectSearchResult(commandId) {
+            document.getElementById('searchResults').style.display = 'none';
+            document.getElementById('searchBox').value = '';
+            showCommand(commandId);
+        }
+        
+        
+        // Hide search results when clicking outside
+        document.addEventListener('click', function(event) {
+            const searchContainer = document.querySelector('.search-container');
+            if (!searchContainer.contains(event.target)) {
+                document.getElementById('searchResults').style.display = 'none';
+            }
+        });
+        
+        // Add event listener to update main table display when table name changes
+        document.addEventListener('DOMContentLoaded', function() {
+            toggleCategory('data-definition');
+            
+            // Update main table display when table name changes
+            const tableNameInput = document.getElementById('tableName');
+            if (tableNameInput) {
+                tableNameInput.addEventListener('input', updateMainTableDisplay);
+            }
+        });
+    </script>
+</body>
+</html>

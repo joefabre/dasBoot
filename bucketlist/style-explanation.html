@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CSS Explanation - style.css</title>
+    <style>
+        body { font-family: monospace; margin: 20px; line-height: 1.6; background: #f9f9f9; }
+        h1 { color: #333; border-bottom: 2px solid #333; }
+        h2 { color: #666; margin-top: 30px; }
+        .line { margin-bottom: 15px; padding: 10px; background: white; border-left: 4px solid #0066cc; }
+        .line-number { color: #666; font-weight: bold; display: inline-block; width: 80px; }
+        .code { color: #0066cc; font-weight: bold; display: block; margin: 5px 0; }
+        .explanation { color: #333; margin-top: 5px; }
+        .section { margin: 20px 0; padding: 15px; background: #e9f4ff; border-radius: 5px; }
+    </style>
+</head>
+<body>
+    <h1>Line-by-Line Explanation: style.css</h1>
+    
+    <div class="section">
+        <h2>Global Styles & Reset (Lines 1-6)</h2>
+    </div>
+    
+    <div class="line">
+        <span class="line-number">Line 1:</span>
+        <code class="code">/* Apple Terminal Styling with Accessibility */</code>
+        <div class="explanation">Comment describing the styling approach - mimicking Apple Terminal with a focus on accessibility features.</div>
+    </div>
+    
+    <div class="line">
+        <span class="line-number">Lines 2-6:</span>
+        <code class="code">* { margin: 0; padding: 0; box-sizing: border-box; }</code>
+        <div class="explanation">Universal selector that resets all margins and paddings to zero, and sets box-sizing to border-box for predictable sizing.</div>
+    </div>
+    
+    <div class="section">
+        <h2>Accessibility Features (Lines 8-34)</h2>
+    </div>
+    
+    <div class="line">
+        <span class="line-number">Lines 9-19:</span>
+        <code class="code">.sr-only { position: absolute; width: 1px; height: 1px; ... }</code>
+        <div class="explanation">Screen reader only class that hides content visually but keeps it accessible to assistive technologies.</div>
+    </div>
+    
+    <div class="line">
+        <span class="line-number">Lines 22-34:</span>
+        <code class="code">Focus styling rules</code>
+        <div class="explanation">Comprehensive focus management with cyan outline for keyboard navigation. Includes :focus-visible for modern browsers.</div>
+    </div>
+    
+    <div class="section">
+        <h2>Body & Terminal Window (Lines 36-55)</h2>
+    </div>
+    
+    <div class="line">
+        <span class="line-number">Lines 36-45:</span>
+        <code class="code">body { font-family: 'SF Mono', 'Monaco', 'Menlo', 'Consolas', monospace; ... }</code>
+        <div class="explanation">Sets monospace font stack, dark background (#1e1e1e), light text, and subtle grid pattern background.</div>
+    </div>
+    
+    <div class="line">
+        <span class="line-number">Lines 47-55:</span>
+        <code class="code">.terminal-window { max-width: 1200px; ... }</code>
+        <div class="explanation">Main terminal window styling with rounded corners, shadow, and dark border to simulate a real terminal.</div>
+    </div>
+    
+    <div class="section">
+        <h2>Terminal Header (Lines 58-152)</h2>
+    </div>
+    
+    <div class="line">
+        <span class="line-number">Lines 58-64:</span>
+        <code class="code">.terminal-header { background: linear-gradient(180deg, #3c3c3c 0%, #2a2a2a 100%); ... }</code>
+        <div class="explanation">Creates a realistic terminal header with gradient background resembling macOS window chrome.</div>
+    </div>
+    
+    <div class="line">
+        <span class="line-number">Lines 88-118:</span>
+        <code class="code">Window control buttons (.button.close, .minimize, .maximize)</code>
+        <div class="explanation">Styles the three window control buttons with authentic macOS colors (red, yellow, green) and hover effects.</div>
+    </div>
+    
+    <div class="line">
+        <span class="line-number">Lines 129-152:</span>
+        <code class="code">DateTime display styling</code>
+        <div class="explanation">Positions and styles the real-time clock display in the terminal header with green terminal text color.</div>
+    </div>
+    
+    <div class="section">
+        <h2>Terminal Content Area (Lines 154-234)</h2>
+    </div>
+    
+    <div class="line">
+        <span class="line-number">Lines 154-160:</span>
+        <code class="code">.terminal-content { padding: 20px; min-height: 600px; ... }</code>
+        <div class="explanation">Main content area with black background and appropriate padding for terminal text display.</div>
+    </div>
+    
+    <div class="line">
+        <span class="line-number">Lines 162-182:</span>
+        <code class="code">Text styling (.output, .prompt, .command, .ascii-art)</code>
+        <div class="explanation">Different text styles for terminal output, command prompts, commands, and ASCII art with improved contrast colors.</div>
+    </div>
+    
+    <div class="line">
+        <span class="line-number">Lines 185-204:</span>
+        <code class="code">High contrast mode support</code>
+        <div class="explanation">Media query for users who prefer high contrast, adding text shadows and stronger outlines.</div>
+    </div>
+    
+    <div class="section">
+        <h2>Form Styling (Lines 207-279)</h2>
+    </div>
+    
+    <div class="line">
+        <span class="line-number">Lines 214-234:</span>
+        <code class="code">.terminal-input styling</code>
+        <div class="explanation">Styles input fields to look like terminal text with transparent background and cyan caret.</div>
+    </div>
+    
+    <div class="line">
+        <span class="line-number">Lines 236-279:</span>
+        <code class="code">Form sections and groups</code>
+        <div class="explanation">Comprehensive form styling with dark backgrounds, proper spacing, and focus states.</div>
+    </div>
+    
+    <div class="section">
+        <h2>Bucket List Items (Lines 309-436)</h2>
+    </div>
+    
+    <div class="line">
+        <span class="line-number">Lines 309-327:</span>
+        <code class="code">.bucket-items-grid { display: grid; grid-template-columns: 1fr 1fr; ... }</code>
+        <div class="explanation">Creates a responsive grid layout for displaying bucket list items in two columns.</div>
+    </div>
+    
+    <div class="line">
+        <span class="line-number">Lines 316-331:</span>
+        <code class="code">.bucket-item styling</code>
+        <div class="explanation">Individual item styling with dark background, border, and flexbox layout for proper content arrangement.</div>
+    </div>
+    
+    <div class="line">
+        <span class="line-number">Lines 357-373:</span>
+        <code class="code">Priority indicators (.priority-high, .priority-medium, .priority-low)</code>
+        <div class="explanation">Color-coded priority badges using the same colors as the window control buttons (red, yellow, green).</div>
+    </div>
+    
+    <div class="line">
+        <span class="line-number">Lines 403-435:</span>
+        <code class="code">Action buttons styling</code>
+        <div class="explanation">Hover effects for complete, edit, and delete buttons with appropriate color coding.</div>
+    </div>
+    
+    <div class="section">
+        <h2>Animations & Motion (Lines 469-489)</h2>
+    </div>
+    
+    <div class="line">
+        <span class="line-number">Lines 469-476:</span>
+        <code class="code">@keyframes typewriter animation</code>
+        <div class="explanation">Simple fade-in animation for typewriter effect on terminal output.</div>
+    </div>
+    
+    <div class="line">
+        <span class="line-number">Lines 479-489:</span>
+        <code class="code">@media (prefers-reduced-motion: reduce)</code>
+        <div class="explanation">Respects user preference for reduced motion by disabling animations for accessibility.</div>
+    </div>
+    
+    <div class="section">
+        <h2>Responsive Design (Lines 570-620)</h2>
+    </div>
+    
+    <div class="line">
+        <span class="line-number">Lines 570-620:</span>
+        <code class="code">@media (max-width: 768px) { ... }</code>
+        <div class="explanation">Mobile-responsive adjustments including single-column grid, smaller fonts, and adjusted spacing for smaller screens.</div>
+    </div>
+    
+    <div class="line">
+        <span class="line-number">Line 621:</span>
+        <code class="code">}</code>
+        <div class="explanation">Closing brace of the CSS file.</div>
+    </div>
+
+</body>
+</html>

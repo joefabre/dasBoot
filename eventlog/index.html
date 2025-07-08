@@ -3,119 +3,85 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Daily Event Logger</title>
+    <title>Event Log</title>
     <link rel="stylesheet" href="styles.css">
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
 </head>
 <body>
     <div class="container">
-        <header>
-            <h1>Daily Event Logger</h1>
-            <nav>
-                <button onclick="showAddEvent()">Add New Event</button>
-                <button onclick="showReports()">Generate Reports</button>
-            </nav>
-        </header>
-
-        <!-- Add Event Form -->
-        <div id="addEventForm" class="form-section">
-            <h2>Add New Event</h2>
-            <form onsubmit="saveEvent(event)">
-                <div class="form-group">
-                    <label for="eventDate">Date:</label>
-                    <input type="date" id="eventDate" required>
-                </div>
-                <div class="form-group">
-                    <label for="eventTime">Time:</label>
-                    <input type="time" id="eventTime" required>
-                </div>
-                <div class="form-group">
-                    <label for="eventCategory">Category:</label>
-                    <select id="eventCategory" required>
-                        <option value="">Select a category</option>
-                        <option value="work">Work</option>
-                        <option value="personal">Personal</option>
-                        <option value="health">Health</option>
-                        <option value="finance">Finance</option>
-                        <option value="other">Other</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label for="eventTitle">Title:</label>
-                    <input type="text" id="eventTitle" placeholder="Brief title for the event" required>
-                </div>
-                <div class="form-group">
-                    <label for="eventDescription">Description:</label>
-                    <textarea id="eventDescription" placeholder="Detailed description of the event" rows="4"></textarea>
-                </div>
-                <div class="form-group">
-                    <label for="eventTags">Tags (comma-separated):</label>
-                    <input type="text" id="eventTags" placeholder="e.g., important, follow-up, urgent">
-                </div>
-                <button type="submit">Save Event</button>
-            </form>
+        <div class="header">
+            <div class="header-date" id="currentDate"></div>
+            <h1>Event Log</h1>
+            <div class="header-time" id="currentTime"></div>
+        </div>
+        
+        <div class="event-input">
+            <input type="text" id="eventSummary" placeholder="Brief summary of the event" maxlength="100">
+            <button id="log-btn" class="log-btn">Log Event</button>
         </div>
 
-        <!-- Reports Section -->
-        <div id="reportsSection" class="form-section" style="display: none;">
-            <h2>Generate Reports</h2>
-            <div class="report-filters">
-                <div class="form-group">
-                    <label for="startDate">Start Date:</label>
-                    <input type="date" id="startDate">
-                </div>
-                <div class="form-group">
-                    <label for="endDate">End Date:</label>
-                    <input type="date" id="endDate">
-                </div>
-                <div class="form-group">
-                    <label for="filterCategory">Category:</label>
-                    <select id="filterCategory">
-                        <option value="">All Categories</option>
-                        <option value="work">Work</option>
-                        <option value="personal">Personal</option>
-                        <option value="health">Health</option>
-                        <option value="finance">Finance</option>
-                        <option value="other">Other</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label for="filterTags">Filter by Tags:</label>
-                    <input type="text" id="filterTags" placeholder="Enter tags to filter">
-                </div>
-                <button onclick="generateReport()">Generate Report</button>
+        <div class="controls">
+            <div class="filter-controls">
+                <input type="text" id="filterText" placeholder="Filter events..." class="filter-input">
+                <input type="date" id="startDate" class="date-input">
+                <input type="date" id="endDate" class="date-input">
+                <button onclick="applyFilters()" class="filter-btn">Filter</button>
+                <button onclick="clearFilters()" class="clear-btn">Clear Filters</button>
             </div>
-<!-- Report Modal -->
-            <div id="reportModal" class="modal">
-                <div class="modal-content report-paper">
-                    <div class="report-header">
-                        <h2>Generated Report</h2>
-                        <div class="report-datetime"></div>
-                    </div>
-                    <div id="reportResults" class="report-results lined-paper">
-                        <!-- Report results will be displayed here -->
-                    </div>
-                    <div class="report-actions">
-                        <button onclick="printReport()" class="print-btn">Print Report</button>
-                        <button onclick="closeReportModal()" class="close-btn">Close</button>
-                    </div>
-                </div>
-            </div>
-
-            <div id="reportResults" class="report-results">
-                <!-- Report results will be displayed here -->
+            <div class="button-group">
+                <button onclick="printEvents()" class="log-btn">Print Events</button>
+                <a href="archive.html" class="log-btn">View Archives</a>
+                <button onclick="downloadEventLog('json')" class="log-btn">Export JSON</button>
+                <button onclick="downloadEventLog('csv')" class="log-btn">Export CSV</button>
+                <input type="file" id="importFile" accept=".json,.csv" style="display: none" onchange="importEventLog(this.files[0])">
+                <button onclick="document.getElementById('importFile').click()" class="log-btn">Import</button>
             </div>
         </div>
 
-        <!-- Recent Events List -->
-        <div id="recentEvents" class="events-list">
-            <h2>Recent Events</h2>
-            <div id="eventsList">
-                <!-- Events will be displayed here -->
+        <div class="event-list" id="eventsList">
+            <!-- Events will be displayed here -->
+        </div>
+
+        <div class="delete-controls" id="deleteControls">
+            <span class="delete-count" id="deleteCount"></span>
+            <button onclick="deleteSelectedEvents()" class="delete-btn">Delete Selected</button>
+        </div>
+
+        <!-- Hidden div for printing -->
+        <div id="printArea" class="print-only">
+            <!-- Print content will be generated here -->
+        </div>
+    </div>
+    <button id="readme-btn" class="readme-btn">README</button>
+
+    <!-- README Modal -->
+    <div id="readme-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Event Log - Documentation</h2>
+                <span class="close">&times;</span>
+            </div>
+            <div class="modal-body">
+                <h3>Features</h3>
+                <ul>
+                    <li>Real-time event logging with timestamps</li>
+                    <li>Event filtering by date range and text</li>
+                    <li>Print functionality for reports</li>
+                    <li>Selective event deletion</li>
+                </ul>
+
+
+                <h3>Usage</h3>
+                <p>Enter events in the input field at the top and press Enter or click 'Log Event'. Use filters to search through past events. Select events with checkboxes for deletion.</p>
+
+                <h3>About</h3>
+                <p>Created by FABREulous Technology © 2025</p>
+                <p>Version 1.0.0</p>
             </div>
         </div>
     </div>
-
+    <footer class="footer">
+        <p>© 2025 by FABREulous Technology</p>
+    </footer>
     <script src="script.js"></script>
 </body>
 </html>
